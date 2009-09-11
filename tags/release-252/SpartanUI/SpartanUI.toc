@@ -1,0 +1,25 @@
+## Interface: 30000
+## Title: SpartanUI (2.5.2)
+## Version: 2.5.2
+## Notes: Standalone Custom User Interface designed by Ansu of Dalaran (www.spartanui.com)
+## Author: Ansu (a.k.a. Atriace) and Beladona
+## X-Contributors: Matthew VG (rendered animation bars). Iriel, Guillotine, MentalPower, Drundia, Antiarc, David W (code reference sages) nevcairiel (Bartender integration code).  Bartender4 included with permission by nevcairiel.
+## X-Email: ansu@spartanui.com
+## X-Website: http://www.spartanui.com
+## SavedVariables: SUI_Lang, FEDB, suiData
+## SavedVariablesPerCharacter: suiChar
+## OptionalDeps:MobInfo2, Bartender4
+
+Support\LibStub\LibStub.lua
+Support\Flare\FilmEffects.lua
+
+Global\Fonts.xml
+Global\Localization.lua
+Global\Templates.xml
+Global\Functions.lua
+
+Modules\MinimapFix.lua
+Modules\StatusBars.xml
+Modules\Bartender.xml
+
+Global\SpartanUI.xml

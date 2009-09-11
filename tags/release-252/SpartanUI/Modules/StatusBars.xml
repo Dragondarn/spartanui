@@ -1,0 +1,118 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\..\FrameXML\UI.xsd">
+	<!-- frameStrata Parameters:  PARENT, BACKGROUND, LOW, MEDIUM, HIGH, DIALOG, FULLSCREEN, FULLSCREEN_DIALOG, TOOLTIP  -->
+	<!-- Layer level Parameters:  BACKGROUND, BORDER, ARTWORK, OVERLAY, HIGHLIGHT -->
+	<Frame name="SUI_ExperienceBar" frameStrata="BACKGROUND" parent="SpartanUI" hidden="true">
+		<Size><AbsDimension x="450" y="32" /></Size>
+		<Layers>
+			<Layer level="OVERLAY">
+				<Texture name="$parentPlate" file="Interface\AddOns\SpartanUI\Media\Object_XP_Plate">
+					<Size><AbsDimension x="512" y="32" /></Size>
+					<Anchors><Anchor point="RIGHT"/></Anchors>
+				</Texture>
+			</Layer>
+			<Layer level="BORDER">
+				<Texture name="$parentFill" file="Interface\AddOns\SpartanUI\Media\StatusBarGlow">
+					<Size><AbsDimension x="400" y="32" /></Size>
+					<Anchors><Anchor point="RIGHT"/></Anchors>
+				</Texture>
+				<Texture name="$parentLead" file="Interface\AddOns\SpartanUI\Media\StatusBarLead">
+					<Size><AbsDimension x="25" y="32" /></Size>
+					<Anchors><Anchor point="RIGHT" relativeTo="$parentFill" relativePoint="LEFT"/></Anchors>
+					<TexCoords left="1" right="0" top="0" bottom="1" />
+				</Texture>
+			</Layer>
+			<Layer level="ARTWORK">
+				<Texture name="$parentFillGlow" file="Interface\AddOns\SpartanUI\Media\StatusBarGlow" alphaMode="ADD">
+					<Anchors>
+						<Anchor point="TOPLEFT" relativeTo="$parentFill" relativePoint="TOPLEFT"/>
+						<Anchor point="BOTTOMRIGHT" relativeTo="$parentFill" relativePoint="BOTTOMRIGHT"/>
+					</Anchors>
+				</Texture>
+				<Texture name="$parentLeadGlow" file="Interface\AddOns\SpartanUI\Media\StatusBarLead" alphaMode="ADD">
+					<Size><AbsDimension x="25" y="32" /></Size>
+					<Anchors><Anchor point="RIGHT" relativeTo="$parentFill" relativePoint="LEFT"/></Anchors>
+					<TexCoords left="1" right="0" top="0" bottom="1" />
+				</Texture>
+			</Layer>
+			<Layer level="BACKGROUND">
+				<Texture name="$parentBase" setAllPoints="true">
+					<Color r="0" g="0" b="0" a="0.5"/>
+				</Texture>
+			</Layer>
+		</Layers>
+	</Frame>
+	<Frame name="SUI_ReputationBar" frameStrata="BACKGROUND" parent="SpartanUI" hidden="true">
+		<Size><AbsDimension x="450" y="32" /></Size>
+		<Layers>
+			<Layer level="OVERLAY">
+				<Texture name="$parentPlate" file="Interface\AddOns\SpartanUI\Media\Object_Rep_Plate">
+					<Size><AbsDimension x="512" y="32" /></Size>
+					<Anchors><Anchor point="LEFT"/></Anchors>
+				</Texture>
+			</Layer>
+			<Layer level="BORDER">
+				<Texture name="$parentFill" file="Interface\AddOns\SpartanUI\Media\StatusBarGlow">
+					<Size><AbsDimension x="400" y="32" /></Size>
+					<Anchors><Anchor point="LEFT"/></Anchors>
+				</Texture>
+				<Texture name="$parentLead" file="Interface\AddOns\SpartanUI\Media\StatusBarLead">
+					<Size><AbsDimension x="25" y="32" /></Size>
+					<Anchors><Anchor point="LEFT" relativeTo="$parentFill" relativePoint="RIGHT"/></Anchors>
+				</Texture>
+			</Layer>
+			<Layer level="ARTWORK">
+				<Texture name="$parentFillGlow" file="Interface\AddOns\SpartanUI\Media\StatusBarGlow" alphaMode="ADD">
+					<Anchors>
+						<Anchor point="TOPLEFT" relativeTo="$parentFill" relativePoint="TOPLEFT"/>
+						<Anchor point="BOTTOMRIGHT" relativeTo="$parentFill" relativePoint="BOTTOMRIGHT"/>
+					</Anchors>
+				</Texture>
+				<Texture name="$parentLeadGlow" file="Interface\AddOns\SpartanUI\Media\StatusBarLead" alphaMode="ADD">
+					<Size><AbsDimension x="25" y="32" /></Size>
+					<Anchors><Anchor point="LEFT" relativeTo="$parentFill" relativePoint="RIGHT"/></Anchors>
+				</Texture>
+			</Layer>
+			<Layer level="BACKGROUND">
+				<Texture name="$parentBase" setAllPoints="true">
+					<Color r="0" g="0" b="0" a="0.5"/>
+				</Texture>
+			</Layer>
+		</Layers>
+	</Frame>
+	<Font name="SUI_StatusHeaderFont" font="Fonts\FRIZQT__.TTF" outline="NORMAL" justifyH="LEFT" virtual="true">
+		<FontHeight><AbsValue val="12"/></FontHeight>
+	</Font>
+	<Frame name="SUI_StatusTooltip" frameStrata="TOOLTIP" hidden="true" parent="SpartanUI">
+		<Size><AbsDimension x="400" y="110"/></Size>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture name="$parent_BG" file="Interface\AddOns\SpartanUI\Media\Object_TooltipStat">
+					<Size><AbsDimension x="512" y="128" /></Size>
+					<Anchors><Anchor point="BOTTOM"/></Anchors>
+				</Texture>
+			</Layer>
+			<Layer level="ARTWORK">
+				<FontString name="$parentHeader" inherits="SUI_StatusHeaderFont">
+					<Size><AbsDimension x="450" y="16" /></Size>
+					<Anchors><Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="4" y="-10"/></Offset>
+					</Anchor></Anchors>
+				</FontString>
+				<FontString name="$parentText" inherits="GameTooltipTextSmall">
+					<Size><AbsDimension x="360" y="36" /></Size>
+					<Anchors><Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="10" y="-28"/></Offset>
+					</Anchor></Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Scripts>
+			<OnHide>
+				SUI_StatusTooltipHeader:SetText(" ");
+				SUI_StatusTooltipText:SetText(" ");
+			</OnHide>
+		</Scripts>
+	</Frame>
+	<Script file="StatusBars.lua" />
+</Ui>

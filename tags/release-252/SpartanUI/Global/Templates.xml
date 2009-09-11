@@ -1,0 +1,34 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\..\FrameXML\UI.xsd">
+	<Frame name="SpartanUI" frameStrata="BACKGROUND" parent="UIParent">
+		<Size><AbsDimension x="2560" y="256" /></Size>
+		<Anchors><Anchor point="BOTTOM" relativePoint="BOTTOM" /></Anchors>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture name="HUD_3" file="Interface\AddOns\SpartanUI\Media\HUD_3">
+					<Size><AbsDimension x="512" y="256" /></Size>
+					<Anchors><Anchor point="BOTTOM" relativePoint="BOTTOM"/></Anchors>
+				</Texture>
+				<Texture name="HUD_2" file="Interface\AddOns\SpartanUI\Media\HUD_2">
+					<Size><AbsDimension x="512" y="256" /></Size>
+					<Anchors><Anchor point="RIGHT" relativeTo="HUD_3" relativePoint="LEFT"/></Anchors>
+				</Texture>
+				<Texture name="HUD_1" file="Interface\AddOns\SpartanUI\Media\HUD_1">
+					<Size><AbsDimension x="512" y="256" /></Size>
+					<Anchors><Anchor point="RIGHT" relativeTo="HUD_2" relativePoint="LEFT"/></Anchors>
+				</Texture>
+				<Texture name="HUD_4" file="Interface\AddOns\SpartanUI\Media\HUD_4">
+					<Size><AbsDimension x="512" y="256" /></Size>
+					<Anchors><Anchor point="LEFT" relativeTo="HUD_3" relativePoint="RIGHT"/></Anchors>
+				</Texture>
+				<Texture name="HUD_5" file="Interface\AddOns\SpartanUI\Media\HUD_5">
+					<Size><AbsDimension x="512" y="256" /></Size>
+					<Anchors><Anchor point="LEFT" relativeTo="HUD_4" relativePoint="RIGHT"/></Anchors>
+				</Texture>
+			</Layer>
+		</Layers>
+	</Frame>
+</Ui>
+
+
+
