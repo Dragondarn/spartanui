@@ -1,0 +1,19 @@
+## Interface: 30000
+## Title: SpartanUI
+## Notes: v2.5                                                  By Ansu of Dalaran   www.spartanui.com
+## Version: 2.5
+## Author: Ansu (a.k.a. Atriace)
+## X-Contributors: Matthew VG (rendered animation bars). Iriel, Guillotine, MentalPower, Drundia, Antiarc, David W (code reference sages) nevcairiel (Bartender integration code).  Bartender4 included with permission by nevcairiel.
+## X-Email: ansu@spartanui.com
+## X-Website: http://www.spartanui.com
+## SavedVariables: SUI_Lang, FEDB, suiData, suiTest
+## SavedVariablesPerCharacter: SUI_mobLast, SUI_mobXP, SUI_Titan, SUI_BT4
+## RequiredDeps:
+## OptionalDeps:MobInfo2, Bartender4
+
+Support\Includes.xml
+
+Localization.lua
+SpartanUI.lua
+Font.xml
+SpartanUI.xml
