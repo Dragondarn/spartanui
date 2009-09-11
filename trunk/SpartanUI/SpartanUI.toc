@@ -1,0 +1,13 @@
+## Interface: 30200
+## Title: SpartanUI (2.6.0 RC5)
+## Notes: User Interface combining elegant artwork with well designed features.
+## Version: 2.6.0.30200
+## Author: Atriace, Beladona
+## X-Category: User Interfaces
+## X-Email: code@spartanui.com
+## X-Website: http://www.spartanui.com
+## OptionalDeps: LibStub, Ace3, Bartender4, FuBar, Titan
+## SavedVariablesPerCharacter: suiChar
+
+embed\LibraryList.xml
+global\SpartanUI.xml
