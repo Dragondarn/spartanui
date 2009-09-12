@@ -227,8 +227,123 @@ local CreatePartyFrame = function(self,unit)
 	end
 	return self;
 end
+local CreatePetFrame = function(self,unit)
+	local base_plate = [[Interface\AddOns\SpartanUI_PartyFrames\media\base_plate2]]
+	local base_ring = [[Interface\AddOns\SpartanUI_PartyFrames\media\base_ring2]]
+	do -- create the base frame
+		self:SetWidth(173); self:SetHeight(46);
+		self:SetScript("OnEnter", UnitFrame_OnEnter)
+		self:SetScript("OnLeave", UnitFrame_OnLeave)
+		self:RegisterForClicks("anyup")
+		
+		self.colors = colors;
+	end
+	do -- setup base artwork
+		local artwork = CreateFrame("Frame",nil,self);
+		artwork:SetFrameStrata("BACKGROUND");
+		artwork:SetAllPoints(self);
+		
+		self.Portrait = artwork:CreateTexture(nil,"BORDER");
+		self.Portrait:SetWidth(32); self.Portrait:SetHeight(32);
+		
+		artwork.bg = artwork:CreateTexture(nil,"BACKGROUND");
+		artwork.bg:SetPoint("CENTER"); artwork.bg:SetTexture(base_plate);
+		self.Portrait:SetPoint("LEFT",self,"LEFT",6,0);
+		
+		local overlay = CreateFrame("Frame",nil,self);
+		overlay:SetAllPoints(self); overlay:SetFrameStrata("MEDIUM");			
+		overlay.ring = overlay:CreateTexture(nil,"BACKGROUND");
+		overlay.ring:SetPoint("CENTER",self.Portrait,"CENTER");
+		overlay.ring:SetTexture(base_ring);
+		self.overlay = overlay;
+	end
+	do -- setup status bars
+		do -- health bar
+			local health = CreateFrame("StatusBar",nil,self);
+			health:SetFrameStrata("LOW");
+			health:SetWidth(97); health:SetHeight(11);
+			health:SetStatusBarTexture(bar_texture);
+			health:SetPoint("TOPRIGHT",self,"TOPRIGHT",-38,-18);
+			
+			health.value = health:CreateFontString(nil, "OVERLAY", "SUI_FontOutline9");
+			health.value:SetWidth(80); health.value:SetHeight(11);
+			health.value:SetJustifyH("LEFT"); health.value:SetJustifyV("TOP");
+			health.value:SetPoint("RIGHT",health,"RIGHT",-2,0);
+			
+			health.ratio = health:CreateFontString(nil, "OVERLAY", "SUI_FontOutline9");
+			health.ratio:SetWidth(40); health.ratio:SetHeight(11);
+			health.ratio:SetJustifyH("LEFT"); health.ratio:SetJustifyV("TOP");
+			health.ratio:SetPoint("LEFT",health,"RIGHT",2,0);
+						
+			self.Health = health;
+			self.Health.frequentUpdates = true;
+			self.Health.colorTapping = true;
+			self.Health.colorDisconnected = true;
+			self.Health.colorHealth = true;
+			self.Health.colorReaction = true;
+			self.PostUpdateHealth = PostUpdateHealth;
+		end
+		do -- power bar
+			local power = CreateFrame("StatusBar",nil,self);
+			power:SetFrameStrata("LOW");
+			power:SetWidth(97); power:SetHeight(11);
+			power:SetStatusBarTexture(bar_texture);
+			power:SetPoint("TOPRIGHT",self.Health,"BOTTOMRIGHT",0,-2);
+			
+			power.value = power:CreateFontString(nil, "OVERLAY", "SUI_FontOutline9");
+			power.value:SetWidth(80); power.value:SetHeight(11);
+			power.value:SetJustifyH("LEFT"); power.value:SetJustifyV("TOP");
+			power.value:SetPoint("RIGHT",power,"RIGHT",-2,0);
+			
+			power.ratio = power:CreateFontString(nil, "OVERLAY", "SUI_FontOutline9");
+			power.ratio:SetWidth(40); power.ratio:SetHeight(11);
+			power.ratio:SetJustifyH("LEFT"); power.ratio:SetJustifyV("TOP");
+			power.ratio:SetPoint("LEFT",power,"RIGHT",2,0);			
+			
+			self.Power = power;
+			self.Power.colorPower = true;
+			self.Power.frequentUpdates = true;
+			self.PostUpdatePower = PostUpdatePower;
+		end
+	end
+	do -- setup text and icons
+		local overlay = self.overlay;
+		
+		self.Name = overlay:CreateFontString(nil, "BORDER","SUI_FontOutline10");
+		self.Name:SetWidth(110); self.Name:SetHeight(12);
+		self.Name:SetPoint("TOPRIGHT",self,"TOPRIGHT",-12,-4);
+		self.Name:SetJustifyH("LEFT");
+		self:Tag(self.Name, "[name]");
+			
+		self.Level = overlay:CreateFontString(nil,"BORDER","SUI_FontOutline8");
+		self.Level:SetWidth(30); self.Level:SetJustifyH("CENTER");
+		self.Level:SetPoint("CENTER",self.Portrait,"CENTER",22,-8);
+		self:Tag(self.Level, "[level]");
+		
+		self.RaidIcon = overlay:CreateTexture(nil,"ARTWORK");
+		self.RaidIcon:SetAllPoints(self.Portrait);
+	end
+	do -- setup buffs and debuffs
+		self.Auras = CreateFrame("Frame",nil,self);
+		self.Auras:SetWidth(18*12); self.Auras:SetHeight(18*2);
+		self.Auras:SetPoint("LEFT",self,"RIGHT");
+		-- settings
+		self.Auras.size = 18;
+		self.Auras.spacing = 1;
+		self.Auras.initialAnchor = "TOPLEFT";
+		self.Auras.gap = true; -- adds an empty spacer between buffs and debuffs
+		self.Auras.numBuffs = 11;
+		self.Auras.numDebuffs = 12;
+		
+		self.PreUpdateAura = PreUpdateAura;
+	end
+	return self;
+end
+local CreateUnitFrames = function(self,unit)
+	return (self:GetAttribute"unitsuffix" == "pet" and CreatePetFrame(self,unit)) or CreatePartyFrame(self,unit);
+end
 ---------------------------------------------------------------------------
-oUF:RegisterStyle("Spartan_PartyFrames", CreatePartyFrame);
+oUF:RegisterStyle("Spartan_PartyFrames", CreateUnitFrames);
 oUF:SetActiveStyle("Spartan_PartyFrames");
 
 local party = oUF:Spawn("header","SUI_PartyFrameHeader");
@@ -241,7 +356,8 @@ party:SetManyAttributes(
 	"yOffset",							-4,
 	"xOffset",							0,
 	"columnAnchorPoint",	"TOPLEFT",
-	"initial-anchor",				"TOPLEFT");
+	"initial-anchor",				"TOPLEFT",
+	"template",						"SUI_PartyMemberTemplate");
 PartyMemberBackground.Show = function() return; end
 PartyMemberBackground:Hide();
 
