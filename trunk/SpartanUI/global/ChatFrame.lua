@@ -32,10 +32,13 @@ do -- addon detection and modifications to the chat frame
 		SpartanUI:HookScript("OnEvent",function()
 			for i = 1,7 do
 				local frame = _G["ChatFrame"..i];				
-				frame:SetMinResize(64,40);
-				frame:SetFading(0);
+				frame:SetMinResize(64,40); frame:SetFading(0);
 				frame:EnableMouseWheel(true);
 				frame:SetScript("OnMouseWheel",scroll);
+				
+				frame:SetFrameStrata("MEDIUM");
+				frame:SetToplevel(false);
+				frame:SetFrameLevel(2);
 			
 				local button = _G["ChatFrame"..i.."UpButton"]
 				button:SetScript("OnShow", hide)
@@ -70,14 +73,4 @@ do -- addon detection and modifications to the chat frame
 			ChatFrameEditBox:SetPoint("BOTTOMRIGHT", ChatFrame1, "TOPRIGHT", 0, 2);
 		end);
 	end
-end
-do -- framestrata and framelevel verification
-	SpartanUI:HookScript("OnEvent",function()
-		-- same framestrata as the popup bar masks, but one framelevel higher
-		for i = 1,7 do
-			_G["ChatFrame"..i]:SetFrameStrata("MEDIUM");
-			_G["ChatFrame"..i]:SetToplevel(false);
-			_G["ChatFrame"..i]:SetFrameLevel(2);
-		end
-	end);
 end

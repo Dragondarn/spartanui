@@ -64,26 +64,27 @@ local CreatePlayerFrame = function(self,unit)
 		artwork.bg:SetPoint("CENTER");
 		artwork.bg:SetTexture(base_plate);
 
-		self.Portrait = self:CreateTexture(nil,"BACKGROUND");
+		self.Portrait = self:CreateTexture(nil,"BORDER");
 		self.Portrait:SetWidth(64); self.Portrait:SetHeight(64);
 		self.Portrait:SetPoint("CENTER",self,"CENTER",80,3);
 	end
 	do -- setup status bars
 		do -- cast bar
 			local cast = CreateFrame("StatusBar",nil,self);
-			cast:SetFrameStrata("BACKGROUND");
-			cast:SetFrameLevel(6); cast:SetWidth(153); cast:SetHeight(16);
-			cast:SetStatusBarTexture(bar_texture);			
-			cast.Text = cast:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
-			cast.Text:SetWidth(135); cast.Text:SetHeight(12);
-			cast.Time = cast:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
-			cast.Time:SetWidth(90); cast.Time:SetHeight(12);
+			cast:SetFrameStrata("BACKGROUND"); cast:SetFrameLevel(2);
+			cast:SetWidth(153); cast:SetHeight(16);
+			cast:SetStatusBarTexture(bar_texture);
+			cast:SetPoint("TOPLEFT",self,"TOPLEFT",36,-23);
 			
-			cast:SetPoint("TOPLEFT",self,"TOPLEFT",36,-23);			
-			cast.Text:SetJustifyH("RIGHT");
+			cast.Text = cast:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
+			cast.Text:SetWidth(135); cast.Text:SetHeight(11);
+			cast.Text:SetJustifyH("RIGHT"); cast.Text:SetJustifyV("MIDDLE");
 			cast.Text:SetPoint("LEFT",cast,"LEFT",4,0);			
-			cast.Time:SetJustifyH("RIGHT");
-			cast.Time:SetPoint("RIGHT",cast,"LEFT",-4,0);
+			
+			cast.Time = cast:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
+			cast.Time:SetWidth(90); cast.Time:SetHeight(11);			
+			cast.Time:SetJustifyH("RIGHT"); cast.Time:SetJustifyV("MIDDLE");
+			cast.Time:SetPoint("RIGHT",cast,"LEFT",-2,0);
 			
 			self.Castbar = cast;
 			self.PostCastStart = PostCastStart;
@@ -91,20 +92,21 @@ local CreatePlayerFrame = function(self,unit)
 		end
 		do -- health bar
 			local health = CreateFrame("StatusBar",nil,self);
-			health:SetFrameStrata("BACKGROUND");
-			health:SetFrameLevel(6); health:SetWidth(150); health:SetHeight(16);
-			health:SetStatusBarTexture(bar_texture);	
-			health.value = health:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
-			health.value:SetWidth(135); health.value:SetHeight(12);
-			health.ratio = health:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
-			health.ratio:SetWidth(90); health.ratio:SetHeight(12);
-			
+			health:SetFrameStrata("BACKGROUND"); health:SetFrameLevel(2);
+			health:SetWidth(150); health:SetHeight(16);
+			health:SetStatusBarTexture(bar_texture);
 			health:SetPoint("TOPLEFT",self.Castbar,"BOTTOMLEFT",0,-2);
-			health.ratio:SetJustifyH("RIGHT");
-			health.ratio:SetPoint("RIGHT",health,"LEFT",-4,0);
-			health.value:SetJustifyH("RIGHT");
+			
+			health.value = health:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
+			health.value:SetWidth(135); health.value:SetHeight(11);
+			health.value:SetJustifyH("RIGHT"); health.value:SetJustifyV("MIDDLE");
 			health.value:SetPoint("LEFT",health,"LEFT",4,0);
-						
+			
+			health.ratio = health:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
+			health.ratio:SetWidth(90); health.ratio:SetHeight(11);
+			health.ratio:SetJustifyH("RIGHT"); health.ratio:SetJustifyV("MIDDLE");
+			health.ratio:SetPoint("RIGHT",health,"LEFT",-2,0);
+			
 			self.Health = health;
 			self.Health.frequentUpdates = true;
 			self.Health.colorTapping = true;
@@ -115,19 +117,20 @@ local CreatePlayerFrame = function(self,unit)
 		end
 		do -- power bar
 			local power = CreateFrame("StatusBar",nil,self);
-			power:SetFrameStrata("BACKGROUND");
-			power:SetFrameLevel(6); power:SetWidth(155); power:SetHeight(14);
-			power:SetStatusBarTexture(bar_texture);		
-			power.value = power:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
-			power.value:SetWidth(135);		
-			power.ratio = power:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
-			power.ratio:SetWidth(90);
-			
+			power:SetFrameStrata("BACKGROUND"); power:SetFrameLevel(2);
+			power:SetWidth(155); power:SetHeight(14);
+			power:SetStatusBarTexture(bar_texture);
 			power:SetPoint("TOPLEFT",self.Health,"BOTTOMLEFT",0,-2);
-			power.ratio:SetJustifyH("RIGHT");
-			power.ratio:SetPoint("RIGHT",power,"LEFT",-4,0);	
-			power.value:SetJustifyH("RIGHT");
+			
+			power.value = power:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
+			power.value:SetWidth(135); power.value:SetHeight(11);
+			power.value:SetJustifyH("RIGHT"); power.value:SetJustifyV("MIDDLE");
 			power.value:SetPoint("LEFT",power,"LEFT",4,0);
+			
+			power.ratio = power:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
+			power.ratio:SetWidth(90); power.ratio:SetHeight(11);
+			power.ratio:SetJustifyH("RIGHT"); power.ratio:SetJustifyV("MIDDLE");
+			power.ratio:SetPoint("RIGHT",power,"LEFT",-2,0);
 			
 			self.Power = power;
 			self.Power.colorPower = true;
@@ -138,20 +141,21 @@ local CreatePlayerFrame = function(self,unit)
 	do -- setup ring, icons, and text
 		local ring = CreateFrame("Frame",nil,self);
 		ring:SetFrameStrata("BACKGROUND");
-		ring:SetAllPoints(self.Portrait); ring:SetFrameLevel(7);
+		ring:SetAllPoints(self.Portrait); ring:SetFrameLevel(3);
 		ring.bg = ring:CreateTexture(nil,"BACKGROUND");
 		ring.bg:SetPoint("CENTER",ring,"CENTER",-80,-3);
 		ring.bg:SetTexture(base_ring);
 		
-		self.Name = ring:CreateFontString(nil, "BORDER","SUI_FontOutline13");
+		self.Name = ring:CreateFontString(nil, "BORDER","SUI_FontOutline12");
 		self.Name:SetHeight(12); self.Name:SetWidth(170); self.Name:SetJustifyH("RIGHT");
 		self.Name:SetPoint("TOPLEFT",self,"TOPLEFT",5,-6);
 		self:Tag(self.Name, "[name]");
 		
 		self.Level = ring:CreateFontString(nil,"BORDER","SUI_FontOutline11");			
-		self.Level:SetWidth(40); self.Level:SetJustifyH("CENTER");
+		self.Level:SetWidth(40); self.Level:SetHeight(11);
+		self.Level:SetJustifyH("CENTER"); self.Level:SetJustifyV("MIDDLE");
 		self.Level:SetPoint("CENTER",ring,"CENTER",51,12);
-		self:Tag(self.Level, "[difficulty][level]");		
+		self:Tag(self.Level, "[level]");		
 		
 		self.ClassIcon = ring:CreateTexture(nil,"BORDER");
 		self.ClassIcon:SetWidth(22); self.ClassIcon:SetHeight(22);
@@ -187,17 +191,18 @@ local CreatePlayerFrame = function(self,unit)
 	end
 	do -- setup buffs and debuffs
 		self.Auras = CreateFrame("Frame",nil,self);
-		self.Auras:SetWidth(26*10); self.Auras:SetHeight(26*3);
-		self.Auras:SetPoint("BOTTOM",self,"TOP");
+		self.Auras:SetWidth(22*10); self.Auras:SetHeight(22*2);
+		self.Auras:SetPoint("BOTTOMLEFT",self,"TOPLEFT",10,0);
 		self.Auras:SetFrameStrata("BACKGROUND");
-		self.Auras:SetFrameLevel(8);
+		self.Auras:SetFrameLevel(4);
 		-- settings
-		self.Auras.size = 24;
-		self.Auras.spacing = 1;
+		self.Auras.size = 20; self.Auras.spacing = 1;
 		self.Auras.initialAnchor = "BOTTOMLEFT";
-		self.Auras.gap = true; -- adds an empty spacer between buffs and debuffs		
-		self.Auras.numBuffs = 13;
-		self.Auras.numDebuffs = 16;
+		self.Auras["growth-x"] = "RIGHT";
+		self.Auras["growth-y"] = "UP";
+		self.Auras.gap = false;
+		self.Auras.numBuffs = 10;
+		self.Auras.numDebuffs = 10;
 
 		self.PostUpdateAura = PostUpdateAura;
 	end
@@ -214,26 +219,27 @@ local CreateTargetFrame = function(self,unit)
 		artwork.bg:SetTexture(base_plate);
 		artwork.bg:SetTexCoord(1,0,0,1);
 
-		self.Portrait = self:CreateTexture(nil,"BACKGROUND");
+		self.Portrait = self:CreateTexture(nil,"BORDER");
 		self.Portrait:SetWidth(64); self.Portrait:SetHeight(64);
 		self.Portrait:SetPoint("CENTER",self,"CENTER",-80,3);
 	end
 	do -- setup status bars
 		do -- cast bar
 			local cast = CreateFrame("StatusBar",nil,self);
-			cast:SetFrameStrata("BACKGROUND");
-			cast:SetFrameLevel(6); cast:SetWidth(153); cast:SetHeight(16);
-			cast:SetStatusBarTexture(bar_texture);			
-			cast.Text = cast:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
-			cast.Text:SetWidth(135); cast.Text:SetHeight(12);
-			cast.Time = cast:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
-			cast.Time:SetWidth(90); cast.Time:SetHeight(12);
-			
+			cast:SetFrameStrata("BACKGROUND"); cast:SetFrameLevel(2);
+			cast:SetWidth(153); cast:SetHeight(16);
+			cast:SetStatusBarTexture(bar_texture);
 			cast:SetPoint("TOPRIGHT",self,"TOPRIGHT",-36,-23);
-			cast.Text:SetJustifyH("LEFT");
+			
+			cast.Text = cast:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
+			cast.Text:SetWidth(135); cast.Text:SetHeight(11);
+			cast.Text:SetJustifyH("LEFT"); cast.Text:SetJustifyV("MIDDLE");
 			cast.Text:SetPoint("RIGHT",cast,"RIGHT",-4,0);
-			cast.Time:SetJustifyH("LEFT");
-			cast.Time:SetPoint("LEFT",cast,"RIGHT",4,0);
+			
+			cast.Time = cast:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
+			cast.Time:SetWidth(90); cast.Time:SetHeight(11);
+			cast.Time:SetJustifyH("LEFT"); cast.Time:SetJustifyV("MIDDLE");
+			cast.Time:SetPoint("LEFT",cast,"RIGHT",2,0);
 			
 			self.Castbar = cast;
 			self.PostCastStart = PostCastStart;
@@ -241,20 +247,22 @@ local CreateTargetFrame = function(self,unit)
 		end
 		do -- health bar
 			local health = CreateFrame("StatusBar",nil,self);
-			health:SetFrameStrata("BACKGROUND");
-			health:SetFrameLevel(6); health:SetWidth(150); health:SetHeight(16);
+			health:SetFrameStrata("BACKGROUND"); health:SetFrameLevel(2);
+			health:SetWidth(150); health:SetHeight(16);
 			health:SetStatusBarTexture(bar_texture);	
-			health.value = health:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
-			health.value:SetWidth(135); health.value:SetHeight(12);
-			health.ratio = health:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
-			health.ratio:SetWidth(90); health.ratio:SetHeight(12);
+			health:SetPoint("TOPRIGHT",self.Castbar,"BOTTOMRIGHT",0,-2);
 			
-			health:SetPoint("TOPRIGHT",self.Castbar,"BOTTOMRIGHT",0,-2);		
-			health.value:SetPoint("RIGHT",health,"RIGHT",-4,0);			
-			health.value:SetJustifyH("LEFT");
-			health.ratio:SetPoint("LEFT",health,"RIGHT",4,0);
-			health.ratio:SetJustifyH("LEFT");
-						
+			health.value = health:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
+			health.value:SetWidth(135); health.value:SetHeight(11);
+			health.value:SetJustifyH("LEFT"); health.value:SetJustifyV("MIDDLE");
+			health.value:SetPoint("RIGHT",health,"RIGHT",-4,0);
+			
+			
+			health.ratio = health:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
+			health.ratio:SetWidth(90); health.ratio:SetHeight(11);
+			health.ratio:SetJustifyH("LEFT"); health.ratio:SetJustifyV("MIDDLE");
+			health.ratio:SetPoint("LEFT",health,"RIGHT",2,0);
+			
 			self.Health = health;
 			self.Health.frequentUpdates = true;
 			self.Health.colorTapping = true;
@@ -265,19 +273,20 @@ local CreateTargetFrame = function(self,unit)
 		end
 		do -- power bar
 			local power = CreateFrame("StatusBar",nil,self);
-			power:SetFrameStrata("BACKGROUND");
-			power:SetFrameLevel(6); power:SetWidth(155); power:SetHeight(14);
-			power:SetStatusBarTexture(bar_texture);		
-			power.value = power:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
-			power.value:SetWidth(135);		
-			power.ratio = power:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
-			power.ratio:SetWidth(90);
-			
+			power:SetFrameStrata("BACKGROUND"); power:SetFrameLevel(2);
+			power:SetWidth(155); power:SetHeight(14);
+			power:SetStatusBarTexture(bar_texture);
 			power:SetPoint("TOPRIGHT",self.Health,"BOTTOMRIGHT",0,-2);
-			power.value:SetPoint("RIGHT",power,"RIGHT",-4,0);			
-			power.value:SetJustifyH("LEFT");
-			power.ratio:SetPoint("LEFT",power,"RIGHT",4,0);
-			power.ratio:SetJustifyH("LEFT");		
+			
+			power.value = power:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
+			power.value:SetWidth(135); power.value:SetHeight(11);
+			power.value:SetJustifyH("LEFT"); power.value:SetJustifyV("MIDDLE");
+			power.value:SetPoint("RIGHT",power,"RIGHT",-4,0);
+			
+			power.ratio = power:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
+			power.ratio:SetWidth(90); power.ratio:SetHeight(11);
+			power.ratio:SetJustifyH("LEFT"); power.ratio:SetJustifyV("MIDDLE");
+			power.ratio:SetPoint("LEFT",power,"RIGHT",2,0);
 			
 			self.Power = power;
 			self.Power.colorPower = true;
@@ -288,21 +297,23 @@ local CreateTargetFrame = function(self,unit)
 	do -- setup ring, icons, and text
 		local ring = CreateFrame("Frame",nil,self);
 		ring:SetFrameStrata("BACKGROUND");
-		ring:SetAllPoints(self.Portrait); ring:SetFrameLevel(7);
+		ring:SetAllPoints(self.Portrait); ring:SetFrameLevel(3);
 		ring.bg = ring:CreateTexture(nil,"BACKGROUND");
 		ring.bg:SetPoint("CENTER",ring,"CENTER",80,-3);
 		ring.bg:SetTexture(base_ring);
 		ring.bg:SetTexCoord(1,0,0,1);
 		
-		self.Name = ring:CreateFontString(nil, "BORDER","SUI_FontOutline13");
-		self.Name:SetHeight(12); self.Name:SetWidth(170); self.Name:SetJustifyH("LEFT");
+		self.Name = ring:CreateFontString(nil, "BORDER","SUI_FontOutline12");
+		self.Name:SetWidth(170); self.Name:SetHeight(12); 
+		self.Name:SetJustifyH("LEFT"); self.Name:SetJustifyV("MIDDLE");
 		self.Name:SetPoint("TOPRIGHT",self,"TOPRIGHT",-5,-6);
 		self:Tag(self.Name,"[name]");
 		
 		self.Level = ring:CreateFontString(nil,"BORDER","SUI_FontOutline11");			
-		self.Level:SetWidth(40); self.Level:SetJustifyH("CENTER");
+		self.Level:SetWidth(40); self.Level:SetHeight(11);
+		self.Level:SetJustifyH("CENTER"); self.Level:SetJustifyV("MIDDLE");
 		self.Level:SetPoint("CENTER",ring,"CENTER",-50,12);
-		self:Tag(self.Level, "[difficulty][level]");
+		self:Tag(self.Level, "[level]");
 		
 		self.ClassIcon = ring:CreateTexture(nil,"BORDER");
 		self.ClassIcon:SetWidth(22); self.ClassIcon:SetHeight(22);
@@ -346,8 +357,7 @@ local CreateTargetFrame = function(self,unit)
 		self.CPoints[2]:SetPoint("TOP",self.CPoints[1],"BOTTOM",3,6);
 		self.CPoints[3]:SetPoint("TOP",self.CPoints[2],"BOTTOM",6,8);
 		self.CPoints[4]:SetPoint("TOP",self.CPoints[3],"BOTTOM",7,9);
-		self.CPoints[5]:SetPoint("TOP",self.CPoints[4],"BOTTOM",9,11);
-		
+		self.CPoints[5]:SetPoint("TOP",self.CPoints[4],"BOTTOM",9,11);		
 		ring:SetScript("OnUpdate",function()
 			if self.CPoints then
 				local cp = GetComboPoints("player","target");
@@ -357,18 +367,18 @@ local CreateTargetFrame = function(self,unit)
 	end
 	do -- setup buffs and debuffs
 		self.Auras = CreateFrame("Frame",nil,self);
-		self.Auras:SetWidth(26*10); self.Auras:SetHeight(26*3);
-		self.Auras:SetPoint("BOTTOM",self,"TOP");
+		self.Auras:SetWidth(22*10); self.Auras:SetHeight(22*2);
+		self.Auras:SetPoint("BOTTOMRIGHT",self,"TOPRIGHT",-10,0);
 		self.Auras:SetFrameStrata("BACKGROUND");
-		self.Auras:SetFrameLevel(8);
+		self.Auras:SetFrameLevel(4);
 		-- settings
-		self.Auras.size = 24;
-		self.Auras.spacing = 1;
+		self.Auras.size = 20; self.Auras.spacing = 1;
 		self.Auras.initialAnchor = "BOTTOMRIGHT";
-		self.Auras["growth-x"] = "LEFT"
-		self.Auras.gap = true; -- adds an empty spacer between buffs and debuffs		
-		self.Auras.numBuffs = 13;
-		self.Auras.numDebuffs = 16;
+		self.Auras["growth-x"] = "LEFT";
+		self.Auras["growth-y"] = "UP";
+		self.Auras.gap = false;
+		self.Auras.numBuffs = 10;
+		self.Auras.numDebuffs = 10;
 
 		self.PostUpdateAura = PostUpdateAura;
 	end
@@ -376,7 +386,7 @@ local CreateTargetFrame = function(self,unit)
 end
 local CreateUnitFrames = function(self,unit)
 	self.menu = menu; self:SetParent("SpartanUI");
-	self:SetFrameStrata("BACKGROUND"); self:SetFrameLevel(5);
+	self:SetFrameStrata("BACKGROUND"); self:SetFrameLevel(1);
 	self:SetScript("OnEnter", UnitFrame_OnEnter)
 	self:SetScript("OnLeave", UnitFrame_OnLeave)
 	self:RegisterForClicks("anyup");
@@ -395,12 +405,12 @@ do -- relocate the death knight rune frame
 	hooksecurefunc(RuneFrame,"SetPoint",function(_,_,parent)
 		if (parent ~= addon.player) then
 			RuneFrame:ClearAllPoints();
-			RuneFrame:SetPoint("TOPLEFT",addon.player,"BOTTOMLEFT",40,6);
+			RuneFrame:SetPoint("TOPLEFT",addon.player,"BOTTOMLEFT",40,10);
 		end
 	end);
-	RuneFrame:SetParent(SpartanUI); RuneFrame:SetFrameStrata("MEDIUM");
-	RuneFrame:SetScale(0.9); RuneFrame:ClearAllPoints();
-	RuneFrame:SetPoint("TOPLEFT",addon.player,"BOTTOMLEFT",40,6);
+	RuneFrame:SetParent(SpartanUI); RuneFrame:SetFrameStrata("LOW");
+	RuneFrame:SetFrameLevel(1); RuneFrame:SetScale(0.8); RuneFrame:ClearAllPoints();
+	RuneFrame:SetPoint("TOPLEFT",addon.player,"BOTTOMLEFT",40,10);
 end
 do -- relocate the shaman totem frame
 	for i = 1,4 do
@@ -411,12 +421,12 @@ do -- relocate the shaman totem frame
 	hooksecurefunc(TotemFrame,"SetPoint",function(_,_,parent)
 		if (parent ~= addon.player) then
 			TotemFrame:ClearAllPoints();
-			TotemFrame:SetPoint("TOPLEFT",addon.player,"BOTTOMLEFT",40,16);
+			TotemFrame:SetPoint("TOPLEFT",addon.player,"BOTTOMLEFT",60,18);
 		end
 	end);
-	TotemFrame:SetParent(SpartanUI); TotemFrame:SetFrameStrata("MEDIUM");
-	TotemFrame:SetScale(0.7); TotemFrame:ClearAllPoints();
-	TotemFrame:SetPoint("TOPLEFT",addon.player,"BOTTOMLEFT",40,16);
+	TotemFrame:SetParent(SpartanUI); TotemFrame:SetFrameStrata("LOW");
+	TotemFrame:SetFrameLevel(0); TotemFrame:SetScale(0.59); TotemFrame:ClearAllPoints();
+	TotemFrame:SetPoint("TOPLEFT",addon.player,"BOTTOMLEFT",60,18);
 end
 
 addon.target = oUF:Spawn("target","SUI_TargetFrame");
