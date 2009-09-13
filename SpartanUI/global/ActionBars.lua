@@ -18,13 +18,15 @@ do -- setup default variables
 end
 do -- setup actionbar container and children
 	plate = CreateFrame("Frame","SUI_ActionBarPlate",SpartanUI,"SUI_ActionBarsTemplate");
-	plate:SetFrameStrata("BACKGROUND");
-	plate:SetPoint("BOTTOM");
-	plate:SetFrameLevel(1);
+	plate:SetFrameStrata("BACKGROUND"); plate:SetFrameLevel(1);
+	plate:SetPoint("BOTTOM");	
 	
 	plate.mask1 = CreateFrame("Frame","SUI_Popup1Mask",SpartanUI,"SUI_Popup1MaskTemplate");
+	plate.mask1:SetFrameStrata("MEDIUM"); plate.mask1:SetFrameLevel(0);
 	plate.mask1:SetPoint("BOTTOM",SUI_Popup1,"BOTTOM");
+	
 	plate.mask2 = CreateFrame("Frame","SUI_Popup2Mask",SpartanUI,"SUI_Popup2MaskTemplate");
+	plate.mask2:SetFrameStrata("MEDIUM"); plate.mask2:SetFrameLevel(0);
 	plate.mask2:SetPoint("BOTTOM",SUI_Popup2,"BOTTOM");
 	
 	plate:SetScript("OnUpdate",function() -- backdrop and popup visibility changes (alpha, animation, hide/show)
