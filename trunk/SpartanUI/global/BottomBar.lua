@@ -1,42 +1,46 @@
 local addon = LibStub:NewLibrary("SpartanUI",20090608);
 if (not addon) then return; end
----------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 local anchor, frame = SUI_AnchorFrame, SpartanUI;
-local getSpartanScale, getSpartanOffset;
+local updateSpartanScale, updateSpartanOffset;
 
-do -- variables and settings
+do -- variables, settings, and local functions
 	suiChar = suiChar or {};
 	if suiData then
 		if suiData.relScale then suiChar.scale = suiData.relScale; end
 	end
 	addon.options = {name = "SpartanUI", type = "group", args = {}};
-end
-do -- special functions and scripts
-	function getSpartanScale()
-		if (not suiChar.scale) then
-			local width, height = string.match((({GetScreenResolutions()})[GetCurrentResolution()] or ""), "(%d+).-(%d+)");		
+	local round = function(num) -- rounds a number to 2 decimal places
+		return math.floor( (num*10^2)+0.5) / (10^2);
+	end;
+	updateSpartanScale = function() -- scales SpartanUI based on setting or screen size
+		if (not suiChar.scale) then -- make sure the variable exists, and auto-configured based on screen size
+			local width, height = string.match(GetCVar("gxResolution"),"(%d+).-(%d+)");
+			print(width.."x"..height);
+			-- local width, height = string.match((({GetScreenResolutions()})[GetCurrentResolution()] or ""), "(%d+).-(%d+)");
 			if (tonumber(width) / tonumber(height) > 4/3) then suiChar.scale = 0.92;
 			else suiChar.scale = 0.78; end
-		end	
-		return math.floor( (SpartanUI:GetScale()*10^2)+0.5) / (10^2); -- rounds the scale to 2 decimal places	
-	end
-	function getSpartanOffset()
-		if suiChar.offset then 
-			return max(suiChar.offset,1);
+		end
+		if (suiChar.scale ~= round(SpartanUI:GetScale())) then
+			print("updateSpartanScale " .. round(SpartanUI:GetScale()) .. " -> ".. suiChar.scale);
+			frame:SetScale(suiChar.scale); end
+	end;
+	updateSpartanOffset = function() -- handles SpartanUI offset based on setting or fubar / titan
+		local fubar,offset = 0;
+		if suiChar.offset then
+			offset = max(suiChar.offset,1);
 		else
-			local fubar = 0;
 			for i = 1,4 do
 				if (_G["FuBarFrame"..i] and _G["FuBarFrame"..i]:IsVisible()) then
 					local bar = _G["FuBarFrame"..i];
 					local point = bar:GetPoint(1);
-					if point == "BOTTOMLEFT" then
-						fubar = fubar + bar:GetHeight();
-					end
+					if point == "BOTTOMLEFT" then fubar = fubar + bar:GetHeight(); 	end
 				end
 			end
-			return max(fubar,1);
+			offset = max(fubar,1);
 		end
-	end
+		if (offset ~= round(anchor:GetHeight())) then anchor:SetHeight(offset); end
+	end;
 	function addon:print(message,prefix)
 		if prefix then
 			message = "SpartanUI: "..message;
@@ -54,23 +58,21 @@ do -- special functions and scripts
 		end
 		return target;
 	end
-	frame:SetScript("OnUpdate",function()
-		if (InCombatLockdown()) then return; end		
-		if (suiChar.scale ~= getSpartanScale()) then
-			frame:SetScale(suiChar.scale);
-		end
-	end);
+end
+do -- event handlers and scripts
 	anchor:SetScript("OnUpdate",function()
 		if (InCombatLockdown()) then return; end
-		local offset = getSpartanOffset();
-		if (anchor:GetHeight() ~= offset) then
-			anchor:SetHeight(offset);
-		end
-	end);
+		updateSpartanScale();
+		updateSpartanOffset();
+	end);	
 	frame:SetScript("OnEvent",function()
 		LibStub("AceConfig-3.0"):RegisterOptionsTable("SpartanUI", addon.options, {"sui", "spartanui"});
+		anchor:SetFrameStrata("BACKGROUND"); anchor:SetFrameLevel(1);
+		frame:SetFrameStrata("BACKGROUND"); frame:SetFrameLevel(1);
+		updateSpartanScale();
+		updateSpartanOffset();		
 	end);
-	frame:RegisterEvent("PLAYER_ENTERING_WORLD");
+	frame:RegisterEvent("VARIABLES_LOADED");
 end
 do -- default interface modifications
 	FramerateLabel:ClearAllPoints();
@@ -145,11 +147,7 @@ do -- default interface modifications
 		end
 	end);
 end
-do -- framestrata and framelevel verification
-	anchor:SetFrameStrata("BACKGROUND"); anchor:SetFrameLevel(1);
-	frame:SetFrameStrata("BACKGROUND"); frame:SetFrameLevel(1);
-end
-do -- slash commands
+do -- slash command handlers
 	addon.options.args["reset"] = {
 		type = "execute",
 		name = "Reset Options",
