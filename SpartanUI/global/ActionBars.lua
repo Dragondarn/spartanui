@@ -86,6 +86,7 @@ do -- setup bartender, if it exists
 				PetBar = {			enabled = true,	padding = 1,	rows = 1,								position = {point = "TOPLEFT",		parent = "SUI_ActionBarPlate",	x=46,		y=-3,	scale = 0.80,	growHorizontal="RIGHT"}},
 				StanceBar = {		enabled = true,	padding = 1,	rows = 1,								position = {point = "TOPRIGHT",	parent = "SUI_ActionBarPlate",	x=-613,	y=-2,	scale = 0.85,	growHorizontal="LEFT"}},
 				MultiCast = {		enabled = true,																			position = {point = "TOPRIGHT",	parent = "SUI_ActionBarPlate",	x=-774,	y=-6,	scale = 0.8}},
+				Vehicle = {			enabled = false},
 			};
 		local lib = LibStub("LibWindow-1.1",true);
 		if not lib then return; end

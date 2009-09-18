@@ -16,13 +16,11 @@ do -- variables, settings, and local functions
 	updateSpartanScale = function() -- scales SpartanUI based on setting or screen size
 		if (not suiChar.scale) then -- make sure the variable exists, and auto-configured based on screen size
 			local width, height = string.match(GetCVar("gxResolution"),"(%d+).-(%d+)");
-			print(width.."x"..height);
 			-- local width, height = string.match((({GetScreenResolutions()})[GetCurrentResolution()] or ""), "(%d+).-(%d+)");
 			if (tonumber(width) / tonumber(height) > 4/3) then suiChar.scale = 0.92;
 			else suiChar.scale = 0.78; end
 		end
 		if (suiChar.scale ~= round(SpartanUI:GetScale())) then
-			print("updateSpartanScale " .. round(SpartanUI:GetScale()) .. " -> ".. suiChar.scale);
 			frame:SetScale(suiChar.scale); end
 	end;
 	updateSpartanOffset = function() -- handles SpartanUI offset based on setting or fubar / titan
