@@ -1,7 +1,7 @@
 local addon = LibStub("AceAddon-3.0"):GetAddon("SpartanUI");
 local module = addon:NewModule("StatusBars");
 ----------------------------------------------------------------------------------------------------
-suiChar.tipmodify = suiChar.tipmodify or 1;
+suiChar.tipHover = suiChar.tipHover or 0;
 
 local tooltip, xpframe, repframe;
 local FACTION_BAR_COLORS = {
@@ -31,12 +31,12 @@ function module:OnInitialize()
 	name = "Change Tooltip Behavior",
 	desc = "toggles between tooltip mechanics for the xp and rep bars",
 	func = function()
-		if (suiChar and suiChar.tipmodify) then
-			suiChar.tipmodify = 0;
-			addon:Print("Tooltip Behavior set to HOVER");
+		if (suiChar and suiChar.tipHover == 1) then
+			suiChar.tipHover = 0;
+			addon:Print("Tooltip Behavior set to OnClick");
 		else
-			suiChar.tipmodify = 1;
-			addon:Print("Tooltip Behavior set to SHIFT-HOVER");
+			suiChar.tipHover = 1;
+			addon:Print("Tooltip Behavior set to OnMouseover");
 		end
 	end
 	};
@@ -66,8 +66,7 @@ function module:OnEnable()
 		SUI_ExperienceBarLead:SetVertexColor(0,0.6,1,0.7);	
 		SUI_ExperienceBarLeadGlow:SetVertexColor(0,0.6,1,0.5);
 		
-		xpframe:SetScript("OnEnter",function()
-			if (suiChar and suiChar.tipmodify == 1) and (not IsShiftKeyDown()) then return; end -- if tipmodify is enabled and the shift key isn't down, don't show
+		local showTooltip = function()
 			tooltip:ClearAllPoints();
 			tooltip:SetPoint("BOTTOM",xpframe,"TOP");
 			SUI_StatusBarTooltipHeader:SetText(format(FRIENDS_LEVEL_TEMPLATE,UnitLevel("player"),format(XP_LEVEL_TEMPLATE,UnitXP("player"),UnitXPMax("player"),(UnitXP("player")/UnitXPMax("player")*100)))); -- Level 99 (9999 / 9999) 100% Experience
@@ -80,9 +79,16 @@ function module:OnEnable()
 				SUI_StatusBarTooltipText:SetText(format(xptip1,EXHAUST_TOOLTIP2,100)); -- You should rest at an Inn. 100% of normal experience gained from monsters.
 			end
 			tooltip:Show();
+		end
+		xpframe:SetScript("OnEnter",function()
+			if (suiChar and suiChar.tipHover == 1) then showTooltip(); end
 		end);
 		xpframe:SetScript("OnLeave",function()
 			tooltip:Hide();
+		end);
+		xpframe:SetScript("OnMouseDown",function()
+			if (tooltip:IsVisible()) then tooltip:Hide();
+			elseif (suiChar and suiChar.tipHover == 0) then showTooltip(); end
 		end);
 		xpframe:SetScript("OnEvent",function()
 			local level,rested,now,goal = UnitLevel("player"),GetXPExhaustion() or 0,UnitXP("player"),UnitXPMax("player");
@@ -107,9 +113,9 @@ function module:OnEnable()
 		SUI_ReputationBarFillGlow:SetVertexColor(0,1,0,0.2);
 		SUI_ReputationBarLead:SetVertexColor(0,1,0,0.7);
 		SUI_ReputationBarLeadGlow:SetVertexColor(0,1,0,0.2);
-
-		repframe:SetScript("OnEnter",function()
-			if (suiChar and suiChar.tipmodify == 1) and (not IsShiftKeyDown()) then return; end -- if tipmodify is enabled and the shift key isn't down, don't show
+		
+		
+		local showTooltip = function()
 			tooltip:ClearAllPoints();
 			tooltip:SetPoint("BOTTOM",SUI_ReputationBar,"TOP",3,0);
 			local name,react,low,high,current,text,ratio = GetWatchedFactionInfo();
@@ -123,10 +129,17 @@ function module:OnEnable()
 				SUI_StatusBarTooltipText:SetText(REPUTATION_STANDING_DESCRIPTION);
 			end
 			tooltip:Show();
+		end
+		repframe:SetScript("OnEnter",function()
+			if (suiChar and suiChar.tipHover == 1) then showTooltip(); end
 		end);
 		repframe:SetScript("OnLeave",function()
 			tooltip:Hide();
 		end);
+		repframe:SetScript("OnMouseDown",function()
+			if (tooltip:IsVisible()) then tooltip:Hide();
+			elseif (suiChar and suiChar.tipHover == 0) then showTooltip(); end
+		end);		
 		repframe:SetScript("OnEvent",function()
 			local ratio,name,reaction,low,high,current = 0,GetWatchedFactionInfo();
 			if name then ratio = (current-low)/(high-low); end

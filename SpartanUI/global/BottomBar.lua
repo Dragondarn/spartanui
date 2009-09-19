@@ -141,7 +141,7 @@ function module:OnInitialize()
 	addon.options.args["offset"] = {
 		type = "input",
 		name = "Configure Offset",
-		desc = "offsets the bottom bar automatically, or a set value",
+		desc = "offsets the bottom bar automatically, or on a set value",
 		set = function(info,val)
 			if (InCombatLockdown()) then 
 				addon:Print(ERR_NOT_IN_COMBAT);

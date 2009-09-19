@@ -132,6 +132,16 @@ function FG_OnEvent(arg1, arg2)
 		end
 	end
 	
+	if arg1=="reset" then
+		if FE_Vignette then FE_Vignette:Hide(); end
+		if FG_Fuzzy then FG_Fuzzy:Hide(); end
+		if FG_Fuggly then FG_Fuggly:Hide(); end
+		if FG_Crispy then FG_Crispy:Hide(); end
+		
+		FEDB.vignette = nil;
+		FEDB.animateGrainFuzzy = nil;		
+		FEDB.animateGrainCrispy = nil;		
+	end		
 end
 function FG_OnUpdate(self, elapsed)
 	FEDB.animationInterval = FEDB.animationInterval + elapsed
@@ -165,53 +175,56 @@ SlashCmdList["FILMEFF"] = function(msg)
 	if (cmd == "vignette") then
 		FG_OnEvent("vignette");
 		if FEDB.vignette then 
-			DEFAULT_CHAT_FRAME:AddMessage("FilmEffects: Vignette Enabled",0, 1, 1);
+			DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99FilmEffects|r: Vignette Enabled");
 		else
-			DEFAULT_CHAT_FRAME:AddMessage("FilmEffects: Vignette Disabled",0, 1, 1);
+			DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99FilmEffects|r: Vignette Disabled");
 		end
 	elseif (cmd == "blur") then
 		FG_OnEvent("film", "blur");
 		if FEDB.animateGrainFuzzy then 
-			DEFAULT_CHAT_FRAME:AddMessage("FilmEffects: Grain Blur Enabled",0, 1, 1);
+			DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99FilmEffects|r: Blurry Film-Grain Enabled");
 		else
-			DEFAULT_CHAT_FRAME:AddMessage("FilmEffects: Grain Blur Disabled",0, 1, 1);
+			DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99FilmEffects|r: Blurry Film-Grain Disabled");
 		end
 	elseif (cmd == "crisp") then
 		FG_OnEvent("film", "crisp");
 		if FEDB.animateGrainCrispy then 
-			DEFAULT_CHAT_FRAME:AddMessage("FilmEffects: Crisp Grain Enabled",0, 1, 1);
+			DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99FilmEffects|r: Crisp Film-Grain Enabled");
 		else
-			DEFAULT_CHAT_FRAME:AddMessage("FilmEffects: Crisp Grain Disabled",0, 1, 1);
+			DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99FilmEffects|r: Crisp Film-Grain Disabled");
 		end
+	elseif (cmd == "reset") then
+		FG_OnEvent("reset");
+		DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99FilmEffects|r: Everything Disabled");	
 	else
-		DEFAULT_CHAT_FRAME:AddMessage("FilmEffects Command Reference:",0, 1, 1);
-		DEFAULT_CHAT_FRAME:AddMessage("Usage: /film <command>",0, 1, 1);
-		DEFAULT_CHAT_FRAME:AddMessage("Commands: vignette, blur, crisp",0, 1, 1);
+		DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99FilmEffects|r: Arguments to |cffffff78/film|r");
+		if FEDB.vignette then
+			DEFAULT_CHAT_FRAME:AddMessage("    |cffffff78vignette|r - toggles shadows on the edges of the screen <|cff33ff99ACTIVE|r>");
+		else
+			DEFAULT_CHAT_FRAME:AddMessage("    |cffffff78vignette|r - toggles shadows on the edges of the screen");
+		end
+		if FEDB.animateGrainFuzzy then
+			DEFAULT_CHAT_FRAME:AddMessage("    |cffffff78blur|r - toggles a blurry film-grain to the screen <|cff33ff99ACTIVE|r>");
+		else
+			DEFAULT_CHAT_FRAME:AddMessage("    |cffffff78blur|r - toggles a blurry film-grain to the screen");
+		end
+		if FEDB.animateGrainCrispy then
+			DEFAULT_CHAT_FRAME:AddMessage("    |cffffff78crisp|r - toggles a sharp film-grain to the screen <|cff33ff99ACTIVE|r>");
+		else
+			DEFAULT_CHAT_FRAME:AddMessage("    |cffffff78crisp|r - toggles a sharp film-grain to the screen");
+		end
+		DEFAULT_CHAT_FRAME:AddMessage("    |cffffff78reset|r - disables all active film effects");		
 	end
 end;
 SLASH_FILMEFF1 = "/film";
 ---------------------------------------------------------------------------
 if (IsAddOnLoaded("SpartanUI")) then
-	local options = LibStub("SpartanUI").options;
+	local options = LibStub("AceAddon-3.0"):GetAddon("SpartanUI").options;
 	options.args["film"] = {
-		name = "Toggle SpinCam",
-		desc = "Film Effects",
-		type = "group", args = {
-			vignette = {name = "Vignette Effect", type = "execute",
-				func = function()
-					SlashCmdList["FILMEFF"]("vignette");
-				end
-			},
-			blur = {name = "Blur Grain Effect", type = "execute",
-				func = function()
-					SlashCmdList["FILMEFF"]("blur");
-				end
-			},
-			crisp = {name = "Crisp Grain Effect", type = "execute",
-				func = function()
-					SlashCmdList["FILMEFF"]("crisp");
-				end
-			},
-		}
+		name = "Toggle FilmEffects",
+		type = "input", 
+		set = function(info,val)
+			SlashCmdList["FILMEFF"](val);
+		end
 	};
 end
