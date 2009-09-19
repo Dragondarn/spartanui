@@ -103,15 +103,15 @@ function module:OnInitialize()
 				set = function(info,val)
 					if (val == "" and suiChar.ActionBars.bar1.enable == 1) or (val == "off") then
 						suiChar.ActionBars.bar1.enable = 0;
-						addon:print("Backdrop1 Disabled",true);
+						addon:Print("Backdrop1 Disabled");
 					elseif (val == "" and suiChar.ActionBars.bar1.enable == 0) or (val == "on") then
 						suiChar.ActionBars.bar1.enable = 1;
-						addon:print("Backdrop1 Enabled",true);
+						addon:Print("Backdrop1 Enabled");
 					else
 						val = tonumber(val);
 						if (type(val) == "number") then
 							suiChar.ActionBars.bar1.alpha = val;
-							addon:print("Backdrop1 Alpha set to "..val,true);
+							addon:Print("Backdrop1 Alpha set to "..val);
 						end
 					end
 				end
@@ -121,15 +121,15 @@ function module:OnInitialize()
 				set = function(info,val)
 					if (val == "" and suiChar.ActionBars.bar2.enable == 1) or (val == "off") then
 						suiChar.ActionBars.bar2.enable = 0;
-						addon:print("Backdrop2 Disabled",true);
+						addon:Print("Backdrop2 Disabled");
 					elseif (val == "" and suiChar.ActionBars.bar2.enable == 0) or (val == "on") then
 						suiChar.ActionBars.bar2.enable = 1;
-						addon:print("Backdrop2 Enabled",true);
+						addon:Print("Backdrop2 Enabled");
 					else
 						val = tonumber(val);
 						if (type(val) == "number") then
 							suiChar.ActionBars.bar2.alpha = val;
-							addon:print("Backdrop2 Alpha set to "..val,true);
+							addon:Print("Backdrop2 Alpha set to "..val);
 						end
 					end
 				end
@@ -139,15 +139,15 @@ function module:OnInitialize()
 				set = function(info,val)
 					if (val == "" and suiChar.ActionBars.bar3.enable == 0) or (val == "off") then
 						suiChar.ActionBars.bar3.enable = 1;
-						addon:print("Backdrop3 Disabled",true);
+						addon:Print("Backdrop3 Disabled");
 					elseif (val == "" and suiChar.ActionBars.bar3.enable == 1) or (val == "on") then
 						suiChar.ActionBars.bar3.enable = 0;
-						addon:print("Backdrop3 Enabled",true);
+						addon:Print("Backdrop3 Enabled");
 					else
 						val = tonumber(val);
 						if (type(val) == "number") then
 							suiChar.ActionBars.bar3.alpha = val;
-							addon:print("Backdrop3 Alpha set to "..val,true);
+							addon:Print("Backdrop3 Alpha set to "..val);
 						end
 					end
 				end
@@ -157,15 +157,15 @@ function module:OnInitialize()
 				set = function(info,val)
 					if (val == "" and suiChar.ActionBars.bar4.enable == 1) or (val == "off") then
 						suiChar.ActionBars.bar4.enable = 0;
-						addon:print("Backdrop4 Disabled",true);
+						addon:Print("Backdrop4 Disabled");
 					elseif (val == "" and suiChar.ActionBars.bar4.enable == 0) or (val == "on") then
 						suiChar.ActionBars.bar4.enable = 1;
-						addon:print("Backdrop4 Enabled",true);
+						addon:Print("Backdrop4 Enabled");
 					else
 						val = tonumber(val);
 						if (type(val) == "number") then
 							suiChar.ActionBars.bar4.alpha = val;
-							addon:print("Backdrop4 Alpha set to "..val,true);
+							addon:Print("Backdrop4 Alpha set to "..val);
 						end
 					end
 				end
@@ -175,15 +175,15 @@ function module:OnInitialize()
 				set = function(info,val)
 					if (val == "" and suiChar.ActionBars.bar5.enable == 1) or (val == "off") then
 						suiChar.ActionBars.bar5.enable = 0;
-						addon:print("Backdrop5 Disabled",true);
+						addon:Print("Backdrop5 Disabled");
 					elseif (val == "" and suiChar.ActionBars.bar5.enable == 0) or (val == "on") then
 						suiChar.ActionBars.bar5.enable = 1;
-						addon:print("Backdrop5 Enabled",true);
+						addon:Print("Backdrop5 Enabled");
 					else
 						val = tonumber(val);
 						if (type(val) == "number") then
 							suiChar.ActionBars.bar5.alpha = val;
-							addon:print("Backdrop5 Alpha set to "..val,true);
+							addon:Print("Backdrop5 Alpha set to "..val);
 						end
 					end
 				end
@@ -193,15 +193,15 @@ function module:OnInitialize()
 				set = function(info,val)
 					if (val == "" and suiChar.ActionBars.bar6.enable == 1) or (val == "off") then
 						suiChar.ActionBars.bar6.enable = 0;
-						addon:print("Backdrop6 Disabled",true);
+						addon:Print("Backdrop6 Disabled");
 					elseif (val == "" and suiChar.ActionBars.bar6.enable == 0) or (val == "on") then
 						suiChar.ActionBars.bar6.enable = 1;
-						addon:print("Backdrop6 Enabled",true);
+						addon:Print("Backdrop6 Enabled");
 					else
 						val = tonumber(val);
 						if (type(val) == "number") then
 							suiChar.ActionBars.bar6.alpha = val;
-							addon:print("Backdrop6 Alpha set to "..val,true);
+							addon:Print("Backdrop6 Alpha set to "..val);
 						end
 					end
 				end
@@ -211,15 +211,15 @@ function module:OnInitialize()
 				set = function(info,val)
 					if (val == "" and suiChar.ActionBars.popup1.enable == 1) or (val == "off") then
 						suiChar.ActionBars.popup1.enable = 0;
-						addon:print("Popup1 Backdrop Disabled",true);
+						addon:Print("Popup1 Backdrop Disabled");
 					elseif (val == "" and suiChar.ActionBars.popup1.enable == 0) or (val == "on") then
 						suiChar.ActionBars.popup1.enable = 1;
-						addon:print("Popup1 Backdrop Enabled",true);
+						addon:Print("Popup1 Backdrop Enabled");
 					else
 						val = tonumber(val);
 						if (type(val) == "number") then
 							suiChar.ActionBars.popup1.alpha = val;
-							addon:print("Popup1 Alpha set to "..val,true);
+							addon:Print("Popup1 Alpha set to "..val);
 						end
 					end
 				end
@@ -229,15 +229,15 @@ function module:OnInitialize()
 				set = function(info,val)
 					if (val == "" and suiChar.ActionBars.popup2.enable == 1) or (val == "off") then
 						suiChar.ActionBars.popup2.enable = 0;
-						addon:print("Popup2 Backdrop Disabled",true);
+						addon:Print("Popup2 Backdrop Disabled");
 					elseif (val == "" and suiChar.ActionBars.popup2.enable == 0) or (val == "on") then
 						suiChar.ActionBars.popup2.enable = 1;
-						addon:print("Popup2 Backdrop Enabled",true);
+						addon:Print("Popup2 Backdrop Enabled");
 					else
 						val = tonumber(val);
 						if (type(val) == "number") then
 							suiChar.ActionBars.popup2.alpha = val;
-							addon:print("Popup2 Alpha set to "..val,true);
+							addon:Print("Popup2 Alpha set to "..val);
 					end
 				end
 			end
@@ -248,16 +248,16 @@ function module:OnInitialize()
 					if (val == "" or val == "on" or val == "off") then
 						if (val == "off" or suiChar.ActionBars.bar1.enable == 1) then
 							for i = 1,6 do suiChar.ActionBars["bar"..i].enable = 0; end
-							addon:print("Backdrops for All Bars Disabled",true);
+							addon:Print("Backdrops for All Bars Disabled");
 						elseif (val == "on" or suiChar.ActionBars.bar1.enable == 0) then
 							for i = 1,6 do suiChar.ActionBars["bar"..i].enable = 1; end
-							addon:print("Backdrops for All Bars Enabled",true);
+							addon:Print("Backdrops for All Bars Enabled");
 						end		
 					else
 						val = tonumber(val);
 						if (type(val) == "number") then
 							for i = 1,6 do suiChar.ActionBars["bar"..i].alpha = val; end
-							addon:print("Alpha for All Bar Backdrops set to "..val,true);
+							addon:Print("Alpha for All Bar Backdrops set to "..val);
 						end
 					end
 				end
@@ -268,16 +268,16 @@ function module:OnInitialize()
 					if (val == "" or val == "on" or val == "off") then
 						if (val == "off" or suiChar.ActionBars.popup1.enable == 1) then
 							for i = 1,2 do suiChar.ActionBars["popup"..i].enable = 0; end
-							addon:print("Backdrops for All Popups Disabled",true);
+							addon:Print("Backdrops for All Popups Disabled");
 						elseif (val == "on" or suiChar.ActionBars.popup1.enable == 0) then
 							for i = 1,2 do suiChar.ActionBars["popup"..i].enable = 1; end
-							addon:print("Backdrops for All Popups Enabled",true);
+							addon:Print("Backdrops for All Popups Enabled");
 						end		
 					else
 						val = tonumber(val);
 						if (type(val) == "number") then
 							for i = 1,2 do suiChar.ActionBars["popup"..i].alpha = val; end
-							addon:print("Alpha for All Popup Backdrops set to "..val,true);
+							addon:Print("Alpha for All Popup Backdrops set to "..val);
 						end
 					end
 				end
@@ -289,18 +289,18 @@ function module:OnInitialize()
 						if (val == "off" or suiChar.ActionBars.bar1.enable == 1) then
 							for i = 1,6 do suiChar.ActionBars["bar"..i].enable = 0; end
 							for i = 1,2 do suiChar.ActionBars["popup"..i].enable = 0; end
-							addon:print("All Backdrops Disabled",true);
+							addon:Print("All Backdrops Disabled");
 						elseif (val == "on" or suiChar.ActionBars.bar1.enable == 0) then
 							for i = 1,6 do suiChar.ActionBars["bar"..i].enable = 1; end
 							for i = 1,2 do suiChar.ActionBars["popup"..i].enable = 1; end
-							addon:print("All Backdrops Enabled",true);
+							addon:Print("All Backdrops Enabled");
 						end		
 					else
 						val = tonumber(val);
 						if (type(val) == "number") then
 							for i = 1,6 do suiChar.ActionBars["bar"..i].alpha = val; end
 							for i = 1,2 do suiChar.ActionBars["popup"..i].alpha = val; end
-							addon:print("Alpha for All Backdrops set to "..val,true);
+							addon:Print("Alpha for All Backdrops set to "..val);
 						end
 					end
 				end
@@ -330,10 +330,10 @@ function module:OnInitialize()
 				set = function(info,val)
 					if val then
 						suiChar.ActionBars.popup1.anim = 1;
-						addon:print("Animations for Popup Bar1 Enabled",true);
+						addon:Print("Animations for Popup Bar1 Enabled");
 					else
 						suiChar.ActionBars.popup1.anim = 0;
-						addon:print("Animations for Popup Bar1 Disabled",true);
+						addon:Print("Animations for Popup Bar1 Disabled");
 					end
 				end
 			},
@@ -342,10 +342,10 @@ function module:OnInitialize()
 				set = function(info,val)				
 					if val then
 						suiChar.ActionBars.popup2.anim = 1;
-						addon:print("Animations for Popup Bar2 Enabled",true);
+						addon:Print("Animations for Popup Bar2 Enabled");
 					else
 						suiChar.ActionBars.popup2.anim = 0;
-						addon:print("Animations for Popup Bar2 Disabled",true);
+						addon:Print("Animations for Popup Bar2 Disabled");
 					end
 				end
 			},
@@ -357,11 +357,11 @@ function module:OnInitialize()
 					if val then
 						suiChar.ActionBars.popup1.anim = 1;
 						suiChar.ActionBars.popup2.anim = 1;
-						addon:print("Animations for All Popup Bars Enabled",true);
+						addon:Print("Animations for All Popup Bars Enabled");
 					else
 						suiChar.ActionBars.popup1.anim = 0;
 						suiChar.ActionBars.popup2.anim = 0;
-						addon:print("Animations for All Popup Bars Disabled",true);
+						addon:Print("Animations for All Popup Bars Disabled");
 					end
 				end
 			},

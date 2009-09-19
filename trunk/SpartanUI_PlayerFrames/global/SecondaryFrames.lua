@@ -1,6 +1,6 @@
-local addon = LibStub:GetLibrary("SpartanUI_PlayerFrames");
-if (not addon) then return; end
----------------------------------------------------------------------------
+local spartan = LibStub("AceAddon-3.0"):GetAddon("SpartanUI");
+local addon = spartan:GetModule("PlayerFrames");
+----------------------------------------------------------------------------------------------------
 local bar_texture = [[Interface\TargetingFrame\UI-StatusBar]]
 local base_plate = [[Interface\AddOns\SpartanUI_PlayerFrames\media\base_plate3]]
 local base_ring = [[Interface\AddOns\SpartanUI_PlayerFrames\media\base_ring3]]

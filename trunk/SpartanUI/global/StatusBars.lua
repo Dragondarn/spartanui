@@ -33,10 +33,10 @@ function module:OnInitialize()
 	func = function()
 		if (suiChar and suiChar.tipmodify) then
 			suiChar.tipmodify = 0;
-			addon:print("Tooltip Behavior set to HOVER",true);
+			addon:Print("Tooltip Behavior set to HOVER");
 		else
 			suiChar.tipmodify = 1;
-			addon:print("Tooltip Behavior set to SHIFT-HOVER",true);
+			addon:Print("Tooltip Behavior set to SHIFT-HOVER");
 		end
 	end
 	};
