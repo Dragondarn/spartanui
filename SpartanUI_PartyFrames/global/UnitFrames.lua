@@ -1,11 +1,11 @@
-local addon = LibStub:NewLibrary("SpartanUI_PartyFrames",20090521);
-if (not addon) then return; end
----------------------------------------------------------------------------
+local spartan = LibStub("AceAddon-3.0"):GetAddon("SpartanUI");
+local addon = spartan:NewModule("PartyFrames");
+----------------------------------------------------------------------------------------------------
 local default = {showAuras = 1,partyLock = 1};
 suiChar.PartyFrames = suiChar.PartyFrames or {};
 setmetatable(suiChar.PartyFrames,{__index = default});
----------------------------------------------------------------------------
-if (not LibStub("SpartanUI_PlayerFrames",true)) then
+
+if (not spartan:GetModule("PlayerFrames",true)) then
 	-- only do this stuff if PlayerFrames isn't loaded
 	do -- ClassIcon as an oUF module
 		local ClassIconCoord = {

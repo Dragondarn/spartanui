@@ -1,22 +1,6 @@
-local addon = LibStub:NewLibrary("SpartanUI_PlayerFrames",20090521);
-if (not addon) then return; end
----------------------------------------------------------------------------
-do -- color codes
-	addon.colors = {};
-	addon.colors.health = {0/255,255/255,50/255};
-	addon.colors.reaction = {};
-	addon.colors.reaction[1] = {0.8,0.3,0}; -- Hated
-	addon.colors.reaction[2] = addon.colors.reaction[1]; -- Hostile
-	addon.colors.reaction[3] = addon.colors.reaction[1]; -- Unfriendly
-	addon.colors.reaction[4] = {1, 0.8, 0}; -- Neutral
-	addon.colors.reaction[5] = {0,1, 0.2}; -- Friendly
-	addon.colors.reaction[6] = addon.colors.reaction[5]; -- Honored
-	addon.colors.reaction[7] = addon.colors.reaction[5]; -- Revered
-	addon.colors.reaction[8] = addon.colors.reaction[5]; -- Exalted
-	if (oUF and oUF.colors) then
-		addon.colors = setmetatable(addon.colors,{__index = oUF.colors});
-	end
-end
+local spartan = LibStub("AceAddon-3.0"):GetAddon("SpartanUI");
+local addon = spartan:NewModule("PlayerFrames");
+----------------------------------------------------------------------------------------------------
 do -- ClassIcon as an oUF module
 	local ClassIconCoord = {
 		WARRIOR = {1,1},
@@ -96,4 +80,19 @@ do -- Rare / Elite dragon graphic as an oUF module
 	end
 	local Disable = function(self) return; end
 	oUF:AddElement('RareElite', Update,Enable,Disable);
+end
+
+addon.colors = {};
+addon.colors.health = {0/255,255/255,50/255};
+addon.colors.reaction = {};
+addon.colors.reaction[1] = {0.8,0.3,0}; -- Hated
+addon.colors.reaction[2] = addon.colors.reaction[1]; -- Hostile
+addon.colors.reaction[3] = addon.colors.reaction[1]; -- Unfriendly
+addon.colors.reaction[4] = {1, 0.8, 0}; -- Neutral
+addon.colors.reaction[5] = {0,1, 0.2}; -- Friendly
+addon.colors.reaction[6] = addon.colors.reaction[5]; -- Honored
+addon.colors.reaction[7] = addon.colors.reaction[5]; -- Revered
+addon.colors.reaction[8] = addon.colors.reaction[5]; -- Exalted
+if (oUF and oUF.colors) then
+	addon.colors = setmetatable(addon.colors,{__index = oUF.colors});
 end

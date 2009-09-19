@@ -1,6 +1,6 @@
-local addon = LibStub:GetLibrary("SpartanUI_PartyFrames");
-if (not addon) then return; end
----------------------------------------------------------------------------
+local spartan = LibStub("AceAddon-3.0"):GetAddon("SpartanUI");
+local addon = spartan:GetModule("PartyFrames");
+----------------------------------------------------------------------------------------------------
 local CreatePartyFrame, CreatePetFrame;
 local bar_texture = [[Interface\TargetingFrame\UI-StatusBar]]
 local colors = setmetatable({},{__index = oUF.colors});
@@ -215,6 +215,7 @@ local CreatePartyFrame = function(self,unit)
 		self.Auras.numDebuffs = 4;
 		
 		self.PreUpdateAura = PreUpdateAura;
+		self.PostUpdateAura = PostUpdateAura;
 	end
 	return self;
 end
@@ -319,6 +320,7 @@ local CreatePetFrame = function(self,unit)
 		self.Auras.numDebuffs = 12;
 		
 		self.PreUpdateAura = PreUpdateAura;
+		self.PostUpdateAura = PostUpdateAura;
 	end
 	return self;
 end
@@ -365,7 +367,7 @@ function addon:UpdatePartyPosition()
 		party:SetMovable(true);
 	else
 		party:SetMovable(false);
-		if LibStub("SpartanUI_PlayerFrames",true) then
+		if spartan:GetModule("PlayerFrames",true) then
 			party:SetPoint("TOPLEFT",UIParent,"TOPLEFT",10,-20);
 		else
 			party:SetPoint("TOPLEFT",UIParent,"TOPLEFT",10,-140);
