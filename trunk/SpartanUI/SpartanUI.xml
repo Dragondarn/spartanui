@@ -3,6 +3,7 @@
 	<!-- frameStrata Parameters:  BACKGROUND, LOW, MEDIUM, HIGH, DIALOG, FULLSCREEN, FULLSCREEN_DIALOG, TOOLTIP  -->
 	<!-- Layer level Parameters:  BACKGROUND, BORDER, ARTWORK, OVERLAY, HIGHLIGHT -->
 	
+	<Script file="SpartanUI.lua" />
 	<Font name="SUI_FontOutline22"  font="Interface\AddOns\SpartanUI\media\Cognosis.ttf" outline="NORMAL" virtual="true">
 		<FontHeight><AbsValue val="22"/></FontHeight>
 	</Font>
@@ -239,9 +240,9 @@
 		</Layers>
 	</Frame>
 	
-	<Script file="BottomBar.lua" />
-	<Script file="ChatFrame.lua" />
-	<Script file="StatusBars.lua" />
-	<Script file="Minimap.lua" />
-	<Script file="ActionBars.lua" />
+	<Script file="global\BottomBar.lua" />
+	<Script file="global\ChatFrame.lua" />
+	<Script file="global\StatusBars.lua" />
+	<Script file="global\Minimap.lua" />
+	<Script file="global\ActionBars.lua" />
 </Ui>
