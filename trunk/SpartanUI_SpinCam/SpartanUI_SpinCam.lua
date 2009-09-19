@@ -9,10 +9,10 @@ SlashCmdList["SPINCAM"] = function(msg)
 	end
 	if (arg1 == "on") then
 		SpinCamData.Disable = nil;
-		DEFAULT_CHAT_FRAME:AddMessage("SpinCam Feature Enabled",0, 1, 1);
+		DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99SpinCam|r: Feature Enabled");
 	elseif (arg1 == "off") then
 		SpinCamData.Disable = true;
-		DEFAULT_CHAT_FRAME:AddMessage("SpinCam Feature Disabled",0, 1, 1);
+		DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99SpinCam|r: Feature Disabled");
 	end
 	if (SpinCamData.Disable) and (SpinCamRunning) then
 		MoveViewRightStop();
@@ -51,13 +51,14 @@ frame:SetScript("OnEvent",function()
 end);
 ---------------------------------------------------------------------------
 if (IsAddOnLoaded("SpartanUI")) then
-	local options = LibStub("SpartanUI").options;
+	local options = LibStub("AceAddon-3.0"):GetAddon("SpartanUI").options;
 	options.args["spincam"] = {
-		type = "execute",
+		type = "input",
 		name = "Toggle SpinCam",
 		desc = "Toggles SpinCam on and off",
-		func = function()
-			SlashCmdList["SPINCAM"]("spincam");
+		set = function(info,val)
+			if val then val = " "..val; end
+			SlashCmdList["SPINCAM"]("spincam"..val);
 		end
 	};
 end
