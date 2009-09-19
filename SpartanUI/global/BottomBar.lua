@@ -1,178 +1,125 @@
-local addon = LibStub:NewLibrary("SpartanUI",20090608);
-if (not addon) then return; end
+local addon = LibStub("AceAddon-3.0"):GetAddon("SpartanUI");
+local module = addon:NewModule("BottomBar");
 ----------------------------------------------------------------------------------------------------
 local anchor, frame = SUI_AnchorFrame, SpartanUI;
-local updateSpartanScale, updateSpartanOffset;
-
-do -- variables, settings, and local functions
-	suiChar = suiChar or {};
-	if suiData then
-		if suiData.relScale then suiChar.scale = suiData.relScale; end
+local round = function(num) -- rounds a number to 2 decimal places
+	return math.floor( (num*10^2)+0.5) / (10^2);
+end;
+local updateSpartanScale = function() -- scales SpartanUI based on setting or screen size
+	if (not suiChar.scale) then -- make sure the variable exists, and auto-configured based on screen size
+		local width, height = string.match(GetCVar("gxResolution"),"(%d+).-(%d+)");
+		-- local width, height = string.match((({GetScreenResolutions()})[GetCurrentResolution()] or ""), "(%d+).-(%d+)");
+		if (tonumber(width) / tonumber(height) > 4/3) then suiChar.scale = 0.92;
+		else suiChar.scale = 0.78; end
 	end
-	addon.options = {name = "SpartanUI", type = "group", args = {}};
-	local round = function(num) -- rounds a number to 2 decimal places
-		return math.floor( (num*10^2)+0.5) / (10^2);
-	end;
-	updateSpartanScale = function() -- scales SpartanUI based on setting or screen size
-		if (not suiChar.scale) then -- make sure the variable exists, and auto-configured based on screen size
-			local width, height = string.match(GetCVar("gxResolution"),"(%d+).-(%d+)");
-			-- local width, height = string.match((({GetScreenResolutions()})[GetCurrentResolution()] or ""), "(%d+).-(%d+)");
-			if (tonumber(width) / tonumber(height) > 4/3) then suiChar.scale = 0.92;
-			else suiChar.scale = 0.78; end
+	if (suiChar.scale ~= round(SpartanUI:GetScale())) then
+		frame:SetScale(suiChar.scale); end
+end;
+local updateSpartanOffset = function() -- handles SpartanUI offset based on setting or fubar / titan
+	local fubar,offset = 0;
+	if suiChar.offset then
+		offset = max(suiChar.offset,1);
+	else
+		for i = 1,4 do
+			if (_G["FuBarFrame"..i] and _G["FuBarFrame"..i]:IsVisible()) then
+				local bar = _G["FuBarFrame"..i];
+				local point = bar:GetPoint(1);
+				if point == "BOTTOMLEFT" then fubar = fubar + bar:GetHeight(); 	end
+			end
 		end
-		if (suiChar.scale ~= round(SpartanUI:GetScale())) then
-			frame:SetScale(suiChar.scale); end
-	end;
-	updateSpartanOffset = function() -- handles SpartanUI offset based on setting or fubar / titan
-		local fubar,offset = 0;
-		if suiChar.offset then
-			offset = max(suiChar.offset,1);
-		else
-			for i = 1,4 do
-				if (_G["FuBarFrame"..i] and _G["FuBarFrame"..i]:IsVisible()) then
-					local bar = _G["FuBarFrame"..i];
-					local point = bar:GetPoint(1);
-					if point == "BOTTOMLEFT" then fubar = fubar + bar:GetHeight(); 	end
+		offset = max(fubar,1);
+	end
+	if (offset ~= round(anchor:GetHeight())) then anchor:SetHeight(offset); end
+end;
+
+function module:OnInitialize()
+	do -- default interface modifications
+		FramerateLabel:ClearAllPoints();
+		FramerateLabel:SetPoint("TOP", "WorldFrame", "TOP", -15, -50);
+		MainMenuBar:Hide();
+		hooksecurefunc("updateContainerFrameAnchors",function() -- fix bag offsets
+			local frame, xOffset, yOffset, screenHeight, freeScreenHeight, leftMostPoint, column
+			local screenWidth = GetScreenWidth()
+			local containerScale = 1
+			local leftLimit = 0
+			if ( BankFrame:IsShown() ) then
+				leftLimit = BankFrame:GetRight() - 25
+			end
+			while ( containerScale > CONTAINER_SCALE ) do
+				screenHeight = GetScreenHeight() / containerScale
+				-- Adjust the start anchor for bags depending on the multibars
+				xOffset = 1 / containerScale
+				yOffset = 155
+				-- freeScreenHeight determines when to start a new column of bags
+				freeScreenHeight = screenHeight - yOffset
+				leftMostPoint = screenWidth - xOffset
+				column = 1
+				local frameHeight
+				for index, frameName in ipairs(ContainerFrame1.bags) do
+					frameHeight = getglobal(frameName):GetHeight()
+					if ( freeScreenHeight < frameHeight ) then
+						-- Start a new column
+						column = column + 1
+						leftMostPoint = screenWidth - ( column * CONTAINER_WIDTH * containerScale ) - xOffset
+						freeScreenHeight = screenHeight - yOffset
+					end
+					freeScreenHeight = freeScreenHeight - frameHeight - VISIBLE_CONTAINER_SPACING
+				end
+				if ( leftMostPoint < leftLimit ) then
+					containerScale = containerScale - 0.01
+				else
+					break
 				end
 			end
-			offset = max(fubar,1);
-		end
-		if (offset ~= round(anchor:GetHeight())) then anchor:SetHeight(offset); end
-	end;
-	function addon:print(message,prefix)
-		if prefix then
-			message = "SpartanUI: "..message;
-		end
-		DEFAULT_CHAT_FRAME:AddMessage(message,0,0.8,1);
-	end
-	function addon:MergeData(target,source)
-		if type(target) ~= "table" then target = {} end
-		for k,v in pairs(source) do
-			if type(v) == "table" then
-				target[k] = self:MergeData(target[k], v);
-			else
-				target[k] = v;
+			if ( containerScale < CONTAINER_SCALE ) then
+				containerScale = CONTAINER_SCALE
 			end
-		end
-		return target;
-	end
-end
-do -- event handlers and scripts
-	anchor:SetScript("OnUpdate",function()
-		if (InCombatLockdown()) then return; end
-		updateSpartanScale();
-		updateSpartanOffset();
-	end);	
-	frame:SetScript("OnEvent",function()
-		LibStub("AceConfig-3.0"):RegisterOptionsTable("SpartanUI", addon.options, {"sui", "spartanui"});
-		anchor:SetFrameStrata("BACKGROUND"); anchor:SetFrameLevel(1);
-		frame:SetFrameStrata("BACKGROUND"); frame:SetFrameLevel(1);
-		updateSpartanScale();
-		updateSpartanOffset();		
-	end);
-	frame:RegisterEvent("VARIABLES_LOADED");
-end
-do -- default interface modifications
-	FramerateLabel:ClearAllPoints();
-	FramerateLabel:SetPoint("TOP", "WorldFrame", "TOP", -15, -50);
-	MainMenuBar:Hide();
-	hooksecurefunc("updateContainerFrameAnchors",function() -- fix bag offsets
-		local frame, xOffset, yOffset, screenHeight, freeScreenHeight, leftMostPoint, column
-		local screenWidth = GetScreenWidth()
-		local containerScale = 1
-		local leftLimit = 0
-		if ( BankFrame:IsShown() ) then
-			leftLimit = BankFrame:GetRight() - 25
-		end
-		while ( containerScale > CONTAINER_SCALE ) do
 			screenHeight = GetScreenHeight() / containerScale
 			-- Adjust the start anchor for bags depending on the multibars
 			xOffset = 1 / containerScale
-			yOffset = 155
+			yOffset = 220
 			-- freeScreenHeight determines when to start a new column of bags
 			freeScreenHeight = screenHeight - yOffset
-			leftMostPoint = screenWidth - xOffset
-			column = 1
-			local frameHeight
+			column = 0
 			for index, frameName in ipairs(ContainerFrame1.bags) do
-				frameHeight = getglobal(frameName):GetHeight()
-				if ( freeScreenHeight < frameHeight ) then
+				frame = getglobal(frameName)
+				frame:SetScale(containerScale)
+				if ( index == 1 ) then
+					-- First bag
+					frame:SetPoint("BOTTOMRIGHT", frame:GetParent(), "BOTTOMRIGHT", -xOffset, yOffset )
+				elseif ( freeScreenHeight < frame:GetHeight() ) then
 					-- Start a new column
 					column = column + 1
-					leftMostPoint = screenWidth - ( column * CONTAINER_WIDTH * containerScale ) - xOffset
 					freeScreenHeight = screenHeight - yOffset
+					frame:SetPoint("BOTTOMRIGHT", frame:GetParent(), "BOTTOMRIGHT", -(column * CONTAINER_WIDTH) - xOffset, yOffset )
+				else
+					-- Anchor to the previous bag
+					frame:SetPoint("BOTTOMRIGHT", ContainerFrame1.bags[index - 1], "TOPRIGHT", 0, CONTAINER_SPACING)
 				end
-				freeScreenHeight = freeScreenHeight - frameHeight - VISIBLE_CONTAINER_SPACING
+				freeScreenHeight = freeScreenHeight - frame:GetHeight() - VISIBLE_CONTAINER_SPACING
 			end
-			if ( leftMostPoint < leftLimit ) then
-				containerScale = containerScale - 0.01
-			else
-				break
+		end);
+			hooksecurefunc(GameTooltip,"SetPoint",function(tooltip,point,parent,rpoint) -- fix GameTooltip offset
+			if (point == "BOTTOMRIGHT" and parent == "UIParent" and rpoint == "BOTTOMRIGHT") then
+				tooltip:ClearAllPoints();
+				tooltip:SetPoint("BOTTOM","SpartanUI","TOP",0,80);
 			end
-		end
-		if ( containerScale < CONTAINER_SCALE ) then
-			containerScale = CONTAINER_SCALE
-		end
-		screenHeight = GetScreenHeight() / containerScale
-		-- Adjust the start anchor for bags depending on the multibars
-		xOffset = 1 / containerScale
-		yOffset = 220
-		-- freeScreenHeight determines when to start a new column of bags
-		freeScreenHeight = screenHeight - yOffset
-		column = 0
-		for index, frameName in ipairs(ContainerFrame1.bags) do
-			frame = getglobal(frameName)
-			frame:SetScale(containerScale)
-			if ( index == 1 ) then
-				-- First bag
-				frame:SetPoint("BOTTOMRIGHT", frame:GetParent(), "BOTTOMRIGHT", -xOffset, yOffset )
-			elseif ( freeScreenHeight < frame:GetHeight() ) then
-				-- Start a new column
-				column = column + 1
-				freeScreenHeight = screenHeight - yOffset
-				frame:SetPoint("BOTTOMRIGHT", frame:GetParent(), "BOTTOMRIGHT", -(column * CONTAINER_WIDTH) - xOffset, yOffset )
-			else
-				-- Anchor to the previous bag
-				frame:SetPoint("BOTTOMRIGHT", ContainerFrame1.bags[index - 1], "TOPRIGHT", 0, CONTAINER_SPACING)
-			end
-			freeScreenHeight = freeScreenHeight - frame:GetHeight() - VISIBLE_CONTAINER_SPACING
-		end
-	end);
-	hooksecurefunc(GameTooltip,"SetPoint",function(tooltip,point,parent,rpoint) -- fix GameTooltip offset
-		if (point == "BOTTOMRIGHT" and parent == "UIParent" and rpoint == "BOTTOMRIGHT") then
-			tooltip:ClearAllPoints();
-			tooltip:SetPoint("BOTTOM","SpartanUI","TOP",0,80);
-		end
-	end);
-end
-do -- slash command handlers
-	addon.options.args["reset"] = {
-		type = "execute",
-		name = "Reset Options",
-		desc = "resets all options to default",
-		func = function()
-			if (InCombatLockdown()) then 
-				addon:print(ERR_NOT_IN_COMBAT,true);
-			else
-				suiChar = nil;
-				ReloadUI();
-			end
-		end
-	};
+		end);
+	end
 	addon.options.args["maxres"] = {
 		type = "execute",
 		name = "Toggle Default Scales",
 		desc = "toggles between widescreen and standard scales",
 		func = function()
 			if (InCombatLockdown()) then 
-				addon:print(ERR_NOT_IN_COMBAT,true);
+				addon:Print(ERR_NOT_IN_COMBAT);
 			else
 				if (suiChar.scale >= 0.92) or (suiChar.scale < 0.78) then
 					suiChar.scale = 0.78;
 				else
 					suiChar.scale = 0.92;
 				end
-				addon:print("Relative Scale set to "..suiChar.scale,true);
+				addon:Print("Relative Scale set to "..suiChar.scale);
 			end
 		end
 	};
@@ -183,10 +130,10 @@ do -- slash command handlers
 		min = 0.5, max = 1, step = 0.01, 
 		set = function(info,val)
 			if (InCombatLockdown()) then 
-				addon:print(ERR_NOT_IN_COMBAT,true);
+				addon:Print(ERR_NOT_IN_COMBAT);
 			else
 				suiChar.scale = min(1,max(0.5,val));
-				addon:print("Relative Scale set to "..suiChar.scale,true);
+				addon:Print("Relative Scale set to "..suiChar.scale);
 			end
 		end,
 		get = function(info) return suiChar.scale; end
@@ -197,20 +144,33 @@ do -- slash command handlers
 		desc = "offsets the bottom bar automatically, or a set value",
 		set = function(info,val)
 			if (InCombatLockdown()) then 
-				addon:print(ERR_NOT_IN_COMBAT,true);
+				addon:Print(ERR_NOT_IN_COMBAT);
 			else
 				if (val == "") or (val == "auto") then
 					suiChar.offset = nil;
-					addon:print("Panel Offset set to AUTO",true);
+					addon:Print("Panel Offset set to AUTO");
 				else
 					val = tonumber(val);
 					if (type(val) == "number") then
 						suiChar.offset = max(val+1,1);					
-						addon:print("Panel Offset set to "..val,true);
+						addon:Print("Panel Offset set to "..val);
 					end
 				end
 			end
 		end,
 		get = function(info) return suiChar.offset; end
 	};
+end
+function module:OnEnable()
+	anchor:SetFrameStrata("BACKGROUND"); anchor:SetFrameLevel(1);
+	frame:SetFrameStrata("BACKGROUND"); frame:SetFrameLevel(1);
+	
+	updateSpartanScale();
+	updateSpartanOffset();
+	
+	anchor:SetScript("OnUpdate",function()
+		if (InCombatLockdown()) then return; end
+		updateSpartanScale();
+		updateSpartanOffset();
+	end);
 end

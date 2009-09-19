@@ -1,136 +1,99 @@
-local addon = LibStub("SpartanUI",true);
-if (not addon) then return; end
----------------------------------------------------------------------------
-local plate, setupProfile;
-
-do -- setup default variables
-	local default =  {
-		popup1 = {anim = 1, alpha = 1, enable = 1},
-		popup2 = {anim = 1, alpha = 1, enable = 1},
-		bar1 = {alpha = 1, enable = 1},
-		bar2 = {alpha = 1, enable = 1},
-		bar3 = {alpha = 1, enable = 1},
-		bar4 = {alpha = 1, enable = 1},
-		bar5 = {alpha = 1, enable = 1},
-		bar6 = {alpha = 1, enable = 1},
-	};
-	suiChar.ActionBars = addon:MergeData(suiChar.ActionBars,default);
+local addon = LibStub("AceAddon-3.0"):GetAddon("SpartanUI");
+local module = addon:NewModule("ActionBars");
+----------------------------------------------------------------------------------------------------
+local default, plate = {
+	popup1 = {anim = 1, alpha = 1, enable = 1},
+	popup2 = {anim = 1, alpha = 1, enable = 1},
+	bar1 = {alpha = 1, enable = 1},
+	bar2 = {alpha = 1, enable = 1},
+	bar3 = {alpha = 1, enable = 1},
+	bar4 = {alpha = 1, enable = 1},
+	bar5 = {alpha = 1, enable = 1},
+	bar6 = {alpha = 1, enable = 1},
+};
+local setupProfile = function()
+	-- placeholder, gets replaced if BT4 exists
 end
-do -- setup actionbar container and children
+local setupBartender = function()
+	if (not Bartender4) then return; end
+	local standard = "SpartanUI Standard";
+	local settings = { -- actual settings being inserted into our custom profile
+			ActionBars = {
+				actionbars = { -- following settings are bare minimum, so that anything not defined is retained between resets
+					{enabled = true,	buttons = 12,	rows = 1,	padding = 3,	skin = {Zoom = true},	position = {point = "BOTTOMLEFT",	parent = "SUI_ActionBarPlate",	x=0,	y=105,	scale = 0.85,	growHorizontal="RIGHT"}}, -- 1
+					{enabled = true,	buttons = 12,	rows = 1,	padding = 3,	skin = {Zoom = true},	position = {point = "BOTTOMLEFT",	parent = "SUI_ActionBarPlate",	x=0,	y=66,	scale = 0.85,	growHorizontal="RIGHT"}}, -- 2
+					{enabled = true,	buttons = 12,	rows = 1,	padding = 3,	skin = {Zoom = true},	position = {point = "BOTTOMRIGHT",	parent = "SUI_ActionBarPlate",	x=-402,	y=105,	scale = 0.85,	growHorizontal="RIGHT"}}, -- 3
+					{enabled = true,	buttons = 12,	rows = 1,	padding = 3,	skin = {Zoom = true},	position = {point = "BOTTOMRIGHT",	parent = "SUI_ActionBarPlate",	x=-402,	y=66,	scale = 0.85,	growHorizontal="RIGHT"}}, -- 4
+					{enabled = true,	buttons = 12,	rows = 3,	padding = 6,	skin = {Zoom = true},	position = {point = "BOTTOMLEFT",	parent = "SUI_ActionBarPlate",	x=-140,	y=109,	scale = 0.80,	growHorizontal="RIGHT"}}, -- 5
+					{enabled = true,	buttons = 12,	rows = 3,	padding = 6,	skin = {Zoom = true},	position = {point = "BOTTOMRIGHT",	parent = "SUI_ActionBarPlate",	x=4,	y=109,	scale = 0.80,	growHorizontal="RIGHT"}}, -- 6
+					{enabled = false}, -- 8
+					{enabled = false}, -- 9
+					{enabled = false} -- 10
+				}
+			},
+			BagBar = {			enabled = true,	padding = 0,	rows = 1,	keyring = true,	position = {point = "TOPRIGHT",	parent = "SUI_ActionBarPlate",	x=-184,	y=-2,	scale = 0.75,	growHorizontal="RIGHT"}},
+			MicroMenu = {	enabled = true,	padding = -3,												position = {point = "TOPLEFT",		parent = "SUI_ActionBarPlate",	x=612,	y=0,	scale = 0.80,	growHorizontal="RIGHT"}},
+			PetBar = {			enabled = true,	padding = 1,	rows = 1,								position = {point = "TOPLEFT",		parent = "SUI_ActionBarPlate",	x=46,		y=-3,	scale = 0.80,	growHorizontal="RIGHT"}},
+			StanceBar = {		enabled = true,	padding = 1,	rows = 1,								position = {point = "TOPRIGHT",	parent = "SUI_ActionBarPlate",	x=-613,	y=-2,	scale = 0.85,	growHorizontal="LEFT"}},
+			MultiCast = {		enabled = true,																			position = {point = "TOPRIGHT",	parent = "SUI_ActionBarPlate",	x=-774,	y=-6,	scale = 0.8}},
+			Vehicle = {			enabled = false},
+		};
+	
+	local lib = LibStub("LibWindow-1.1",true);
+	if not lib then return; end
+	function lib.RegisterConfig(frame, storage, names)
+		if not lib.windowData[frame] then
+			lib.windowData[frame] = {}
+		end
+		lib.windowData[frame].names = names
+		lib.windowData[frame].storage = storage
+		local parent = frame:GetParent();
+		if (storage.parent) then
+		frame:SetParent(storage.parent);
+			if storage.parent == "SUI_ActionBarPlate" then
+				frame:SetFrameStrata("LOW");
+			end
+		elseif (not storage.parent) and (parent:GetName() == "SUI_ActionBarPlate") then
+			frame:SetParent(UIParent);
+		end
+	end
+	setupProfile = function() -- apply default settings into a custom BT4 profile
+		if (not suiChar) then suiChar = {}; end
+		if (not suiChar.ActionBars) then suiChar.ActionBars = default; end
+		if suiChar.ActionBars.Bartender4 then return; end
+		Bartender4.db:SetProfile(standard);
+		for k,v in LibStub("AceAddon-3.0"):IterateModulesOfAddon(Bartender4) do -- for each module (BagBar, ActionBars, etc..)
+			if settings[k] and v.db.profile then
+				v.db.profile = addon:MergeData(v.db.profile,settings[k])
+			end
+		end
+		Bartender4:UpdateModuleConfigs(); -- run ApplyConfig for all modules, so that the new settings are applied
+		suiChar.ActionBars.Bartender4 = true;
+	end
+	plate:HookScript("OnUpdate",function()
+		if (InCombatLockdown()) then return; end
+		if (Bartender4.db:GetCurrentProfile() == standard) then
+			if Bartender4.Locked then return; end
+			Bartender4:Lock();
+		end
+	end);	
+end
+
+function module:OnInitialize()
+	suiChar.ActionBars = addon:MergeData(suiChar.ActionBars,default);	
+	
 	plate = CreateFrame("Frame","SUI_ActionBarPlate",SpartanUI,"SUI_ActionBarsTemplate");
 	plate:SetFrameStrata("BACKGROUND"); plate:SetFrameLevel(1);
 	plate:SetPoint("BOTTOM");	
-	
 	plate.mask1 = CreateFrame("Frame","SUI_Popup1Mask",SpartanUI,"SUI_Popup1MaskTemplate");
 	plate.mask1:SetFrameStrata("MEDIUM"); plate.mask1:SetFrameLevel(0);
 	plate.mask1:SetPoint("BOTTOM",SUI_Popup1,"BOTTOM");
-	
 	plate.mask2 = CreateFrame("Frame","SUI_Popup2Mask",SpartanUI,"SUI_Popup2MaskTemplate");
 	plate.mask2:SetFrameStrata("MEDIUM"); plate.mask2:SetFrameLevel(0);
-	plate.mask2:SetPoint("BOTTOM",SUI_Popup2,"BOTTOM");
+	plate.mask2:SetPoint("BOTTOM",SUI_Popup2,"BOTTOM");	
 	
-	plate:SetScript("OnUpdate",function() -- backdrop and popup visibility changes (alpha, animation, hide/show)
-		if (suiChar.ActionBars) then
-			for b = 1,6 do -- for each backdrop
-				if suiChar.ActionBars["bar"..b].enable == 1 then -- backdrop enabled
-					_G["SUI_Bar"..b]:SetAlpha(suiChar.ActionBars["bar"..b].alpha or 1); -- apply alpha
-				else -- backdrop disabled
-					_G["SUI_Bar"..b]:SetAlpha(0);
-				end
-			end
-			for p = 1,2 do -- for each popup
-				if suiChar.ActionBars["popup"..p].enable == 1 then -- popup enabled
-					_G["SUI_Popup"..p]:SetAlpha(suiChar.ActionBars["popup"..p].alpha or 1); -- apply alpha
-					if suiChar.ActionBars["popup"..p].anim == 1 then --- animation enabled
-						_G["SUI_Popup"..p.."MaskBG"]:SetAlpha(1);
-					else -- animation disabled
-						_G["SUI_Popup"..p.."MaskBG"]:SetAlpha(0);
-					end						
-				else -- popup disabled
-					_G["SUI_Popup"..p]:SetAlpha(0);
-					_G["SUI_Popup"..p.."MaskBG"]:SetAlpha(0);
-				end
-			end
-			if (MouseIsOver(SUI_Popup1Mask)) then -- popup1 animation
-				SUI_Popup1MaskBG:Hide();
-				SUI_Popup2MaskBG:Show();
-			elseif (MouseIsOver(SUI_Popup2Mask)) then -- popup2 animation
-				SUI_Popup2MaskBG:Hide();
-				SUI_Popup1MaskBG:Show();
-			else -- animation at rest
-				SUI_Popup1MaskBG:Show();
-				SUI_Popup2MaskBG:Show();
-			end
-		end
-	end);
-end
-do -- setup bartender, if it exists
-	if Bartender4 then -- Bartender4 specific modifications
-		local standard = "SpartanUI Standard";
-		local settings = { -- actual settings being inserted into our custom profile
-				ActionBars = {
-					actionbars = { -- following settings are bare minimum, so that anything not defined is retained between resets
-						{enabled = true,	buttons = 12,	rows = 1,	padding = 3,	skin = {Zoom = true},	position = {point = "BOTTOMLEFT",	parent = "SUI_ActionBarPlate",	x=0,	y=105,	scale = 0.85,	growHorizontal="RIGHT"}}, -- 1
-						{enabled = true,	buttons = 12,	rows = 1,	padding = 3,	skin = {Zoom = true},	position = {point = "BOTTOMLEFT",	parent = "SUI_ActionBarPlate",	x=0,	y=66,	scale = 0.85,	growHorizontal="RIGHT"}}, -- 2
-						{enabled = true,	buttons = 12,	rows = 1,	padding = 3,	skin = {Zoom = true},	position = {point = "BOTTOMRIGHT",	parent = "SUI_ActionBarPlate",	x=-402,	y=105,	scale = 0.85,	growHorizontal="RIGHT"}}, -- 3
-						{enabled = true,	buttons = 12,	rows = 1,	padding = 3,	skin = {Zoom = true},	position = {point = "BOTTOMRIGHT",	parent = "SUI_ActionBarPlate",	x=-402,	y=66,	scale = 0.85,	growHorizontal="RIGHT"}}, -- 4
-						{enabled = true,	buttons = 12,	rows = 3,	padding = 6,	skin = {Zoom = true},	position = {point = "BOTTOMLEFT",	parent = "SUI_ActionBarPlate",	x=-140,	y=109,	scale = 0.80,	growHorizontal="RIGHT"}}, -- 5
-						{enabled = true,	buttons = 12,	rows = 3,	padding = 6,	skin = {Zoom = true},	position = {point = "BOTTOMRIGHT",	parent = "SUI_ActionBarPlate",	x=4,	y=109,	scale = 0.80,	growHorizontal="RIGHT"}}, -- 6
-						{enabled = false}, -- 8
-						{enabled = false}, -- 9
-						{enabled = false} -- 10
-					}
-				},
-				BagBar = {			enabled = true,	padding = 0,	rows = 1,	keyring = true,	position = {point = "TOPRIGHT",	parent = "SUI_ActionBarPlate",	x=-184,	y=-2,	scale = 0.75,	growHorizontal="RIGHT"}},
-				MicroMenu = {	enabled = true,	padding = -3,												position = {point = "TOPLEFT",		parent = "SUI_ActionBarPlate",	x=612,	y=0,	scale = 0.80,	growHorizontal="RIGHT"}},
-				PetBar = {			enabled = true,	padding = 1,	rows = 1,								position = {point = "TOPLEFT",		parent = "SUI_ActionBarPlate",	x=46,		y=-3,	scale = 0.80,	growHorizontal="RIGHT"}},
-				StanceBar = {		enabled = true,	padding = 1,	rows = 1,								position = {point = "TOPRIGHT",	parent = "SUI_ActionBarPlate",	x=-613,	y=-2,	scale = 0.85,	growHorizontal="LEFT"}},
-				MultiCast = {		enabled = true,																			position = {point = "TOPRIGHT",	parent = "SUI_ActionBarPlate",	x=-774,	y=-6,	scale = 0.8}},
-				Vehicle = {			enabled = false},
-			};
-		local lib = LibStub("LibWindow-1.1",true);
-		if not lib then return; end
-		function lib.RegisterConfig(frame, storage, names)
-			if not lib.windowData[frame] then
-				lib.windowData[frame] = {}
-			end
-			lib.windowData[frame].names = names
-			lib.windowData[frame].storage = storage
-			local parent = frame:GetParent();
-			if (storage.parent) then
-				frame:SetParent(storage.parent);
-				if storage.parent == "SUI_ActionBarPlate" then
-					frame:SetFrameStrata("LOW");
-				end
-			elseif (not storage.parent) and (parent:GetName() == "SUI_ActionBarPlate") then
-				frame:SetParent(UIParent);
-			end
-		end
-		setupProfile = function() -- apply default settings into a custom BT4 profile
-			if (not suiChar) then suiChar = {}; end
-			if (not suiChar.ActionBars) then suiChar.ActionBars = default; end
-			if suiChar.ActionBars.Bartender4 then return; end
-			Bartender4.db:SetProfile(standard);
-			for k,v in LibStub("AceAddon-3.0"):IterateModulesOfAddon(Bartender4) do -- for each module (BagBar, ActionBars, etc..)
-				if settings[k] and v.db.profile then
-					v.db.profile = addon:MergeData(v.db.profile,settings[k])
-				end
-			end
-			Bartender4:UpdateModuleConfigs(); -- run ApplyConfig for all modules, so that the new settings are applied
-			suiChar.ActionBars.Bartender4 = true;
-		end
-		plate:SetScript("OnEvent",setupProfile);
-		plate:RegisterEvent("PLAYER_ENTERING_WORLD");
-		plate:HookScript("OnUpdate",function()
-			if (InCombatLockdown()) then return; end
-			if (Bartender4.db:GetCurrentProfile() == standard) then
-				if Bartender4.Locked then return; end
-				Bartender4:Lock();
-			end
-		end);	
-	end
-end
-do -- setup slash commands
+	setupBartender();
+	
 	addon.options.args["backdrop"] = {
 		name = "ActionBar Backdrops",
 		desc = "configure actionbar backdrops",
@@ -350,11 +313,11 @@ do -- setup slash commands
 		desc = "resets all ActionBar options to default",
 		func = function()
 			if (InCombatLockdown()) then 
-				addon:print(ERR_NOT_IN_COMBAT,true);
+				addon:Print(ERR_NOT_IN_COMBAT);
 			else
 				suiChar.ActionBars = default;
 				if Bartender4 then setupProfile(); end
-				addon:print("ActionBar Options Reset",true);
+				addon:Print("ActionBar Options Reset");
 			end
 		end
 	};
@@ -405,13 +368,52 @@ do -- setup slash commands
 		}
 	};
 end
-do -- framestrata and framelevel verification	
-	for i = 1,6 do
-		_G["SUI_Bar"..i]:SetFrameStrata("BACKGROUND");
-		_G["SUI_Bar"..i]:SetFrameLevel(3);
+function module:OnEnable()
+	do -- create base module frames
+		plate:SetScript("OnUpdate",function() -- backdrop and popup visibility changes (alpha, animation, hide/show)
+			if (suiChar.ActionBars) then
+				for b = 1,6 do -- for each backdrop
+					if suiChar.ActionBars["bar"..b].enable == 1 then -- backdrop enabled
+						_G["SUI_Bar"..b]:SetAlpha(suiChar.ActionBars["bar"..b].alpha or 1); -- apply alpha
+					else -- backdrop disabled
+						_G["SUI_Bar"..b]:SetAlpha(0);
+					end
+				end
+				for p = 1,2 do -- for each popup
+					if suiChar.ActionBars["popup"..p].enable == 1 then -- popup enabled
+						_G["SUI_Popup"..p]:SetAlpha(suiChar.ActionBars["popup"..p].alpha or 1); -- apply alpha
+						if suiChar.ActionBars["popup"..p].anim == 1 then --- animation enabled
+							_G["SUI_Popup"..p.."MaskBG"]:SetAlpha(1);
+						else -- animation disabled
+							_G["SUI_Popup"..p.."MaskBG"]:SetAlpha(0);
+						end						
+					else -- popup disabled
+						_G["SUI_Popup"..p]:SetAlpha(0);
+						_G["SUI_Popup"..p.."MaskBG"]:SetAlpha(0);
+					end
+				end
+				if (MouseIsOver(SUI_Popup1Mask)) then -- popup1 animation
+					SUI_Popup1MaskBG:Hide();
+					SUI_Popup2MaskBG:Show();
+				elseif (MouseIsOver(SUI_Popup2Mask)) then -- popup2 animation
+					SUI_Popup2MaskBG:Hide();
+					SUI_Popup1MaskBG:Show();
+				else -- animation at rest
+					SUI_Popup1MaskBG:Show();
+					SUI_Popup2MaskBG:Show();
+				end
+			end
+		end);
 	end
-	for i = 1,2 do
-		_G["SUI_Popup"..i]:SetFrameStrata("BACKGROUND");
-		_G["SUI_Popup"..i]:SetFrameLevel(3);
+	do -- modify strata / levels of backdrops
+		for i = 1,6 do
+			_G["SUI_Bar"..i]:SetFrameStrata("BACKGROUND");
+			_G["SUI_Bar"..i]:SetFrameLevel(3);
+		end
+		for i = 1,2 do
+			_G["SUI_Popup"..i]:SetFrameStrata("BACKGROUND");
+			_G["SUI_Popup"..i]:SetFrameLevel(3);
+		end
 	end
+	setupProfile();
 end
