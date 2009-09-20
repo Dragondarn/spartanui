@@ -42,15 +42,21 @@ end
 local PostUpdateAura = function(self,event,unit)
 	if suiChar and suiChar.PlayerFrames and suiChar.PlayerFrames[unit] == 0 then
 		self.Auras:Hide();
-		if unit == "player" then
-			BuffFrame:RegisterEvent("UNIT_AURA");
+		if (unit == "player") then
+			TemporaryEnchantFrame:Show();
 			BuffFrame:Show();
+			BuffFrame:RegisterEvent("UNIT_AURA");
+			BuffFrame:RegisterEvent("PLAYER_AURAS_CHANGED");
+			BuffFrame_Update();
+			if (HideBlizzard) then HideBlizzard:GetModule("Player"):UpdateFrames(); end
+			if (ElkBuffBars) then ElkBuffBars:PLAYER_ENTERING_WORLD(); end			
 		end
 	else
 		self.Auras:Show();
 		if unit == "player" then
-			BuffFrame:UnregisterEvent("UNIT_AURA");
+			BuffFrame:UnregisterAllEvents();
 			BuffFrame:Hide();
+			TemporaryEnchantFrame:Hide();
 		end
 	end
 end
