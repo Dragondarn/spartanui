@@ -4,7 +4,7 @@ local module = addon:NewModule("Minimap");
 local map = CreateFrame("Frame");
 
 function module:OnInitialize()
-	do -- default interface modifications
+	do -- minimap modifications
 		MinimapBorderTop:Hide();
 		MinimapToggleButton:Hide();
 		MinimapZoomIn:Hide();
@@ -14,22 +14,26 @@ function module:OnInitialize()
 		MinimapBorder:SetAlpha(0);
 		Minimap:ClearAllPoints();
 		Minimap:SetPoint("CENTER","MinimapCluster","CENTER",0,2);
+	end
+	do -- minimap button modifications
 		GameTimeFrame:SetScale(0.6);
 		GameTimeFrame:ClearAllPoints();
 		GameTimeFrame:SetPoint("TOPRIGHT","Minimap","TOPRIGHT",5,-5);
 		MiniMapTracking:SetScale(0.8);
 		MiniMapTracking:ClearAllPoints();
 		MiniMapTracking:SetPoint("TOPLEFT",20,-36);
+	end
+	do -- minimap overlay
+		local overlay = Minimap:CreateTexture(nil,"OVERLAY");
+		overlay:SetWidth(228);
+		overlay:SetHeight(228); 
+		overlay:SetPoint("CENTER");
+		overlay:SetTexture("Interface\\AddOns\\SpartanUI\\media\\map_overlay");
+		overlay:SetBlendMode("ADD");
+	end
+	do -- minimap coordinates
 		MinimapZoneTextButton:ClearAllPoints();
-		MinimapZoneTextButton:SetPoint("BOTTOM","SpartanUI","BOTTOM",0,24);
-	end
-	do -- create the glass overlay on the minimap
-		map.overlay = Minimap:CreateTexture(nil,"OVERLAY");
-		map.overlay:SetWidth(228); map.overlay:SetHeight(228); map.overlay:SetPoint("CENTER");
-		map.overlay:SetTexture("Interface\\AddOns\\SpartanUI\\media\\map_overlay");
-		map.overlay:SetBlendMode("ADD");
-	end
-	do -- create the minimap coordinates	
+		MinimapZoneTextButton:SetPoint("BOTTOM","SpartanUI","BOTTOM",0,24);		
 		map.coords = MinimapZoneTextButton:CreateFontString(nil,"BACKGROUND","GameFontNormalSmall");
 		map.coords:SetWidth(128); map.coords:SetHeight(12);
 		map.coords:SetPoint("TOP","MinimapZoneTextButton","BOTTOM");
@@ -49,21 +53,33 @@ function module:OnInitialize()
 	end
 end
 function module:OnEnable()
-	MinimapCluster:ClearAllPoints();
-	MinimapCluster:SetParent("SpartanUI");
-	MinimapCluster:SetPoint("BOTTOM","SpartanUI","BOTTOM",0,20)
-	MinimapCluster:SetScale(1.1);
-	MinimapCluster:SetMovable(true);
-	MinimapCluster:SetUserPlaced(true);
-	MinimapCluster:EnableMouseWheel(true);
-	MinimapCluster:SetScript("OnMouseWheel",function()
-		if (arg1 > 0) then Minimap_ZoomIn()
-		else Minimap_ZoomOut() end
-	end);
-	
-	TemporaryEnchantFrame:ClearAllPoints();
-	TemporaryEnchantFrame:SetPoint("TOPRIGHT",UIParent,"TOPRIGHT",-10,-10);
-	
+	do -- minimapcluster modifications
+		MinimapCluster:ClearAllPoints();
+		MinimapCluster:SetParent("SpartanUI");
+		MinimapCluster:SetPoint("BOTTOM","SpartanUI","BOTTOM",0,20)
+		MinimapCluster:SetScale(1.1);
+		MinimapCluster:SetMovable(true);
+		MinimapCluster:SetUserPlaced(true);
+		MinimapCluster:EnableMouseWheel(true);
+		MinimapCluster:SetScript("OnMouseWheel",function()
+			if (arg1 > 0) then Minimap_ZoomIn()
+			else Minimap_ZoomOut() end
+		end);
+	end
+	do -- buff modifications
+		TemporaryEnchantFrame:ClearAllPoints();
+		TemporaryEnchantFrame:SetPoint("TOPRIGHT",UIParent,"TOPRIGHT",-10,-10);
+	end
+	do -- vehicle seat indicator
+		hooksecurefunc(VehicleSeatIndicator,"SetPoint",function(_,_,parent)
+			if (parent == "MinimapCluster") or (parent == _G["MinimapCluster"]) then
+				VehicleSeatIndicator:ClearAllPoints();
+				VehicleSeatIndicator:SetPoint("RIGHT","UIParent","RIGHT",0,0);
+			end
+		end);
+		VehicleSeatIndicator:ClearAllPoints();
+		VehicleSeatIndicator:SetPoint("RIGHT","UIParent","RIGHT",0,0);
+	end	
 	hooksecurefunc(WatchFrame,"SetPoint",function(_,_,parent)
 		if (parent == "MinimapCluster") or (parent == _G["MinimapCluster"]) then
 			-- this only happens if the user isn't using the advanced quest watcher
