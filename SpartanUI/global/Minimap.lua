@@ -40,26 +40,36 @@ function module:OnInitialize()
 	end
 end
 function module:OnEnable()
-	hooksecurefunc(VehicleSeatIndicator,"SetPoint",function(_,_,parent) -- vehicle seat indicator
-		if (parent == "MinimapCluster") or (parent == _G["MinimapCluster"]) then
-			VehicleSeatIndicator:ClearAllPoints();
-			VehicleSeatIndicator:SetPoint("RIGHT","UIParent","RIGHT",0,0);
-		end
-	end);
-	hooksecurefunc(WatchFrame,"SetPoint",function(_,_,parent) -- quest watch frame
-		if (parent == "MinimapCluster") or (parent == _G["MinimapCluster"]) then
-			-- this only happens if the user isn't using the advanced quest watcher
-			WatchFrame:ClearAllPoints();
-			WatchFrame:SetPoint("TOPRIGHT","UIParent","TOPRIGHT",-4,-130);
-			WatchFrame:SetPoint("BOTTOMRIGHT","UIParent","BOTTOMRIGHT",-4,160);
-		end
-	end);
-	hooksecurefunc(DurabilityFrame,"SetPoint",function(self,_,parent) -- durability frame
-		if (parent == "MinimapCluster") or (parent == _G["MinimapCluster"]) then
-			DurabilityFrame:ClearAllPoints();
-			DurabilityFrame:SetPoint("RIGHT",UIParent,"RIGHT",-10,0);
-		end
-	end);
+	do -- positioning hooks
+		-- we hook the SetPoint method so that they still work with third-party movers
+		hooksecurefunc(VehicleSeatIndicator,"SetPoint",function(_,_,parent) -- vehicle seat indicator
+			if (parent == "MinimapCluster") or (parent == _G["MinimapCluster"]) then
+				VehicleSeatIndicator:ClearAllPoints();
+				VehicleSeatIndicator:SetPoint("RIGHT","UIParent","RIGHT",0,0);
+			end
+		end);
+		hooksecurefunc(WatchFrame,"SetPoint",function(_,_,parent) -- quest watch frame
+			if (parent == "MinimapCluster") or (parent == _G["MinimapCluster"]) then
+				-- this only happens if the user isn't using the advanced quest watcher
+				WatchFrame:ClearAllPoints();
+				WatchFrame:SetPoint("TOPRIGHT","UIParent","TOPRIGHT",-4,-130);
+				WatchFrame:SetPoint("BOTTOMRIGHT","UIParent","BOTTOMRIGHT",-4,160);
+			end
+		end);
+		hooksecurefunc(DurabilityFrame,"SetPoint",function(self,_,parent) -- durability frame
+			if (parent == "MinimapCluster") or (parent == _G["MinimapCluster"]) then
+				DurabilityFrame:ClearAllPoints();
+				DurabilityFrame:SetPoint("RIGHT",UIParent,"RIGHT",-10,0);
+			end
+		end);
+		-- this is a direct hook on the frame position manager, so doens't work with third-party movers
+		hooksecurefunc("UIParent_ManageFramePositions",function(self,_,parent) -- zonemap frame
+			if ( BattlefieldMinimapTab and not BattlefieldMinimapTab:IsUserPlaced() ) then
+				BattlefieldMinimapTab:ClearAllPoints()
+				BattlefieldMinimapTab:SetPoint("BOTTOMRIGHT", "SpartanUI", "TOPRIGHT", -148,165);
+			end
+		end);	
+	end
 	do -- minimap modifications
 		MinimapBorderTop:Hide();
 		MinimapToggleButton:Hide();
