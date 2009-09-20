@@ -99,7 +99,7 @@ function module:OnInitialize()
 				freeScreenHeight = freeScreenHeight - frame:GetHeight() - VISIBLE_CONTAINER_SPACING
 			end
 		end);
-			hooksecurefunc(GameTooltip,"SetPoint",function(tooltip,point,parent,rpoint) -- fix GameTooltip offset
+		hooksecurefunc(GameTooltip,"SetPoint",function(tooltip,point,parent,rpoint) -- fix GameTooltip offset
 			if (point == "BOTTOMRIGHT" and parent == "UIParent" and rpoint == "BOTTOMRIGHT") then
 				tooltip:ClearAllPoints();
 				tooltip:SetPoint("BOTTOM","SpartanUI","TOP",0,80);
