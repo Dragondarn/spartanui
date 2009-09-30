@@ -13,7 +13,9 @@ local updateSpartanScale = function() -- scales SpartanUI based on setting or sc
 		else suiChar.scale = 0.78; end
 	end
 	if (suiChar.scale ~= round(SpartanUI:GetScale())) then
-		frame:SetScale(suiChar.scale); end
+		frame:SetScale(suiChar.scale);
+		-- WorldFrame:SetPoint("BOTTOMRIGHT",0,135*suiChar.scale); -- works, but doesn't account for offset
+	end
 end;
 local updateSpartanOffset = function() -- handles SpartanUI offset based on setting or fubar / titan
 	local fubar,offset = 0;
@@ -34,9 +36,8 @@ end;
 
 function module:OnInitialize()
 	do -- default interface modifications
-		FramerateLabel:ClearAllPoints();
-		FramerateLabel:SetPoint("TOP", "WorldFrame", "TOP", -15, -50);
-		MainMenuBar:Hide();
+		FramerateLabel:ClearAllPoints(); FramerateLabel:SetPoint("TOP", "WorldFrame", "TOP", -15, -50);
+		MainMenuBar:Hide(); WorldFrame:SetPoint("BOTTOMRIGHT",frame,"TOPRIGHT",0,-5); -- seems to work, but my gut tells me it is a bad idea
 		hooksecurefunc("updateContainerFrameAnchors",function() -- fix bag offsets
 			local frame, xOffset, yOffset, screenHeight, freeScreenHeight, leftMostPoint, column
 			local screenWidth = GetScreenWidth()
