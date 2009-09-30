@@ -174,8 +174,9 @@ local CreatePlayerFrame = function(self,unit)
 		self.Combat:SetPoint("CENTER",self.Level,"TOPLEFT");
 		
 		self.RaidIcon = ring:CreateTexture(nil,"ARTWORK");
-		self.RaidIcon:SetAllPoints(self.Portrait);
-		
+		self.RaidIcon:SetWidth(20); self.RaidIcon:SetHeight(20);
+		self.RaidIcon:SetPoint("CENTER",ring,"LEFT",4,-4);
+			
 		self.StatusText = ring:CreateFontString(nil, "OVERLAY", "SUI_FontOutline22");
 		self.StatusText:SetPoint("CENTER",ring,"CENTER");
 		self.StatusText:SetJustifyH("CENTER");
@@ -321,7 +322,7 @@ local CreateTargetFrame = function(self,unit)
 		
 		self.PvP = ring:CreateTexture(nil,"BORDER");
 		self.PvP:SetWidth(48); self.PvP:SetHeight(48);
-		self.PvP:SetPoint("CENTER",ring,"CENTER",30,-40);
+		self.PvP:SetPoint("CENTER",ring,"CENTER",35,-40);
 		
 		self.LevelSkull = ring:CreateTexture(nil,"ARTWORK");
 		self.LevelSkull:SetWidth(16); self.LevelSkull:SetHeight(16);
@@ -332,7 +333,8 @@ local CreateTargetFrame = function(self,unit)
 		self.RareElite:SetPoint("CENTER",ring,"CENTER",-12,-4);
 		
 		self.RaidIcon = ring:CreateTexture(nil,"ARTWORK");
-		self.RaidIcon:SetAllPoints(self.Portrait);
+		self.RaidIcon:SetWidth(20); self.RaidIcon:SetHeight(20);
+		self.RaidIcon:SetPoint("CENTER",ring,"RIGHT",-4,-4);
 		
 		self.StatusText = ring:CreateFontString(nil, "OVERLAY", "SUI_FontOutline22");
 		self.StatusText:SetPoint("CENTER",ring,"CENTER");
