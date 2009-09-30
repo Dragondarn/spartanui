@@ -9,6 +9,6 @@
 ## RequiredDeps: SpartanUI, oUF
 ## OptionalDeps: SpartanUI_PlayerFrames
 
-global\UnitFrames.xml
+global\UnitFrames.lua
 global\PartyFrames.lua
 global\Commands.lua
