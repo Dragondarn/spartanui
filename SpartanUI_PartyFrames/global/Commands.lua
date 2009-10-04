@@ -1,8 +1,6 @@
 local spartan = LibStub("AceAddon-3.0"):GetAddon("SpartanUI");
 local addon = spartan:GetModule("PartyFrames");
 ----------------------------------------------------------------------------------------------------
-addon.locked = 1;
-
 function addon:UpdateAuraVisibility()
 	for i = 1,4 do
 		-- local pet = _G["SUI_PartyFrameHeaderUnitButton"..i.."Pet"];

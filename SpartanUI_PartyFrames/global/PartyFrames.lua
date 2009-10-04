@@ -23,35 +23,34 @@ do -- scripts to make it movable
 	party.mover:SetWidth(205); party.mover:SetHeight(332);
 	party.mover:SetPoint("TOPLEFT",party,"TOPLEFT");	
 	party.mover:EnableMouse(true);
+	
+	party.bg = party.mover:CreateTexture(nil,"BACKGROUND");
+	party.bg:SetAllPoints(party.mover);
+	party.bg:SetTexture(1,1,1,0.5);
+	
 	party.mover:SetScript("OnMouseDown",function()
 		party.isMoving = true;
 		suiChar.PartyFrames.partyMoved = true;
 		party:SetMovable(true);
 		party:StartMoving();
 	end);
-	
-	party.bg = party.mover:CreateTexture(nil,"BACKGROUND");
-	party.bg:SetAllPoints(party.mover);	
-	
 	party.mover:SetScript("OnMouseUp",function()
 		if party.isMoving then
 			party.isMoving = nil;
 			party:StopMovingOrSizing();
 		end
 	end);
-	party.mover:SetScript("OnShow",function()
-		party.bg:SetTexture(1,1,1,0.5);
-	end);
 	party.mover:SetScript("OnHide",function()
-		party.bg:SetTexture(1,1,1,0);
 		party.isMoving = nil;
 		party:StopMovingOrSizing();
 	end);
 	party.mover:SetScript("OnEvent",function()
-		-- fired when player enters combat
+		addon.locked = 1;
 		party.mover:Hide();
 	end);
-	party.mover:Hide();
+	party.mover:RegisterEvent("VARIABLES_LOADED");
+	party.mover:RegisterEvent("PLAYER_REGEN_DISABLED");
+	
 	
 	function addon:UpdatePartyPosition()
 		if suiChar.PartyFrames.partyMoved then
