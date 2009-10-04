@@ -27,12 +27,10 @@ do -- scripts to make it movable
 	party.mover:SetAllPoints(party.bg);
 	party.mover:EnableMouse(true);
 	party.mover:SetScript("OnMouseDown",function()
-		if IsAltKeyDown() then
-			party.isMoving = true;
-			suiChar.PartyFrames.partyMoved = true;
-			party:SetMovable(true);
-			party:StartMoving();
-		end
+		party.isMoving = true;
+		suiChar.PartyFrames.partyMoved = true;
+		party:SetMovable(true);
+		party:StartMoving();
 	end);
 	party.mover:SetScript("OnMouseUp",function()
 		if party.isMoving then

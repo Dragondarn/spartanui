@@ -1,6 +1,8 @@
 local spartan = LibStub("AceAddon-3.0"):GetAddon("SpartanUI");
 local addon = spartan:GetModule("PartyFrames");
 ----------------------------------------------------------------------------------------------------
+addon.locked = 1;
+
 function addon:UpdateAuraVisibility()
 	for i = 1,4 do
 		-- local pet = _G["SUI_PartyFrameHeaderUnitButton"..i.."Pet"];
@@ -38,15 +40,20 @@ function addon:OnInitialize()
 			if (InCombatLockdown()) then 
 				spartan:Print(ERR_NOT_IN_COMBAT);
 			else
-				if (val == "" and suiChar.PartyFrames.partyLock == 1) or (val == "unlock") then
-					suiChar.PartyFrames.partyLock = 0;
+				if (val == "" and addon.locked == 1) or (val == "unlock") then
+					addon.locked = 0;
 					SUI_PartyFrameHeader.mover:Show();
-				elseif (val == "" and suiChar.PartyFrames.partyLock == 0) or (val == "lock") then
-					suiChar.PartyFrames.partyLock = 1;
+					spartan:Print("Party Position Unlocked");
+				elseif (val == "" and addon.locked == 0) or (val == "lock") then
+					addon.locked = 1;
 					SUI_PartyFrameHeader.mover:Hide();
+					spartan:Print("Party Position Locked");
 				elseif val == "reset" then
 					suiChar.PartyFrames.partyMoved = nil;
+					addon.locked = 1;
+					SUI_PartyFrameHeader.mover:Hide();
 					addon:UpdatePartyPosition();
+					spartan:Print("Party Position Reset");
 				end
 			end
 		end,
