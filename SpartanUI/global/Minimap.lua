@@ -1,7 +1,20 @@
+if Minimap:IsUserPlaced() then return; end
 local addon = LibStub("AceAddon-3.0"):GetAddon("SpartanUI");
 local module = addon:NewModule("Minimap");
 ----------------------------------------------------------------------------------------------------
 local map = CreateFrame("Frame");
+local Update_BattlefieldMinimap = function()
+	if ( BattlefieldMinimapTab and not BattlefieldMinimapTab:IsUserPlaced() ) then
+		BattlefieldMinimapTab:ClearAllPoints()
+		BattlefieldMinimapTab:SetPoint("RIGHT", "UIParent", "RIGHT",-144,150);
+	end
+end
+local Update_ArenaEnemyFrames = function()
+	if ( ArenaEnemyFrames ) then
+		ArenaEnemyFrames:ClearAllPoints();
+		ArenaEnemyFrames:SetPoint("RIGHT", UIParent, "RIGHT",0,40);
+	end
+end
 
 function module:OnInitialize()
 	do -- minimap overlay		
@@ -26,6 +39,8 @@ function module:OnInitialize()
 			if (event == "ZONE_CHANGED" or event == "ZONE_CHANGED_INDOORS" or event == "ZONE_CHANGED_NEW_AREA") then
 				if IsInInstance() then map.coords:Hide() else map.coords:Show() end
 				if (WorldMapFrame:IsVisible()) then SetMapToCurrentZone(); end
+			elseif (event == "ADDON_LOADED") then
+				print(arg1);			
 			end
 			local LastFrame = UIErrorsFrame;
 			for i = 1, NUM_EXTENDED_UI_FRAMES do
@@ -45,7 +60,7 @@ function module:OnEnable()
 		hooksecurefunc(VehicleSeatIndicator,"SetPoint",function(_,_,parent) -- vehicle seat indicator
 			if (parent == "MinimapCluster") or (parent == _G["MinimapCluster"]) then
 				VehicleSeatIndicator:ClearAllPoints();
-				VehicleSeatIndicator:SetPoint("RIGHT","UIParent","RIGHT",0,0);
+				VehicleSeatIndicator:SetPoint("BOTTOMRIGHT","SpartanUI","TOPRIGHT",-5,5);
 			end
 		end);
 		hooksecurefunc(WatchFrame,"SetPoint",function(_,_,parent) -- quest watch frame
@@ -59,16 +74,15 @@ function module:OnEnable()
 		hooksecurefunc(DurabilityFrame,"SetPoint",function(self,_,parent) -- durability frame
 			if (parent == "MinimapCluster") or (parent == _G["MinimapCluster"]) then
 				DurabilityFrame:ClearAllPoints();
-				DurabilityFrame:SetPoint("RIGHT",UIParent,"RIGHT",-10,0);
+				DurabilityFrame:SetPoint("BOTTOM","SpartanUI","TOP",0,70);
 			end
 		end);
-		-- this is a direct hook on the frame position manager, so doens't work with third-party movers
-		hooksecurefunc("UIParent_ManageFramePositions",function(self,_,parent) -- zonemap frame
-			if ( BattlefieldMinimapTab and not BattlefieldMinimapTab:IsUserPlaced() ) then
-				BattlefieldMinimapTab:ClearAllPoints()
-				BattlefieldMinimapTab:SetPoint("BOTTOMRIGHT", "SpartanUI", "TOPRIGHT", -148,165);
-			end
+		-- this is a direct hook on the frame position manager, so may not work with third-party movers
+		hooksecurefunc("UIParent_ManageFramePositions",function() -- zonemap frame
+			Update_BattlefieldMinimap();
+			Update_ArenaEnemyFrames();			
 		end);	
+		hooksecurefunc("ToggleBattlefieldMinimap",Update_BattlefieldMinimap);	
 	end
 	do -- minimap modifications
 		MinimapBorderTop:Hide();
