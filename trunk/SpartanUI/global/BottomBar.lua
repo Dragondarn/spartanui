@@ -153,6 +153,7 @@ function module:OnInitialize()
 				else
 					val = tonumber(val);
 					if (type(val) == "number") then
+						val = max(0,val);						
 						suiChar.offset = max(val+1,1);					
 						addon:Print("Panel Offset set to "..val);
 					end

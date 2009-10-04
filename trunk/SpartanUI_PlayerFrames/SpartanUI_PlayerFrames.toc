@@ -9,7 +9,9 @@
 ## OptionalDeps: Adapt
 ## RequiredDeps: SpartanUI, oUF
 
-global\UnitFrames.lua
-global\PrimaryFrames.lua
-global\SecondaryFrames.lua
+global\Framework.lua
+global\UnitFrame_Player.lua
+global\UnitFrame_PlayerPet.lua
+global\UnitFrame_Target.lua
+global\UnitFrame_TargetTarget.lua
 global\Commands.lua
