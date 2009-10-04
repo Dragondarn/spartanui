@@ -8,8 +8,8 @@ do -- party header configuration
 	party:SetParent("SpartanUI");
 	party:SetClampedToScreen(true);
 	party:SetManyAttributes(
-		--"showSolo",						true,
-		--"showPlayer",					true,
+		"showSolo",						true,
+		"showPlayer",					true,
 		"showParty",						true,
 		"yOffset",							-4,
 		"xOffset",							0,
@@ -19,12 +19,9 @@ do -- party header configuration
 	PartyMemberBackground:Hide();
 end
 do -- scripts to make it movable
-	party.bg = party:CreateTexture(nil,"ARTWORK");
-	party.bg:SetWidth(250); party.bg:SetHeight(332);
-	party.bg:SetPoint("TOPLEFT");
-	
-	party.mover = CreateFrame("Frame");
-	party.mover:SetAllPoints(party.bg);
+	party.mover = CreateFrame("Frame");	
+	party.mover:SetWidth(205); party.mover:SetHeight(332);
+	party.mover:SetPoint("TOPLEFT",party,"TOPLEFT");	
 	party.mover:EnableMouse(true);
 	party.mover:SetScript("OnMouseDown",function()
 		party.isMoving = true;
@@ -32,6 +29,10 @@ do -- scripts to make it movable
 		party:SetMovable(true);
 		party:StartMoving();
 	end);
+	
+	party.bg = party.mover:CreateTexture(nil,"BACKGROUND");
+	party.bg:SetAllPoints(party.mover);	
+	
 	party.mover:SetScript("OnMouseUp",function()
 		if party.isMoving then
 			party.isMoving = nil;
