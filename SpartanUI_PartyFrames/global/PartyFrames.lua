@@ -8,8 +8,8 @@ do -- party header configuration
 	party:SetParent("SpartanUI");
 	party:SetClampedToScreen(true);
 	party:SetManyAttributes(
-		"showSolo",						true,
-		"showPlayer",					true,
+		--"showSolo",						true,
+		--"showPlayer",					true,
 		"showParty",						true,
 		"yOffset",							-4,
 		"xOffset",							0,

@@ -80,7 +80,8 @@ local setupBartender = function()
 end
 
 function module:OnInitialize()
-	suiChar.ActionBars = addon:MergeData(suiChar.ActionBars,default);	
+	suiChar.ActionBars = suiChar.ActionBars or {};
+	setmetatable(suiChar.ActionBars,{__index = default});
 	
 	plate = CreateFrame("Frame","SUI_ActionBarPlate",SpartanUI,"SUI_ActionBarsTemplate");
 	plate:SetFrameStrata("BACKGROUND"); plate:SetFrameLevel(1);
