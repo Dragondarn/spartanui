@@ -103,7 +103,7 @@ function module:OnInitialize()
 		hooksecurefunc(GameTooltip,"SetPoint",function(tooltip,point,parent,rpoint) -- fix GameTooltip offset
 			if (point == "BOTTOMRIGHT" and parent == "UIParent" and rpoint == "BOTTOMRIGHT") then
 				tooltip:ClearAllPoints();
-				tooltip:SetPoint("BOTTOM","SpartanUI","TOP",750,5);
+				tooltip:SetPoint("BOTTOMRIGHT","SpartanUI","TOPRIGHT",0,10);
 			end
 		end);
 	end

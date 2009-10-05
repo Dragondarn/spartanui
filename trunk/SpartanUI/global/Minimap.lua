@@ -1,4 +1,4 @@
-if Minimap:IsUserPlaced() then return; end
+if simpleMinimap or SexyMap or MinimapCluster:IsUserPlaced() then return; end
 local addon = LibStub("AceAddon-3.0"):GetAddon("SpartanUI");
 local module = addon:NewModule("Minimap");
 ----------------------------------------------------------------------------------------------------
@@ -15,8 +15,7 @@ local Update_ArenaEnemyFrames = function()
 		ArenaEnemyFrames:SetPoint("RIGHT", UIParent, "RIGHT",0,40);
 	end
 end
-
-function module:OnInitialize()
+function module:OnEnable()
 	do -- minimap overlay		
 		local overlay = Minimap:CreateTexture(nil,"OVERLAY");
 		overlay:SetWidth(228); overlay:SetHeight(228); 
@@ -53,37 +52,6 @@ function module:OnInitialize()
 			end
 		end);
 	end
-end
-function module:OnEnable()
-	do -- positioning hooks
-		-- we hook the SetPoint method so that they still work with third-party movers
-		hooksecurefunc(VehicleSeatIndicator,"SetPoint",function(_,_,parent) -- vehicle seat indicator
-			if (parent == "MinimapCluster") or (parent == _G["MinimapCluster"]) then
-				VehicleSeatIndicator:ClearAllPoints();
-				VehicleSeatIndicator:SetPoint("BOTTOMRIGHT","SpartanUI","TOPRIGHT",-5,5);
-			end
-		end);
-		hooksecurefunc(WatchFrame,"SetPoint",function(_,_,parent) -- quest watch frame
-			if (parent == "MinimapCluster") or (parent == _G["MinimapCluster"]) then
-				-- this only happens if the user isn't using the advanced quest watcher
-				WatchFrame:ClearAllPoints();
-				WatchFrame:SetPoint("TOPRIGHT","UIParent","TOPRIGHT",-4,-130);
-				WatchFrame:SetPoint("BOTTOMRIGHT","UIParent","BOTTOMRIGHT",-4,160);
-			end
-		end);
-		hooksecurefunc(DurabilityFrame,"SetPoint",function(self,_,parent) -- durability frame
-			if (parent == "MinimapCluster") or (parent == _G["MinimapCluster"]) then
-				DurabilityFrame:ClearAllPoints();
-				DurabilityFrame:SetPoint("BOTTOM","SpartanUI","TOP",0,70);
-			end
-		end);
-		-- this is a direct hook on the frame position manager, so may not work with third-party movers
-		hooksecurefunc("UIParent_ManageFramePositions",function() -- zonemap frame
-			Update_BattlefieldMinimap();
-			Update_ArenaEnemyFrames();			
-		end);	
-		hooksecurefunc("ToggleBattlefieldMinimap",Update_BattlefieldMinimap);	
-	end
 	do -- minimap modifications
 		MinimapBorderTop:Hide();
 		MinimapToggleButton:Hide();
@@ -116,6 +84,31 @@ function module:OnEnable()
 		TemporaryEnchantFrame:ClearAllPoints();
 		TemporaryEnchantFrame:SetPoint("TOPRIGHT",UIParent,"TOPRIGHT",-10,-10);
 	end
+	hooksecurefunc(VehicleSeatIndicator,"SetPoint",function(_,_,parent) -- vehicle seat indicator
+		if (parent == "MinimapCluster") or (parent == _G["MinimapCluster"]) then
+			VehicleSeatIndicator:ClearAllPoints();
+			VehicleSeatIndicator:SetPoint("BOTTOMRIGHT","SpartanUI","TOPRIGHT",-5,5);
+		end
+	end);
+	hooksecurefunc(WatchFrame,"SetPoint",function(_,_,parent) -- quest watch frame
+		if (parent == "MinimapCluster") or (parent == _G["MinimapCluster"]) then
+			-- this only happens if the user isn't using the advanced quest watcher
+			WatchFrame:ClearAllPoints();
+			WatchFrame:SetPoint("TOPRIGHT","UIParent","TOPRIGHT",-4,-130);
+			WatchFrame:SetPoint("BOTTOMRIGHT","UIParent","BOTTOMRIGHT",-4,160);
+		end
+	end);
+	hooksecurefunc(DurabilityFrame,"SetPoint",function(self,_,parent) -- durability frame
+		if (parent == "MinimapCluster") or (parent == _G["MinimapCluster"]) then
+			DurabilityFrame:ClearAllPoints();
+			DurabilityFrame:SetPoint("BOTTOM","SpartanUI","TOP",0,70);
+		end
+	end);
+	hooksecurefunc("UIParent_ManageFramePositions",function()
+		Update_BattlefieldMinimap();
+		Update_ArenaEnemyFrames();			
+	end);	
+	hooksecurefunc("ToggleBattlefieldMinimap",Update_BattlefieldMinimap);	
 	map:RegisterEvent("ZONE_CHANGED");
 	map:RegisterEvent("ZONE_CHANGED_INDOORS");
 	map:RegisterEvent("ZONE_CHANGED_NEW_AREA");
@@ -123,5 +116,5 @@ function module:OnEnable()
 	map:RegisterEvent("UPDATE_BATTLEFIELD_SCORE");	
 	map:RegisterEvent("PLAYER_ENTERING_WORLD");
 	map:RegisterEvent("PLAYER_ENTERING_BATTLEGROUND");
-	map:RegisterEvent("WORLD_STATE_UI_TIMER_UPDATE");
+	map:RegisterEvent("WORLD_STATE_UI_TIMER_UPDATE");	
 end
