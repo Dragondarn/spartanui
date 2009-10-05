@@ -1,4 +1,13 @@
 if simpleMinimap or SexyMap or MinimapCluster:IsUserPlaced() then return; end
+
+--[[ I am a little worried about the viability of disabling my code when SexyMap and 
+simpleMinimap are installed. For one, I noticed that certain things like the Arena UI 
+appears not to be handled by either addon. This is strange since both have a direct 
+impact on the functionality of each frame no different than when I modify the 
+minimap. I need to isntall each, and do a series of test exercises to verify that things 
+will appear the way I need them to. This is all in teh name of making SpartanUI
+JUST WORK even if someone installs sexyMap or simpleMinimap... ]]
+
 local addon = LibStub("AceAddon-3.0"):GetAddon("SpartanUI");
 local module = addon:NewModule("Minimap");
 ----------------------------------------------------------------------------------------------------
