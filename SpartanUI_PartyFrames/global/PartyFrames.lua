@@ -11,7 +11,7 @@ do -- party header configuration
 		--"showSolo",						true,
 		--"showPlayer",					true,
 		"showParty",						true,
-		"yOffset",							-4,
+		"yOffset",							-8,
 		"xOffset",							0,
 		"columnAnchorPoint",	"TOPLEFT",
 		"initial-anchor",				"TOPLEFT");
