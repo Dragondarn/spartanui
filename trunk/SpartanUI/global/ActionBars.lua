@@ -58,8 +58,6 @@ local setupBartender = function()
 		end
 	end
 	setupProfile = function() -- apply default settings into a custom BT4 profile
-		if (not suiChar) then suiChar = {}; end
-		if (not suiChar.ActionBars) then suiChar.ActionBars = default; end
 		if suiChar.ActionBars.Bartender4 then return; end
 		Bartender4.db:SetProfile(standard);
 		for k,v in LibStub("AceAddon-3.0"):IterateModulesOfAddon(Bartender4) do -- for each module (BagBar, ActionBars, etc..)
@@ -81,8 +79,10 @@ end
 
 function module:OnInitialize()
 	suiChar.ActionBars = suiChar.ActionBars or {};
-	setmetatable(suiChar.ActionBars,{__index = default});
-	
+	for key,val in pairs(default) do
+		if (not suiChar.ActionBars[key]) then suiChar.ActionBars[key] = {}; end
+		setmetatable(suiChar.ActionBars[key],{__index = default[key]});
+	end
 	plate = CreateFrame("Frame","SUI_ActionBarPlate",SpartanUI,"SUI_ActionBarsTemplate");
 	plate:SetFrameStrata("BACKGROUND"); plate:SetFrameLevel(1);
 	plate:SetPoint("BOTTOM");	
@@ -369,7 +369,7 @@ function module:OnInitialize()
 		}
 	};
 end
-function module:OnEnable()
+function module:OnEnable()	
 	do -- create base module frames
 		plate:SetScript("OnUpdate",function() -- backdrop and popup visibility changes (alpha, animation, hide/show)
 			if (suiChar.ActionBars) then
