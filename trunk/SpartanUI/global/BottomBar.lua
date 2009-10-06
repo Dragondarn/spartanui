@@ -38,6 +38,8 @@ function module:OnInitialize()
 	do -- default interface modifications
 		FramerateLabel:ClearAllPoints(); FramerateLabel:SetPoint("TOP", "WorldFrame", "TOP", -15, -50);
 		MainMenuBar:Hide(); WorldFrame:SetPoint("BOTTOMRIGHT",frame,"TOPRIGHT",0,-5); -- seems to work, but my gut tells me it is a bad idea
+		hooksecurefunc(UIParent,"Hide",function() WorldFrame:SetPoint("BOTTOMRIGHT"); end);
+		hooksecurefunc(UIParent,"Show",function() WorldFrame:SetPoint("BOTTOMRIGHT",frame,"TOPRIGHT",0,-5); end);
 		hooksecurefunc("updateContainerFrameAnchors",function() -- fix bag offsets
 			local frame, xOffset, yOffset, screenHeight, freeScreenHeight, leftMostPoint, column
 			local screenWidth = GetScreenWidth()
