@@ -13,8 +13,8 @@ do -- relocate the death knight rune frame
 			RuneFrame:SetPoint("TOPLEFT",addon.player,"BOTTOMLEFT",40,10);
 		end
 	end);
-	RuneFrame:SetParent(SpartanUI); RuneFrame:SetFrameStrata("LOW");
-	RuneFrame:SetFrameLevel(1); RuneFrame:SetScale(0.8); RuneFrame:ClearAllPoints();
+	RuneFrame:SetParent(SpartanUI); RuneFrame:SetFrameStrata("BACKGROUND");
+	RuneFrame:SetFrameLevel(4); RuneFrame:SetScale(0.8); RuneFrame:ClearAllPoints();
 	RuneFrame:SetPoint("TOPLEFT",addon.player,"BOTTOMLEFT",40,10);
 end
 do -- relocate the shaman totem frame
@@ -29,7 +29,7 @@ do -- relocate the shaman totem frame
 			TotemFrame:SetPoint("TOPLEFT",addon.player,"BOTTOMLEFT",60,18);
 		end
 	end);
-	TotemFrame:SetParent(SpartanUI); TotemFrame:SetFrameStrata("LOW");
-	TotemFrame:SetFrameLevel(0); TotemFrame:SetScale(0.59); TotemFrame:ClearAllPoints();
+	TotemFrame:SetParent(SpartanUI); TotemFrame:SetFrameStrata("BACKGROUND");
+	TotemFrame:SetFrameLevel(4); TotemFrame:SetScale(0.59); TotemFrame:ClearAllPoints();
 	TotemFrame:SetPoint("TOPLEFT",addon.player,"BOTTOMLEFT",60,18);
 end
