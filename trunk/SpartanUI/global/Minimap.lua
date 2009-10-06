@@ -1,30 +1,27 @@
-if simpleMinimap or SexyMap or MinimapCluster:IsUserPlaced() then return; end
-
---[[ I am a little worried about the viability of disabling my code when SexyMap and 
-simpleMinimap are installed. For one, I noticed that certain things like the Arena UI 
-appears not to be handled by either addon. This is strange since both have a direct 
-impact on the functionality of each frame no different than when I modify the 
-minimap. I need to isntall each, and do a series of test exercises to verify that things 
-will appear the way I need them to. This is all in teh name of making SpartanUI
-JUST WORK even if someone installs sexyMap or simpleMinimap... ]]
-
 local addon = LibStub("AceAddon-3.0"):GetAddon("SpartanUI");
 local module = addon:NewModule("Minimap");
 ----------------------------------------------------------------------------------------------------
-local map = CreateFrame("Frame");
-local Update_BattlefieldMinimap = function()
-	if ( BattlefieldMinimapTab and not BattlefieldMinimapTab:IsUserPlaced() ) then
-		BattlefieldMinimapTab:ClearAllPoints()
-		BattlefieldMinimapTab:SetPoint("RIGHT", "UIParent", "RIGHT",-144,150);
-	end
+local map, Update_BattlefieldMinimap, Update_ArenaEnemyFrames;
+local checkThirdParty = function()
+	local point, relativeTo, relativePoint, x, y = MinimapCluster:GetPoint();
+	if (relativeTo ~= UIParent) then return true; end -- a third party minimap manager is involved
 end
-local Update_ArenaEnemyFrames = function()
-	if ( ArenaEnemyFrames ) then
-		ArenaEnemyFrames:ClearAllPoints();
-		ArenaEnemyFrames:SetPoint("RIGHT", UIParent, "RIGHT",0,40);
-	end
-end
+
 function module:OnEnable()
+	if (checkThirdParty()) then return; end
+	map = CreateFrame("Frame");
+	Update_BattlefieldMinimap = function()
+		if ( BattlefieldMinimapTab and not BattlefieldMinimapTab:IsUserPlaced() ) then
+			BattlefieldMinimapTab:ClearAllPoints()
+			BattlefieldMinimapTab:SetPoint("RIGHT", "UIParent", "RIGHT",-144,150);
+		end
+	end
+	Update_ArenaEnemyFrames = function()
+		if ( ArenaEnemyFrames ) then
+			ArenaEnemyFrames:ClearAllPoints();
+			ArenaEnemyFrames:SetPoint("RIGHT", UIParent, "RIGHT",0,40);
+		end
+	end
 	do -- minimap overlay		
 		local overlay = Minimap:CreateTexture(nil,"OVERLAY");
 		overlay:SetWidth(228); overlay:SetHeight(228); 
