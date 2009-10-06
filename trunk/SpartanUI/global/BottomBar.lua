@@ -14,7 +14,6 @@ local updateSpartanScale = function() -- scales SpartanUI based on setting or sc
 	end
 	if (suiChar.scale ~= round(SpartanUI:GetScale())) then
 		frame:SetScale(suiChar.scale);
-		-- WorldFrame:SetPoint("BOTTOMRIGHT",0,135*suiChar.scale); -- works, but doesn't account for offset
 	end
 end;
 local updateSpartanOffset = function() -- handles SpartanUI offset based on setting or fubar / titan
