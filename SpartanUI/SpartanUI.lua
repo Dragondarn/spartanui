@@ -21,14 +21,3 @@ end
 function addon:OnEnable()
 	LibStub("AceConfig-3.0"):RegisterOptionsTable("SpartanUI", addon.options, {"sui", "spartanui"});
 end
-function addon:MergeData(target,source)
-	if type(target) ~= "table" then target = {} end
-	for k,v in pairs(source) do
-		if type(v) == "table" then
-			target[k] = self:MergeData(target[k], v);
-		else
-			target[k] = v;
-		end
-	end
-	return target;
-end

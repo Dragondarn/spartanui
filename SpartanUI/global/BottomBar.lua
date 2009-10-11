@@ -6,6 +6,7 @@ local round = function(num) -- rounds a number to 2 decimal places
 	return math.floor( (num*10^2)+0.5) / (10^2);
 end;
 local updateSpartanScale = function() -- scales SpartanUI based on setting or screen size
+	suiChar = suiChar or {};
 	if (not suiChar.scale) then -- make sure the variable exists, and auto-configured based on screen size
 		local width, height = string.match(GetCVar("gxResolution"),"(%d+).-(%d+)");
 		-- local width, height = string.match((({GetScreenResolutions()})[GetCurrentResolution()] or ""), "(%d+).-(%d+)");
