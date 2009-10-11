@@ -11,10 +11,17 @@ local default, plate = {
 	bar5 = {alpha = 1, enable = 1},
 	bar6 = {alpha = 1, enable = 1},
 };
-local setupProfile = function()
-	-- placeholder, gets replaced if BT4 exists
+local UpdateSettings = function()
+	suiChar.ActionBars = suiChar.ActionBars or {};
+	for key,val in pairs(default) do
+		if (not suiChar.ActionBars[key]) then suiChar.ActionBars[key] = {}; end
+		setmetatable(suiChar.ActionBars[key],{__index = default[key]});
+	end
 end;
-local setupBartender = function()
+local SetupProfile = function()
+	UpdateSettings();
+end;
+local SetupBartender = function()
 	if (not Bartender4) then return; end
 	local standard = "SpartanUI Standard";
 	local settings = { -- actual settings being inserted into our custom profile
@@ -57,12 +64,13 @@ local setupBartender = function()
 			frame:SetParent(UIParent);
 		end
 	end
-	setupProfile = function() -- apply default settings into a custom BT4 profile
+	SetupProfile = function() -- apply default settings into a custom BT4 profile
+		UpdateSettings();
 		if suiChar.ActionBars.Bartender4 then return; end
 		Bartender4.db:SetProfile(standard);
 		for k,v in LibStub("AceAddon-3.0"):IterateModulesOfAddon(Bartender4) do -- for each module (BagBar, ActionBars, etc..)
 			if settings[k] and v.db.profile then
-				v.db.profile = addon:MergeData(v.db.profile,settings[k])
+				v.db.profile = module:MergeData(v.db.profile,settings[k])
 			end
 		end
 		Bartender4:UpdateModuleConfigs(); -- run ApplyConfig for all modules, so that the new settings are applied
@@ -77,31 +85,32 @@ local setupBartender = function()
 		end
 	end);	
 end;
-local configSettings = function()
-	suiChar.ActionBars = suiChar.ActionBars or {};
-	for key,val in pairs(default) do
-		if (not suiChar.ActionBars[key]) then suiChar.ActionBars[key] = {}; end
-		setmetatable(suiChar.ActionBars[key],{__index = default[key]});
-	end
-end;
 
+function module:MergeData(target,source)
+	if type(target) ~= "table" then target = {} end
+	for k,v in pairs(source) do
+		if type(v) == "table" then
+			target[k] = self:MergeData(target[k], v);
+		else
+			target[k] = v;
+		end
+	end
+	return target;
+end
 function module:OnInitialize()
-	configSettings();
+	do -- create bar plate and masks
+		plate = CreateFrame("Frame","SUI_ActionBarPlate",SpartanUI,"SUI_ActionBarsTemplate");
+		plate:SetFrameStrata("BACKGROUND"); plate:SetFrameLevel(1);
+		plate:SetPoint("BOTTOM");
 	
-	plate = CreateFrame("Frame","SUI_ActionBarPlate",SpartanUI,"SUI_ActionBarsTemplate");
-	plate:SetFrameStrata("BACKGROUND"); plate:SetFrameLevel(1);
-	plate:SetPoint("BOTTOM");
+		plate.mask1 = CreateFrame("Frame","SUI_Popup1Mask",SpartanUI,"SUI_Popup1MaskTemplate");
+		plate.mask1:SetFrameStrata("MEDIUM"); plate.mask1:SetFrameLevel(0);
+		plate.mask1:SetPoint("BOTTOM",SUI_Popup1,"BOTTOM");
 	
-	plate.mask1 = CreateFrame("Frame","SUI_Popup1Mask",SpartanUI,"SUI_Popup1MaskTemplate");
-	plate.mask1:SetFrameStrata("MEDIUM"); plate.mask1:SetFrameLevel(0);
-	plate.mask1:SetPoint("BOTTOM",SUI_Popup1,"BOTTOM");
-	
-	plate.mask2 = CreateFrame("Frame","SUI_Popup2Mask",SpartanUI,"SUI_Popup2MaskTemplate");
-	plate.mask2:SetFrameStrata("MEDIUM"); plate.mask2:SetFrameLevel(0);
-	plate.mask2:SetPoint("BOTTOM",SUI_Popup2,"BOTTOM");	
-	
-	setupBartender();
-	
+		plate.mask2 = CreateFrame("Frame","SUI_Popup2Mask",SpartanUI,"SUI_Popup2MaskTemplate");
+		plate.mask2:SetFrameStrata("MEDIUM"); plate.mask2:SetFrameLevel(0);
+		plate.mask2:SetPoint("BOTTOM",SUI_Popup2,"BOTTOM");
+	end
 	addon.options.args["backdrop"] = {
 		name = "ActionBar Backdrops",
 		desc = "configure actionbar backdrops",
@@ -324,8 +333,7 @@ function module:OnInitialize()
 				addon:Print(ERR_NOT_IN_COMBAT);
 			else
 				suiChar.ActionBars = {};
-				configSettings();
-				setupProfile();
+				SetupProfile();
 				addon:Print("ActionBar Options Reset");
 			end
 		end
@@ -334,48 +342,49 @@ function module:OnInitialize()
 		name = "PopupBar Animations",
 		desc = "toggle popup bar animations",
 		type = "group", args = {
-			["1"] = {name = "toggle animations for popup1", type = "toggle", 
-				get = function(info) return suiChar.ActionBars.popup1.anim; end,
+			["1"] = {name = "toggle animations for popup1", type="input",
+				get = function(info) return suiChar and suiChar.ActionBars and suiChar.ActionBars.popup1 and suiChar.ActionBars.popup1.anim; end,
 				set = function(info,val)
-					if val then
-						suiChar.ActionBars.popup1.anim = 1;
-						addon:Print("Animations for Popup Bar1 Enabled");
-					else
+					if (val == "" and suiChar.ActionBars.popup1.anim == 1) or (val == "off") then
 						suiChar.ActionBars.popup1.anim = 0;
 						addon:Print("Animations for Popup Bar1 Disabled");
+					elseif (val == "" and suiChar.ActionBars.popup1.anim == 0) or (val == "on") then
+						suiChar.ActionBars.popup1.anim = 1;
+						addon:Print("Animations for Popup Bar1 Enabled");
 					end
 				end
 			},
-			["2"] = {name = "toggle animations for popup2", type = "toggle",
-				get = function(info) return suiChar.ActionBars.popup2.anim; end,
-				set = function(info,val)				
-					if val then
-						suiChar.ActionBars.popup2.anim = 1;
-						addon:Print("Animations for Popup Bar2 Enabled");
-					else
+			["2"] = {name = "toggle animations for popup2", type="input",
+				get = function(info) return suiChar and suiChar.ActionBars and suiChar.ActionBars.popup2 and suiChar.ActionBars.popup2.anim; end,
+				set = function(info,val)
+					if (val == "" and suiChar.ActionBars.popup2.anim == 1) or (val == "off") then
 						suiChar.ActionBars.popup2.anim = 0;
 						addon:Print("Animations for Popup Bar2 Disabled");
+					elseif (val == "" and suiChar.ActionBars.popup2.anim == 0) or (val == "on") then
+						suiChar.ActionBars.popup2.anim = 1;
+						addon:Print("Animations for Popup Bar2 Enabled");
 					end
 				end
 			},
-			all = {name = "toggle all popup animations", type = "toggle", 
+			all = {name = "toggle all popup animations", type = "input", 
 				get = function(info)
-					return suiChar.ActionBars.popup1.anim == 1 or suiChar.ActionBars.popup2.anim == 1;
+					return suiChar.ActionBars;
 				end,
 				set = function(info,val)
-					if val then
-						suiChar.ActionBars.popup1.anim = 1;
-						suiChar.ActionBars.popup2.anim = 1;
-						addon:Print("Animations for All Popup Bars Enabled");
-					else
+					if (val == "" and suiChar.ActionBars.popup1.anim == 1) or (val == "off") then
 						suiChar.ActionBars.popup1.anim = 0;
 						suiChar.ActionBars.popup2.anim = 0;
 						addon:Print("Animations for All Popup Bars Disabled");
+					elseif (val == "" and suiChar.ActionBars.popup1.anim == 0) or (val == "on") then
+						suiChar.ActionBars.popup1.anim = 1;
+						suiChar.ActionBars.popup2.anim = 1;
+						addon:Print("Animations for All Popup Bars Enabled");
 					end
 				end
 			},
 		}
 	};
+	SetupBartender();	
 end
 function module:OnEnable()	
 	do -- create base module frames
@@ -424,5 +433,5 @@ function module:OnEnable()
 			_G["SUI_Popup"..i]:SetFrameLevel(3);
 		end
 	end
-	setupProfile();
+	SetupProfile();
 end
