@@ -13,29 +13,29 @@ local default, plate = {
 };
 local setupProfile = function()
 	-- placeholder, gets replaced if BT4 exists
-end
+end;
 local setupBartender = function()
 	if (not Bartender4) then return; end
 	local standard = "SpartanUI Standard";
 	local settings = { -- actual settings being inserted into our custom profile
 			ActionBars = {
 				actionbars = { -- following settings are bare minimum, so that anything not defined is retained between resets
-					{enabled = true,	buttons = 12,	rows = 1,	padding = 3,	skin = {Zoom = true},	position = {point = "BOTTOMLEFT",	parent = "SUI_ActionBarPlate",	x=0,	y=105,	scale = 0.85,	growHorizontal="RIGHT"}}, -- 1
-					{enabled = true,	buttons = 12,	rows = 1,	padding = 3,	skin = {Zoom = true},	position = {point = "BOTTOMLEFT",	parent = "SUI_ActionBarPlate",	x=0,	y=66,	scale = 0.85,	growHorizontal="RIGHT"}}, -- 2
-					{enabled = true,	buttons = 12,	rows = 1,	padding = 3,	skin = {Zoom = true},	position = {point = "BOTTOMRIGHT",	parent = "SUI_ActionBarPlate",	x=-402,	y=105,	scale = 0.85,	growHorizontal="RIGHT"}}, -- 3
-					{enabled = true,	buttons = 12,	rows = 1,	padding = 3,	skin = {Zoom = true},	position = {point = "BOTTOMRIGHT",	parent = "SUI_ActionBarPlate",	x=-402,	y=66,	scale = 0.85,	growHorizontal="RIGHT"}}, -- 4
-					{enabled = true,	buttons = 12,	rows = 3,	padding = 6,	skin = {Zoom = true},	position = {point = "BOTTOMLEFT",	parent = "SUI_ActionBarPlate",	x=-140,	y=109,	scale = 0.80,	growHorizontal="RIGHT"}}, -- 5
-					{enabled = true,	buttons = 12,	rows = 3,	padding = 6,	skin = {Zoom = true},	position = {point = "BOTTOMRIGHT",	parent = "SUI_ActionBarPlate",	x=4,	y=109,	scale = 0.80,	growHorizontal="RIGHT"}}, -- 6
+					{enabled = true,	buttons = 12,	rows = 1,	padding = 3,	skin = {Zoom = true},	position = {point = "LEFT",		parent = "SUI_ActionBarPlate",	x=0,		y=36,	scale = 0.85,	growHorizontal="RIGHT"}}, -- 1
+					{enabled = true,	buttons = 12,	rows = 1,	padding = 3,	skin = {Zoom = true},	position = {point = "LEFT",		parent = "SUI_ActionBarPlate",	x=0,		y=-4,	scale = 0.85,	growHorizontal="RIGHT"}}, -- 2
+					{enabled = true,	buttons = 12,	rows = 1,	padding = 3,	skin = {Zoom = true},	position = {point = "RIGHT",	parent = "SUI_ActionBarPlate",	x=-402,	y=36,	scale = 0.85,	growHorizontal="RIGHT"}}, -- 3
+					{enabled = true,	buttons = 12,	rows = 1,	padding = 3,	skin = {Zoom = true},	position = {point = "RIGHT",	parent = "SUI_ActionBarPlate",	x=-402,	y=-4,	scale = 0.85,	growHorizontal="RIGHT"}}, -- 4
+					{enabled = true,	buttons = 12,	rows = 3,	padding = 4,	skin = {Zoom = true},	position = {point = "LEFT",		parent = "SUI_ActionBarPlate",	x=-135,	y=36,	scale = 0.80,	growHorizontal="RIGHT"}}, -- 5
+					{enabled = true,	buttons = 12,	rows = 3,	padding = 6,	skin = {Zoom = true},	position = {point = "RIGHT",	parent = "SUI_ActionBarPlate",	x=3,		y=36,	scale = 0.80,	growHorizontal="RIGHT"}}, -- 6
 					{enabled = false}, -- 8
 					{enabled = false}, -- 9
 					{enabled = false} -- 10
 				}
 			},
-			BagBar = {			enabled = true,	padding = 0,	rows = 1,	keyring = true,	position = {point = "TOPRIGHT",	parent = "SUI_ActionBarPlate",	x=-184,	y=-2,	scale = 0.75,	growHorizontal="RIGHT"}},
-			MicroMenu = {	enabled = true,	padding = -3,												position = {point = "TOPLEFT",		parent = "SUI_ActionBarPlate",	x=612,	y=0,	scale = 0.80,	growHorizontal="RIGHT"}},
-			PetBar = {			enabled = true,	padding = 1,	rows = 1,								position = {point = "TOPLEFT",		parent = "SUI_ActionBarPlate",	x=46,		y=-3,	scale = 0.80,	growHorizontal="RIGHT"}},
-			StanceBar = {		enabled = true,	padding = 1,	rows = 1,								position = {point = "TOPRIGHT",	parent = "SUI_ActionBarPlate",	x=-613,	y=-2,	scale = 0.85,	growHorizontal="LEFT"}},
-			MultiCast = {		enabled = true,																			position = {point = "TOPRIGHT",	parent = "SUI_ActionBarPlate",	x=-774,	y=-6,	scale = 0.8}},
+			BagBar = {			enabled = true, padding = 0, 		position = {point = "TOPRIGHT",		parent = "SUI_ActionBarPlate",	x=-4,		y=0,	scale = 0.75,	growHorizontal="LEFT"},	rows = 1, keyring = true},
+			MicroMenu = {	enabled = true,	padding = -3,	position = {point = "TOPLEFT",		parent = "SUI_ActionBarPlate",	x=603,	y=0,	scale = 0.80,	growHorizontal="RIGHT"}},
+			PetBar = {			enabled = true, padding = 1, 		position = {point = "TOPLEFT",		parent = "SUI_ActionBarPlate",	x=5,		y=-3,	scale = 0.7,	growHorizontal="RIGHT"},	rows = 1, skin = {Zoom = true}},
+			StanceBar = {		enabled = true,	padding = 1, 	position = {point = "TOPRIGHT",		parent = "SUI_ActionBarPlate",	x=-766,	y=-6,	scale = 0.85,	growHorizontal="LEFT"},	rows = 1},
+			MultiCast = {		enabled = true,								position = {point = "TOPRIGHT",		parent = "SUI_ActionBarPlate",	x=-755,	y=-7,	scale = 0.75}},
 			Vehicle = {			enabled = false},
 		};
 	
@@ -72,23 +72,30 @@ local setupBartender = function()
 		if (InCombatLockdown()) then return; end
 		if (Bartender4.db:GetCurrentProfile() == standard) then
 			if Bartender4.Locked then return; end
+			addon:Print("The ability to unlock your bars is disabled when using the SpartanUI Default profile in Bartender4. Please change profiles to enable this functionality.");
 			Bartender4:Lock();
 		end
 	end);	
-end
-
-function module:OnInitialize()
+end;
+local configSettings = function()
 	suiChar.ActionBars = suiChar.ActionBars or {};
 	for key,val in pairs(default) do
 		if (not suiChar.ActionBars[key]) then suiChar.ActionBars[key] = {}; end
 		setmetatable(suiChar.ActionBars[key],{__index = default[key]});
 	end
+end;
+
+function module:OnInitialize()
+	configSettings();
+	
 	plate = CreateFrame("Frame","SUI_ActionBarPlate",SpartanUI,"SUI_ActionBarsTemplate");
 	plate:SetFrameStrata("BACKGROUND"); plate:SetFrameLevel(1);
-	plate:SetPoint("BOTTOM");	
+	plate:SetPoint("BOTTOM");
+	
 	plate.mask1 = CreateFrame("Frame","SUI_Popup1Mask",SpartanUI,"SUI_Popup1MaskTemplate");
 	plate.mask1:SetFrameStrata("MEDIUM"); plate.mask1:SetFrameLevel(0);
 	plate.mask1:SetPoint("BOTTOM",SUI_Popup1,"BOTTOM");
+	
 	plate.mask2 = CreateFrame("Frame","SUI_Popup2Mask",SpartanUI,"SUI_Popup2MaskTemplate");
 	plate.mask2:SetFrameStrata("MEDIUM"); plate.mask2:SetFrameLevel(0);
 	plate.mask2:SetPoint("BOTTOM",SUI_Popup2,"BOTTOM");	
@@ -316,8 +323,9 @@ function module:OnInitialize()
 			if (InCombatLockdown()) then 
 				addon:Print(ERR_NOT_IN_COMBAT);
 			else
-				suiChar.ActionBars = default;
-				if Bartender4 then setupProfile(); end
+				suiChar.ActionBars = {};
+				configSettings();
+				setupProfile();
 				addon:Print("ActionBar Options Reset");
 			end
 		end
@@ -371,7 +379,7 @@ function module:OnInitialize()
 end
 function module:OnEnable()	
 	do -- create base module frames
-		plate:SetScript("OnUpdate",function() -- backdrop and popup visibility changes (alpha, animation, hide/show)
+		plate:HookScript("OnUpdate",function() -- backdrop and popup visibility changes (alpha, animation, hide/show)
 			if (suiChar.ActionBars) then
 				for b = 1,6 do -- for each backdrop
 					if suiChar.ActionBars["bar"..b].enable == 1 then -- backdrop enabled

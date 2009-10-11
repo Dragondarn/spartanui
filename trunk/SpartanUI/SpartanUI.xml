@@ -169,13 +169,13 @@
 	</Frame>
 	
 	<Frame name="SUI_PopTemplate" frameStrata="BACKGROUND" virtual="true">
-		<Size><AbsDimension x="356" y="32" /></Size>
+		<Size><AbsDimension x="400" y="32" /></Size>
 		<Layers>
 			<Layer level="BACKGROUND">
-				<Texture name="$parentBG" file="Interface\AddOns\SpartanUI\media\bar_popupbg">
-					<Size><AbsDimension x="512" y="50" /></Size>
+				<Texture name="$parentBG" file="Interface\AddOns\SpartanUI\media\bar_backdrop1">
+					<Size><AbsDimension x="500" y="46" /></Size>
 					<Anchors><Anchor point="BOTTOM" relativePoint="BOTTOM"/></Anchors>
-					<TexCoords left="0" right="1" top="0" bottom="0.671875" />
+					<TexCoords left="0" right="1" top="0" bottom="0.71875" />
 				</Texture>
 			</Layer>
 		</Layers>
@@ -203,38 +203,38 @@
 		</Layers>
 	</Frame>
 	<Frame name="SUI_ActionBarsTemplate" parent="SpartanUI" frameStrata="BACKGROUND" virtual="true">
-		<Size><AbsDimension x="1012" y="139"/></Size>
+		<Size><AbsDimension x="1002" y="139"/></Size>
 		<Frames>
-			<Frame name="SUI_Bar1" inherits="SUI_BarTemplate1"><Anchors><Anchor point="BOTTOMRIGHT" relativePoint="BOTTOM"><Offset><AbsDimension x="-105" y="70" /></Offset></Anchor></Anchors></Frame>
-			<Frame name="SUI_Bar2" inherits="SUI_BarTemplate1"><Anchors><Anchor point="BOTTOMRIGHT" relativePoint="BOTTOM"><Offset><AbsDimension x="-105" y="31" /></Offset></Anchor></Anchors></Frame>
-			<Frame name="SUI_Bar3" inherits="SUI_BarTemplate1"><Anchors><Anchor point="BOTTOMLEFT" relativePoint="BOTTOM"><Offset><AbsDimension x="105" y="70" /></Offset></Anchor></Anchors></Frame>
-			<Frame name="SUI_Bar4" inherits="SUI_BarTemplate1"><Anchors><Anchor point="BOTTOMLEFT" relativePoint="BOTTOM"><Offset><AbsDimension x="105" y="31" /></Offset></Anchor></Anchors></Frame>
-			<Frame name="SUI_Bar5" inherits="SUI_BarTemplate3"><Anchors><Anchor point="BOTTOMRIGHT" relativePoint="BOTTOM"><Offset><AbsDimension x="-510" y="8" /></Offset></Anchor></Anchors></Frame>
-			<Frame name="SUI_Bar6" inherits="SUI_BarTemplate3"><Anchors><Anchor point="BOTTOMLEFT" relativePoint="BOTTOM"><Offset><AbsDimension x="510" y="8" /></Offset></Anchor></Anchors></Frame>			
-			<Frame name="SUI_Popup1" inherits="SUI_PopTemplate"><Anchors><Anchor point="BOTTOMRIGHT" relativePoint="BOTTOM"><Offset><AbsDimension x="-105" y="105" /></Offset></Anchor></Anchors></Frame>
-			<Frame name="SUI_Popup2" inherits="SUI_PopTemplate"><Anchors><Anchor point="BOTTOMLEFT" relativePoint="BOTTOM"><Offset><AbsDimension x="106" y="105" /></Offset></Anchor></Anchors></Frame>
+			<Frame name="SUI_Bar1" inherits="SUI_BarTemplate1"><Anchors><Anchor point="BOTTOMRIGHT" relativePoint="BOTTOM"><Offset><AbsDimension x="-100" y="70" /></Offset></Anchor></Anchors></Frame>
+			<Frame name="SUI_Bar2" inherits="SUI_BarTemplate1"><Anchors><Anchor point="BOTTOMRIGHT" relativePoint="BOTTOM"><Offset><AbsDimension x="-100" y="31" /></Offset></Anchor></Anchors></Frame>
+			<Frame name="SUI_Bar3" inherits="SUI_BarTemplate1"><Anchors><Anchor point="BOTTOMLEFT" relativePoint="BOTTOM"><Offset><AbsDimension x="100" y="70" /></Offset></Anchor></Anchors></Frame>
+			<Frame name="SUI_Bar4" inherits="SUI_BarTemplate1"><Anchors><Anchor point="BOTTOMLEFT" relativePoint="BOTTOM"><Offset><AbsDimension x="100" y="31" /></Offset></Anchor></Anchors></Frame>
+			<Frame name="SUI_Bar5" inherits="SUI_BarTemplate3"><Anchors><Anchor point="BOTTOMRIGHT" relativePoint="BOTTOM"><Offset><AbsDimension x="-502" y="5" /></Offset></Anchor></Anchors></Frame>
+			<Frame name="SUI_Bar6" inherits="SUI_BarTemplate3"><Anchors><Anchor point="BOTTOMLEFT" relativePoint="BOTTOM"><Offset><AbsDimension x="502" y="5" /></Offset></Anchor></Anchors></Frame>			
+			<Frame name="SUI_Popup1" inherits="SUI_PopTemplate"><Anchors><Anchor point="BOTTOMRIGHT" relativePoint="BOTTOM"><Offset><AbsDimension x="-100" y="105" /></Offset></Anchor></Anchors></Frame>
+			<Frame name="SUI_Popup2" inherits="SUI_PopTemplate"><Anchors><Anchor point="BOTTOMLEFT" relativePoint="BOTTOM"><Offset><AbsDimension x="100" y="105" /></Offset></Anchor></Anchors></Frame>
 		</Frames>
 	</Frame>
 	<Frame name="SUI_Popup1MaskTemplate" parent="SpartanUI" frameStrata="MEDIUM" virtual="true">
-		<Size><AbsDimension x="356" y="34"/></Size>
+		<Size><AbsDimension x="400" y="34"/></Size>
 		<Layers>
 			<Layer level="BACKGROUND">
 				<Texture name="$parentBG" file="Interface\AddOns\SpartanUI\media\bar_popup1">
-					<Size><AbsDimension x="356" y="32" /></Size>
+					<Size><AbsDimension x="400" y="28" /></Size>
 					<Anchors><Anchor point="TOP" relativePoint="TOP"/></Anchors>
-					<TexCoords left="0.29296875" right="0.98828125" top="0" bottom="1" />
+					<TexCoords left="0.216796875" right="0.998046875" top="0" bottom="0.875" />
 				</Texture>
 			</Layer>
 		</Layers>
 	</Frame>
 	<Frame name="SUI_Popup2MaskTemplate" parent="SpartanUI" frameStrata="MEDIUM" virtual="true">
-		<Size><AbsDimension x="356" y="34"/></Size>
+		<Size><AbsDimension x="400" y="34"/></Size>
 		<Layers>
 			<Layer level="BACKGROUND">
 				<Texture name="$parentBG" file="Interface\AddOns\SpartanUI\media\bar_popup2">
-					<Size><AbsDimension x="356" y="32" /></Size>
+					<Size><AbsDimension x="400" y="28" /></Size>
 					<Anchors><Anchor point="TOP" relativePoint="TOP"/></Anchors>
-					<TexCoords left="0.01171875" right="0.70703125" top="0" bottom="1" />
+					<TexCoords left="0.001953125" right="0.783203125" top="0" bottom="0.875" />
 				</Texture>
 			</Layer>
 		</Layers>
