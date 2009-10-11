@@ -51,7 +51,7 @@ function module:OnInitialize()
 				screenHeight = GetScreenHeight() / containerScale
 				-- Adjust the start anchor for bags depending on the multibars
 				xOffset = 1 / containerScale
-				yOffset = 155
+				yOffset = 155;
 				-- freeScreenHeight determines when to start a new column of bags
 				freeScreenHeight = screenHeight - yOffset
 				leftMostPoint = screenWidth - xOffset
@@ -79,7 +79,7 @@ function module:OnInitialize()
 			screenHeight = GetScreenHeight() / containerScale
 			-- Adjust the start anchor for bags depending on the multibars
 			xOffset = 1 / containerScale
-			yOffset = 220
+			yOffset = 154
 			-- freeScreenHeight determines when to start a new column of bags
 			freeScreenHeight = screenHeight - yOffset
 			column = 0
@@ -88,7 +88,7 @@ function module:OnInitialize()
 				frame:SetScale(containerScale)
 				if ( index == 1 ) then
 					-- First bag
-					frame:SetPoint("BOTTOMRIGHT", frame:GetParent(), "BOTTOMRIGHT", -xOffset, yOffset )
+					frame:SetPoint("BOTTOMRIGHT", frame:GetParent(), "BOTTOMRIGHT", -xOffset, (yOffset + (suiChar.offset or 1)) * (suiChar.scale or 1) )
 				elseif ( freeScreenHeight < frame:GetHeight() ) then
 					-- Start a new column
 					column = column + 1
