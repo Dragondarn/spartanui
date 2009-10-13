@@ -33,11 +33,18 @@ local updateSpartanOffset = function() -- handles SpartanUI offset based on sett
 	end
 	if (offset ~= round(anchor:GetHeight())) then anchor:SetHeight(offset); end
 end;
+local updateSpartanViewport = function() -- handles viewport offset based on settings
+	if (suiChar and suiChar.viewport == 1) then
+		WorldFrame:SetPoint("BOTTOMRIGHT",frame,"TOPRIGHT",0,-5);
+	else
+		WorldFrame:SetPoint("BOTTOMRIGHT");
+	end
+end;
 
 function module:OnInitialize()
 	do -- default interface modifications
 		FramerateLabel:ClearAllPoints(); FramerateLabel:SetPoint("TOP", "WorldFrame", "TOP", -15, -50);
-		MainMenuBar:Hide(); WorldFrame:SetPoint("BOTTOMRIGHT",frame,"TOPRIGHT",0,-5); -- seems to work, but my gut tells me it is a bad idea
+		MainMenuBar:Hide();
 		hooksecurefunc(UIParent,"Hide",function() WorldFrame:SetPoint("BOTTOMRIGHT"); end);
 		hooksecurefunc(UIParent,"Show",function() WorldFrame:SetPoint("BOTTOMRIGHT",frame,"TOPRIGHT",0,-5); end);
 		hooksecurefunc("updateContainerFrameAnchors",function() -- fix bag offsets
@@ -164,6 +171,25 @@ function module:OnInitialize()
 		end,
 		get = function(info) return suiChar.offset; end
 	};
+	addon.options.args["viewport"] = {
+		type = "execute",
+		name = "Toggle Dynamic Viewport",
+		desc = "toggles between dyamic and static viewports",
+		func = function()
+			if (InCombatLockdown()) then 
+				addon:Print(ERR_NOT_IN_COMBAT);
+			else
+				if (suiChar.viewport == 1) then
+					suiChar.viewport = 0;
+					addon:Print("Dynamic Viewport Disabled");
+				else -- this catches both nil and 0 values for suiChar.viewport
+					suiChar.viewport = 1;
+					addon:Print("Dynamic Viewport Enabled");
+				end
+				updateSpartanViewport();
+			end
+		end
+	};
 end
 function module:OnEnable()
 	anchor:SetFrameStrata("BACKGROUND"); anchor:SetFrameLevel(1);
@@ -171,6 +197,7 @@ function module:OnEnable()
 	
 	updateSpartanScale();
 	updateSpartanOffset();
+	updateSpartanViewport();
 	
 	anchor:SetScript("OnUpdate",function()
 		if (InCombatLockdown()) then return; end
