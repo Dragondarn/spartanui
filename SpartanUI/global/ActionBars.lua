@@ -32,13 +32,13 @@ local SetupBartender = function()
 					{enabled = true,	buttons = 12,	rows = 1,	padding = 3,	skin = {Zoom = true},	position = {point = "RIGHT",	parent = "SUI_ActionBarPlate",	x=-402,	y=36,	scale = 0.85,	growHorizontal="RIGHT"}}, -- 3
 					{enabled = true,	buttons = 12,	rows = 1,	padding = 3,	skin = {Zoom = true},	position = {point = "RIGHT",	parent = "SUI_ActionBarPlate",	x=-402,	y=-4,	scale = 0.85,	growHorizontal="RIGHT"}}, -- 4
 					{enabled = true,	buttons = 12,	rows = 3,	padding = 4,	skin = {Zoom = true},	position = {point = "LEFT",		parent = "SUI_ActionBarPlate",	x=-135,	y=36,	scale = 0.80,	growHorizontal="RIGHT"}}, -- 5
-					{enabled = true,	buttons = 12,	rows = 3,	padding = 6,	skin = {Zoom = true},	position = {point = "RIGHT",	parent = "SUI_ActionBarPlate",	x=3,		y=36,	scale = 0.80,	growHorizontal="RIGHT"}}, -- 6
+					{enabled = true,	buttons = 12,	rows = 3,	padding = 4,	skin = {Zoom = true},	position = {point = "RIGHT",	parent = "SUI_ActionBarPlate",	x=3,		y=36,	scale = 0.80,	growHorizontal="RIGHT"}}, -- 6
 					{enabled = false}, -- 8
 					{enabled = false}, -- 9
 					{enabled = false} -- 10
 				}
 			},
-			BagBar = {			enabled = true, padding = 0, 		position = {point = "TOPRIGHT",		parent = "SUI_ActionBarPlate",	x=-4,		y=0,	scale = 0.75,	growHorizontal="LEFT"},	rows = 1, keyring = true},
+			BagBar = {			enabled = true, padding = 0, 		position = {point = "TOPRIGHT",		parent = "SUI_ActionBarPlate",	x=-6,		y=-2,	scale = 0.70,	growHorizontal="LEFT"},	rows = 1, keyring = true},
 			MicroMenu = {	enabled = true,	padding = -3,	position = {point = "TOPLEFT",		parent = "SUI_ActionBarPlate",	x=603,	y=0,	scale = 0.80,	growHorizontal="RIGHT"}},
 			PetBar = {			enabled = true, padding = 1, 		position = {point = "TOPLEFT",		parent = "SUI_ActionBarPlate",	x=5,		y=-3,	scale = 0.7,	growHorizontal="RIGHT"},	rows = 1, skin = {Zoom = true}},
 			StanceBar = {		enabled = true,	padding = 1, 	position = {point = "TOPRIGHT",		parent = "SUI_ActionBarPlate",	x=-605,	y=-2,	scale = 0.85,	growHorizontal="LEFT"},	rows = 1},
