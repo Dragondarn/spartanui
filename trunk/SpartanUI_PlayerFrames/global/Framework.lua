@@ -493,7 +493,7 @@ local CreatePetFrame = function(self,unit)
 
 		self.Portrait = self:CreateTexture(nil,"BACKGROUND");
 		self.Portrait:SetWidth(56); self.Portrait:SetHeight(50);
-		self.Portrait:SetPoint("CENTER",self,"CENTER",88,-8);
+		self.Portrait:SetPoint("CENTER",self,"CENTER",87,-8);
 	end
 	do -- setup status bars
 		do -- cast bar
