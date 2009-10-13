@@ -1,7 +1,7 @@
 local addon = LibStub("AceAddon-3.0"):GetAddon("SpartanUI");
 local module = addon:NewModule("Minimap");
 ----------------------------------------------------------------------------------------------------
-local map, Update_BattlefieldMinimap, Update_ArenaEnemyFrames;
+local map, Update_BattlefieldMinimap, Update_ArenaEnemyFrames, Update_MinimapButtons;
 local checkThirdParty = function()
 	local point, relativeTo, relativePoint, x, y = MinimapCluster:GetPoint();
 	if (relativeTo ~= UIParent) then return true; end -- a third party minimap manager is involved
@@ -35,12 +35,27 @@ function module:OnEnable()
 		map.coords = MinimapZoneTextButton:CreateFontString(nil,"BACKGROUND","GameFontNormalSmall");
 		map.coords:SetWidth(128); map.coords:SetHeight(12);
 		map.coords:SetPoint("TOP","MinimapZoneTextButton","BOTTOM");
-		map:SetScript("OnUpdate", function()
-			local x,y = GetPlayerMapPosition("player");
-			if (not x) or (not y) then return; end
-			map.coords:SetText(format("%.1f, %.1f",x*100,y*100));
+		map:HookScript("OnUpdate", function()
+			if (MouseIsOver(MinimapCluster)) then
+				GameTimeFrame:Show();
+				MiniMapTracking:Show();
+				MinimapZoomIn:Show();
+				MinimapZoomOut:Show();
+				MiniMapWorldMapButton:Show();
+			else -- animation at rest
+				GameTimeFrame:Hide();
+				MiniMapTracking:Hide();
+				MinimapZoomIn:Hide();
+				MinimapZoomOut:Hide();
+				MiniMapWorldMapButton:Hide();
+			end
+			do -- update minimap coordinates
+				local x,y = GetPlayerMapPosition("player");
+				if (not x) or (not y) then return; end
+				map.coords:SetText(format("%.1f, %.1f",x*100,y*100));
+			end
 		end);
-		map:SetScript("OnEvent",function()
+		map:HookScript("OnEvent",function()
 			if (event == "ZONE_CHANGED" or event == "ZONE_CHANGED_INDOORS" or event == "ZONE_CHANGED_NEW_AREA") then
 				if IsInInstance() then map.coords:Hide() else map.coords:Show() end
 				if (WorldMapFrame:IsVisible()) then SetMapToCurrentZone(); end
@@ -58,22 +73,22 @@ function module:OnEnable()
 			end
 		end);
 	end
+	do -- minimap buttons
+		GameTimeFrame:SetScale(0.6);
+		GameTimeFrame:ClearAllPoints();
+		GameTimeFrame:SetPoint("TOPRIGHT","Minimap","TOPRIGHT",5,-5);
+		MiniMapTracking:SetScale(0.8);
+		MiniMapTracking:ClearAllPoints();
+		MiniMapTracking:SetPoint("TOPLEFT",20,-36);
+	end	
 	do -- minimap modifications
 		MinimapBorderTop:Hide();
 		MinimapToggleButton:Hide();
-		MinimapZoomIn:Hide();
-		MinimapZoomOut:Hide();		
 		MinimapBorder:SetAlpha(0); 
 		MinimapBackdrop:ClearAllPoints();
 		MinimapBackdrop:SetPoint("CENTER","MinimapCluster","CENTER",-10,-24);		
 		Minimap:ClearAllPoints();
-		Minimap:SetPoint("CENTER","MinimapCluster","CENTER",0,2);		
-		GameTimeFrame:SetScale(0.6);
-		GameTimeFrame:ClearAllPoints();
-		GameTimeFrame:SetPoint("TOPRIGHT","Minimap","TOPRIGHT",5,-5);		
-		MiniMapTracking:SetScale(0.8);
-		MiniMapTracking:ClearAllPoints();
-		MiniMapTracking:SetPoint("TOPLEFT",20,-36);		
+		Minimap:SetPoint("CENTER","MinimapCluster","CENTER",0,2);
 		MinimapCluster:ClearAllPoints();
 		MinimapCluster:SetParent("SpartanUI");
 		MinimapCluster:SetPoint("BOTTOM","SpartanUI","BOTTOM",0,20)
@@ -85,6 +100,8 @@ function module:OnEnable()
 			if (arg1 > 0) then Minimap_ZoomIn()
 			else Minimap_ZoomOut() end
 		end);
+	end
+	do -- child frame modifications
 		VehicleSeatIndicator:ClearAllPoints();
 		VehicleSeatIndicator:SetPoint("RIGHT","UIParent","RIGHT",0,0);
 		TemporaryEnchantFrame:ClearAllPoints();
@@ -110,11 +127,14 @@ function module:OnEnable()
 			DurabilityFrame:SetPoint("BOTTOM","SpartanUI","TOP",0,70);
 		end
 	end);
+	hooksecurefunc("AchievementAlertFrame_ShowAlert",function() -- achivement alerts
+		if (AchievementAlertFrame1) then AchievementAlertFrame1:SetPoint("BOTTOM",UIParent,"CENTER"); end
+	end);
 	hooksecurefunc("UIParent_ManageFramePositions",function()
 		Update_BattlefieldMinimap();
 		Update_ArenaEnemyFrames();			
 	end);	
-	hooksecurefunc("ToggleBattlefieldMinimap",Update_BattlefieldMinimap);	
+	hooksecurefunc("ToggleBattlefieldMinimap",Update_BattlefieldMinimap);
 	map:RegisterEvent("ZONE_CHANGED");
 	map:RegisterEvent("ZONE_CHANGED_INDOORS");
 	map:RegisterEvent("ZONE_CHANGED_NEW_AREA");
@@ -122,5 +142,5 @@ function module:OnEnable()
 	map:RegisterEvent("UPDATE_BATTLEFIELD_SCORE");	
 	map:RegisterEvent("PLAYER_ENTERING_WORLD");
 	map:RegisterEvent("PLAYER_ENTERING_BATTLEGROUND");
-	map:RegisterEvent("WORLD_STATE_UI_TIMER_UPDATE");	
+	map:RegisterEvent("WORLD_STATE_UI_TIMER_UPDATE");
 end
