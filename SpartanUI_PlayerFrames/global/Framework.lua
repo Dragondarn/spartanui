@@ -407,7 +407,7 @@ local CreateTargetFrame = function(self,unit)
 		self.Level:SetWidth(40); self.Level:SetHeight(11);
 		self.Level:SetJustifyH("CENTER"); self.Level:SetJustifyV("MIDDLE");
 		self.Level:SetPoint("CENTER",ring,"CENTER",-50,12);
-		self:Tag(self.Level, "[level]");
+		self:Tag(self.Level, "[difficulty][level]");
 		
 		self.ClassIcon = ring:CreateTexture(nil,"BORDER");
 		self.ClassIcon:SetWidth(22); self.ClassIcon:SetHeight(22);
