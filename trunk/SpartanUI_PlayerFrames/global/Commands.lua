@@ -15,7 +15,7 @@ function addon:OnInitialize()
 				set = function(info,val)
 					if suiChar.PlayerFrames.player == 0 then
 						suiChar.PlayerFrames.player = 1;
-						spartan:Print("Player Auras Enabled");
+						spartan:Print("Player Auras Enabled. Default buffs are NOT disabled with this command. You will need a third-party addon such as HideBlizzard to hide them");						
 					else
 						suiChar.PlayerFrames.player = 0;
 						spartan:Print("Player Auras Disabled");
