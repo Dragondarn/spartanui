@@ -40,7 +40,7 @@ local SetupBartender = function()
 			},
 			BagBar = {			enabled = true, padding = 0, 		position = {point = "TOPRIGHT",		parent = "SUI_ActionBarPlate",	x=-6,		y=-2,	scale = 0.70,	growHorizontal="LEFT"},	rows = 1, keyring = true},
 			MicroMenu = {	enabled = true,	padding = -3,	position = {point = "TOPLEFT",		parent = "SUI_ActionBarPlate",	x=603,	y=0,	scale = 0.80,	growHorizontal="RIGHT"}},
-			PetBar = {			enabled = true, padding = 1, 		position = {point = "TOPLEFT",		parent = "SUI_ActionBarPlate",	x=5,		y=-3,	scale = 0.7,	growHorizontal="RIGHT"},	rows = 1, skin = {Zoom = true}},
+			PetBar = {			enabled = true, padding = 1, 		position = {point = "TOPLEFT",		parent = "SUI_ActionBarPlate",	x=5,		y=-6,	scale = 0.7,	growHorizontal="RIGHT"},	rows = 1, skin = {Zoom = true}},
 			StanceBar = {		enabled = true,	padding = 1, 	position = {point = "TOPRIGHT",		parent = "SUI_ActionBarPlate",	x=-605,	y=-2,	scale = 0.85,	growHorizontal="LEFT"},	rows = 1},
 			MultiCast = {		enabled = true,								position = {point = "TOPRIGHT",		parent = "SUI_ActionBarPlate",	x=-755,	y=-7,	scale = 0.75}},
 			Vehicle = {			enabled = false},
