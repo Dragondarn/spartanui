@@ -50,6 +50,7 @@ function module:OnEnable()
 		end);
 		SUI_StatusBarTooltipHeader:SetJustifyH("LEFT");
 		SUI_StatusBarTooltipText:SetJustifyH("LEFT");
+		SUI_StatusBarTooltipText:SetJustifyV("TOP");
 	end
 	do -- experience bar
 		local xptip1 = string.gsub(EXHAUST_TOOLTIP1,"\n"," "); -- %s %d%% of normal experience gained from monsters. (replaced single breaks with space)
@@ -68,7 +69,7 @@ function module:OnEnable()
 		
 		local showTooltip = function()
 			tooltip:ClearAllPoints();
-			tooltip:SetPoint("BOTTOM",xpframe,"TOP");
+			tooltip:SetPoint("BOTTOM",xpframe,"TOP",6,-1);
 			SUI_StatusBarTooltipHeader:SetText(format(FRIENDS_LEVEL_TEMPLATE,UnitLevel("player"),format(XP_LEVEL_TEMPLATE,UnitXP("player"),UnitXPMax("player"),(UnitXP("player")/UnitXPMax("player")*100)))); -- Level 99 (9999 / 9999) 100% Experience
 			-- talk about complicated. The string I was using got changed in 3.2; Hopefully this one stays put. Using GlobalStrings is important for cross-locale support, but it makes for some debugging when something changes in a patch
 			local rested,text = GetXPExhaustion() or 0;
@@ -117,7 +118,7 @@ function module:OnEnable()
 		
 		local showTooltip = function()
 			tooltip:ClearAllPoints();
-			tooltip:SetPoint("BOTTOM",SUI_ReputationBar,"TOP",3,0);
+			tooltip:SetPoint("BOTTOM",SUI_ReputationBar,"TOP",-2,-1);
 			local name,react,low,high,current,text,ratio = GetWatchedFactionInfo();
 			if name then
 				text = GetFactionDetails(name);
