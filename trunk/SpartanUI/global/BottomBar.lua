@@ -46,7 +46,7 @@ function module:OnInitialize()
 		FramerateLabel:ClearAllPoints(); FramerateLabel:SetPoint("TOP", "WorldFrame", "TOP", -15, -50);
 		MainMenuBar:Hide();
 		hooksecurefunc(UIParent,"Hide",function() WorldFrame:SetPoint("BOTTOMRIGHT"); end);
-		hooksecurefunc(UIParent,"Show",function() WorldFrame:SetPoint("BOTTOMRIGHT",frame,"TOPRIGHT",0,-5); end);
+		hooksecurefunc(UIParent,"Show",function()  updateSpartanViewport(); end);
 		hooksecurefunc("updateContainerFrameAnchors",function() -- fix bag offsets
 			local frame, xOffset, yOffset, screenHeight, freeScreenHeight, leftMostPoint, column
 			local screenWidth = GetScreenWidth()
