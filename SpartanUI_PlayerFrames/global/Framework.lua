@@ -16,13 +16,13 @@ do -- ClassIcon as an oUF module
 		DEFAULT = {4,4}, -- transparent so hidden by default
 	};
 	local Update = function(self,event,unit)
-		if (self.ClassIcon) then
-			local _,class = UnitClass(unit);
-			local col, row = ClassIconCoord[class or "DEFAULT"][1],ClassIconCoord[class or "DEFAULT"][2];
-			local left, top = (row-1)*0.25,(col-1)*0.25;
-			self.ClassIcon:SetTexture([[Interface\AddOns\SpartanUI_PlayerFrames\media\icon_class]]);
-			self.ClassIcon:SetTexCoord(left,left+0.25,top,top+0.25);
-		end
+		if (self.unit ~= unit) then return; end
+		if (not self.ClassIcon) then return; end
+		local _,class = UnitClass(unit);
+		local col, row = ClassIconCoord[class or "DEFAULT"][1],ClassIconCoord[class or "DEFAULT"][2];
+		local left, top = (row-1)*0.25,(col-1)*0.25;
+		self.ClassIcon:SetTexture[[Interface\AddOns\SpartanUI_PlayerFrames\media\icon_class]]
+		self.ClassIcon:SetTexCoord(left,left+0.25,top,top+0.25);
 	end
 	local Enable = function(self)
 		if (self.ClassIcon) then return true; end
@@ -42,15 +42,15 @@ do -- AFK / DND status text, as an oUF module
 end
 do -- Level Skull as an oUF module
 	local Update = function(self,event,unit)
-		if (self.LevelSkull) then
-			local level = UnitLevel(unit);
-			self.LevelSkull:SetTexture[[Interface\TargetingFrame\UI-TargetingFrame-Skull]]
-			if level < 0 then
-				self.LevelSkull:SetTexCoord(0,1,0,1);
-				if self.Level then self.Level:SetText"" end
-			else
-				self.LevelSkull:SetTexCoord(0,0.01,0,0.01);
-			end
+		if (self.unit ~= unit) then return; end
+		if (not self.LevelSkull) then return; end
+		local level = UnitLevel(unit);
+		self.LevelSkull:SetTexture[[Interface\TargetingFrame\UI-TargetingFrame-Skull]]
+		if level < 0 then
+			self.LevelSkull:SetTexCoord(0,1,0,1);
+			if self.Level then self.Level:SetText"" end
+		else
+			self.LevelSkull:SetTexCoord(0,0.01,0,0.01);
 		end
 	end
 	local Enable = function(self)
@@ -61,18 +61,18 @@ do -- Level Skull as an oUF module
 end
 do -- Rare / Elite dragon graphic as an oUF module
 	local Update = function(self,event,unit)
-		if (self.RareElite) then
-			local c = UnitClassification(unit);
-			self.RareElite:SetTexture[[Interface\AddOns\SpartanUI_PlayerFrames\media\elite_rare]];
-			if c == "worldboss" or c == "elite" or c == "rareelite" then
-				self.RareElite:SetTexCoord(0,1,0,1);
-				self.RareElite:SetVertexColor(1,0.9,0,1);
-			elseif c == "rare" then
-				self.RareElite:SetTexCoord(0,1,0,1);
-				self.RareElite:SetVertexColor(1,1,1,1);
+		if (self.unit ~= unit) then return; end
+		if (not self.RareElite) then return; end
+		local c = UnitClassification(unit);
+		self.RareElite:SetTexture[[Interface\AddOns\SpartanUI_PlayerFrames\media\elite_rare]];
+		if c == "worldboss" or c == "elite" or c == "rareelite" then
+			self.RareElite:SetTexCoord(0,1,0,1);
+			self.RareElite:SetVertexColor(1,0.9,0,1);
+		elseif c == "rare" then
+			self.RareElite:SetTexCoord(0,1,0,1);
+			self.RareElite:SetVertexColor(1,1,1,1);
 		else
-				self.RareElite:SetTexCoord(0,0.1,0,0.1);
-			end
+			self.RareElite:SetTexCoord(0,0.1,0,0.1);
 		end
 	end
 	local Enable = function(self)
