@@ -21,13 +21,13 @@ if (not spartan:GetModule("PlayerFrames",true)) then
 			DEFAULT = {4,4}, -- transparent so hidden by default
 		};
 		local Update = function(self,event,unit)
-			if (self.ClassIcon) then
-				local _,class = UnitClass(unit);
-				local col, row = ClassIconCoord[class or "DEFAULT"][1],ClassIconCoord[class or "DEFAULT"][2];
-				local left, top = (row-1)*0.25,(col-1)*0.25;
-				self.ClassIcon:SetTexture([[Interface\AddOns\SpartanUI_PlayerFrames\media\icon_class]]);
-				self.ClassIcon:SetTexCoord(left,left+0.25,top,top+0.25);
-			end
+			if (self.unit ~= unit) then return; end
+			if (not self.ClassIcon) then return; end
+			local _,class = UnitClass(unit);
+			local col, row = ClassIconCoord[class or "DEFAULT"][1],ClassIconCoord[class or "DEFAULT"][2];
+			local left, top = (row-1)*0.25,(col-1)*0.25;
+			self.ClassIcon:SetTexture[[Interface\AddOns\SpartanUI_PartyFrames\media\icon_class]]
+			self.ClassIcon:SetTexCoord(left,left+0.25,top,top+0.25);
 		end
 		local Enable = function(self)
 			if (self.ClassIcon) then return true; end
