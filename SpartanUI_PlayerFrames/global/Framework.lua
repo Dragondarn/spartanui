@@ -1,34 +1,47 @@
 local spartan = LibStub("AceAddon-3.0"):GetAddon("SpartanUI");
 local addon = spartan:NewModule("PlayerFrames");
 ----------------------------------------------------------------------------------------------------
-do -- ClassIcon as an oUF module
+if (not IsAddOnLoaded("oUF_ClassIcons")) then -- ClassIcon as an oUF module
 	local ClassIconCoord = {
-		WARRIOR = {1,1},
-		MAGE = {1,2},
-		ROGUE = {1,3},
-		DRUID = {1,4},
-		HUNTER = {2,1},
-		SHAMAN = {2,2},
-		PRIEST = {2,3},
-		WARLOCK = {2,4},
-		PALADIN = {3,1},
-		DEATHKNIGHT = {3,2},
-		DEFAULT = {4,4}, -- transparent so hidden by default
+		WARRIOR = {			0.00, 0.25, 0.00, 0.25 },
+		MAGE = {				0.25, 0.50, 0.00, 0.25 },
+		ROGUE = {				0.50, 0.75, 0.00, 0.25 },
+		DRUID = {				0.75, 1.00, 0.00, 0.25 },
+		HUNTER = {			0.00, 0.25, 0.25, 0.50 },
+		SHAMAN = {			0.25, 0.50, 0.25, 0.50 },
+		PRIEST = {				0.50, 0.75, 0.25, 0.50 },
+		WARLOCK = {		0.75, 1.00, 0.25, 0.50 },
+		PALADIN = {			0.00, 0.25, 0.50, 0.75 },
+		DEATHKNIGHT = {	0.25, 0.50, 0.50, 0.75 },
+		DEFAULT = {			0.75, 1.00, 0.75, 1.00 },
 	};
 	local Update = function(self,event,unit)
-		if (self.unit ~= unit) then return; end
-		if (not self.ClassIcon) then return; end
-		local _,class = UnitClass(unit);
-		local col, row = ClassIconCoord[class or "DEFAULT"][1],ClassIconCoord[class or "DEFAULT"][2];
-		local left, top = (row-1)*0.25,(col-1)*0.25;
-		self.ClassIcon:SetTexture[[Interface\AddOns\SpartanUI_PlayerFrames\media\icon_class]]
-		self.ClassIcon:SetTexCoord(left,left+0.25,top,top+0.25);
+		local icon = self.ClassIcon;
+		if (icon) then
+			local _,class = UnitClass(self.unit);
+			local coords = ClassIconCoord[class or "DEFAULT"];
+			icon:SetTexCoord(coords[1], coords[2], coords[3], coords[4]);
+			icon:Show();
+		end
 	end
 	local Enable = function(self)
-		if (self.ClassIcon) then return true; end
+		local icon = self.ClassIcon;
+		if (icon) then
+			self:RegisterEvent("PARTY_MEMBERS_CHANGED", Update);
+			self:RegisterEvent("PLAYER_TARGET_CHANGED", Update);
+			--self:RegisterEvent("UNIT_STATS", Update);
+			icon:SetTexture[[Interface\AddOns\SpartanUI_PlayerFrames\media\icon_class]]
+			return true;
+		end
 	end
-	local Disable = function(self) return; end
-	oUF:AddElement('SpartanClass', Update,Enable,Disable);
+	local Disable = function(self)
+		local icon = self.ClassIcon;
+		if (icon) then
+			self:UnregisterEvent("PARTY_MEMBERS_CHANGED", Update)
+			self:UnregisterEvent("PLAYER_TARGET_CHANGED", Update)
+		end
+	end
+	oUF:AddElement('ClassIcon', Update,Enable,Disable);
 end
 do -- AFK / DND status text, as an oUF module
 	if not oUF.Tags["[afkdnd]"] then

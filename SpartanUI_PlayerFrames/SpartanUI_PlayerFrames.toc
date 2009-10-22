@@ -6,7 +6,7 @@
 ## X-Category: User Interfaces
 ## X-Email: code@spartanui.com
 ## X-Website: http://www.spartanui.com
-## OptionalDeps: Adapt
+## OptionalDeps: Adapt, oUF_ClassIcons
 ## RequiredDeps: SpartanUI, oUF
 
 global\Framework.lua
