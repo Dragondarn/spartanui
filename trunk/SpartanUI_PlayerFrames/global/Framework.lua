@@ -37,8 +37,9 @@ if (not IsAddOnLoaded("oUF_ClassIcons")) then -- ClassIcon as an oUF module
 	local Disable = function(self)
 		local icon = self.ClassIcon;
 		if (icon) then
-			self:UnregisterEvent("PARTY_MEMBERS_CHANGED", Update)
-			self:UnregisterEvent("PLAYER_TARGET_CHANGED", Update)
+			self:UnregisterEvent("PARTY_MEMBERS_CHANGED", Update);
+			self:UnregisterEvent("PLAYER_TARGET_CHANGED", Update);
+			self:UnregisterEvent("UNIT_STATS", Update);
 		end
 	end
 	oUF:AddElement('ClassIcon', Update,Enable,Disable);

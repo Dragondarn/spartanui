@@ -41,8 +41,9 @@ if (not spartan:GetModule("PlayerFrames",true)) then -- only do this stuff if Pl
 		local Disable = function(self)
 			local icon = self.ClassIcon;
 			if (icon) then
-				self:UnregisterEvent("PARTY_MEMBERS_CHANGED", Update)
-				self:UnregisterEvent("PLAYER_TARGET_CHANGED", Update)
+				self:UnregisterEvent("PARTY_MEMBERS_CHANGED", Update);
+				self:UnregisterEvent("PLAYER_TARGET_CHANGED", Update);
+				self:UnregisterEvent("UNIT_STATS", Update);
 			end
 		end
 		oUF:AddElement('ClassIcon', Update,Enable,Disable);
