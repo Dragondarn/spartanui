@@ -29,7 +29,9 @@ if (not IsAddOnLoaded("oUF_ClassIcons")) then -- ClassIcon as an oUF module
 		if (icon) then
 			self:RegisterEvent("PARTY_MEMBERS_CHANGED", Update);
 			self:RegisterEvent("PLAYER_TARGET_CHANGED", Update);
-			--self:RegisterEvent("UNIT_STATS", Update);
+			self:RegisterEvent("PET_BAR_UPDATE", Update);
+			self:RegisterEvent("UNIT_CLASSIFICATION_CHANGED", Update);
+			self:RegisterEvent("UNIT_PET", Update);
 			icon:SetTexture[[Interface\AddOns\SpartanUI_PlayerFrames\media\icon_class]]
 			return true;
 		end
@@ -39,7 +41,8 @@ if (not IsAddOnLoaded("oUF_ClassIcons")) then -- ClassIcon as an oUF module
 		if (icon) then
 			self:UnregisterEvent("PARTY_MEMBERS_CHANGED", Update);
 			self:UnregisterEvent("PLAYER_TARGET_CHANGED", Update);
-			self:UnregisterEvent("UNIT_STATS", Update);
+			self:UnregisterEvent("UNIT_CLASSIFICATION_CHANGED ", Update);
+			self:UnregisterEvent("UNIT_PET", Update);
 		end
 	end
 	oUF:AddElement('ClassIcon', Update,Enable,Disable);

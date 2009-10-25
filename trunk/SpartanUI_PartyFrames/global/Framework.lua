@@ -33,7 +33,8 @@ if (not spartan:GetModule("PlayerFrames",true)) then -- only do this stuff if Pl
 			if (icon) then
 				self:RegisterEvent("PARTY_MEMBERS_CHANGED", Update);
 				self:RegisterEvent("PLAYER_TARGET_CHANGED", Update);
-				--self:RegisterEvent("UNIT_STATS", Update);
+				self:RegisterEvent("UNIT_CLASSIFICATION_CHANGED", Update);
+				self:RegisterEvent("UNIT_PET", Update);
 				icon:SetTexture[[Interface\AddOns\SpartanUI_PartyFrames\media\icon_class]]
 				return true;
 			end
@@ -43,7 +44,8 @@ if (not spartan:GetModule("PlayerFrames",true)) then -- only do this stuff if Pl
 			if (icon) then
 				self:UnregisterEvent("PARTY_MEMBERS_CHANGED", Update);
 				self:UnregisterEvent("PLAYER_TARGET_CHANGED", Update);
-				self:UnregisterEvent("UNIT_STATS", Update);
+				self:UnregisterEvent("UNIT_CLASSIFICATION_CHANGED", Update);
+				self:UnregisterEvent("UNIT_PET", Update);
 			end
 		end
 		oUF:AddElement('ClassIcon', Update,Enable,Disable);
