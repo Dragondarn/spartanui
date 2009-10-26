@@ -189,10 +189,8 @@ local CreatePartyFrame = function(self,unit)
 						
 			self.Health = health;
 			self.Health.frequentUpdates = true;
-			self.Health.colorTapping = true;
 			self.Health.colorDisconnected = true;
 			self.Health.colorHealth = true;
-			self.Health.colorReaction = true;
 			self.PostUpdateHealth = PostUpdateHealth;
 		end
 		do -- power bar
