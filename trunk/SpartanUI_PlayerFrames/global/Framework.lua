@@ -217,10 +217,8 @@ local CreatePlayerFrame = function(self,unit)
 			
 			self.Health = health;
 			self.Health.frequentUpdates = true;
-			self.Health.colorTapping = true;
 			self.Health.colorDisconnected = true;
-			self.Health.colorReaction = true;
-			self.Health.colorHealth = true;		
+			self.Health.colorHealth = true;
 			self.PostUpdateHealth = PostUpdateHealth;
 		end
 		do -- power bar
@@ -551,11 +549,7 @@ local CreatePetFrame = function(self,unit)
 			health.ratio:SetPoint("RIGHT",health,"LEFT",-2,0);			
 			
 			self.Health = health;
-			self.Health.colorTapping = true;
-			self.Health.colorDisconnected = true;
-			self.Health.colorHappiness = true;
 			self.Health.colorHealth = true;
-			self.Health.colorReaction = true;
 			self.PostUpdateHealth = PostUpdateHealth;
 		end
 		do -- power bar
@@ -698,7 +692,6 @@ local CreateToTFrame = function(self,unit)
 			self.Health = health;
 			self.Health.colorTapping = true;
 			self.Health.colorDisconnected = true;
-			self.Health.colorHappiness = true;
 			self.Health.colorHealth = true;
 			self.Health.colorReaction = true;
 			self.PostUpdateHealth = PostUpdateHealth;
