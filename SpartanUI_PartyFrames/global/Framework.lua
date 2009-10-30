@@ -5,7 +5,7 @@ local default = {showAuras = 1,partyLock = 1};
 suiChar.PartyFrames = suiChar.PartyFrames or {};
 setmetatable(suiChar.PartyFrames,{__index = default});
 if (not spartan:GetModule("PlayerFrames",true)) then -- only do this stuff if PlayerFrames isn't loaded
-	if (not IsAddOnLoaded("oUF_ClassIcons")) then -- ClassIcon as an oUF module
+	do -- ClassIcon as an oUF module
 		local ClassIconCoord = {
 			WARRIOR = {			0.00, 0.25, 0.00, 0.25 },
 			MAGE = {				0.25, 0.50, 0.00, 0.25 },
@@ -20,7 +20,7 @@ if (not spartan:GetModule("PlayerFrames",true)) then -- only do this stuff if Pl
 			DEFAULT = {			0.75, 1.00, 0.75, 1.00 },
 		};
 		local Update = function(self,event,unit)
-			local icon = self.ClassIcon;
+			local icon = self.SUI_ClassIcon;
 			if (icon) then
 				local _,class = UnitClass(self.unit);
 				local coords = ClassIconCoord[class or "DEFAULT"];
@@ -29,26 +29,24 @@ if (not spartan:GetModule("PlayerFrames",true)) then -- only do this stuff if Pl
 			end
 		end
 		local Enable = function(self)
-			local icon = self.ClassIcon;
+			local icon = self.SUI_ClassIcon;
 			if (icon) then
 				self:RegisterEvent("PARTY_MEMBERS_CHANGED", Update);
 				self:RegisterEvent("PLAYER_TARGET_CHANGED", Update);
-				self:RegisterEvent("UNIT_CLASSIFICATION_CHANGED", Update);
 				self:RegisterEvent("UNIT_PET", Update);
 				icon:SetTexture[[Interface\AddOns\SpartanUI_PartyFrames\media\icon_class]]
 				return true;
 			end
 		end
 		local Disable = function(self)
-			local icon = self.ClassIcon;
+			local icon = self.SUI_ClassIcon;
 			if (icon) then
 				self:UnregisterEvent("PARTY_MEMBERS_CHANGED", Update);
 				self:UnregisterEvent("PLAYER_TARGET_CHANGED", Update);
-				self:UnregisterEvent("UNIT_CLASSIFICATION_CHANGED", Update);
 				self:UnregisterEvent("UNIT_PET", Update);
 			end
 		end
-		oUF:AddElement('ClassIcon', Update,Enable,Disable);
+		oUF:AddElement('SUI_ClassIcon', Update,Enable,Disable);
 	end
 	do -- AFK / DND status text, as an oUF module
 		if not oUF.Tags["[afkdnd]"] then
@@ -62,20 +60,10 @@ if (not spartan:GetModule("PlayerFrames",true)) then -- only do this stuff if Pl
 	end
 end
 
-local bar_texture = [[Interface\TargetingFrame\UI-StatusBar]]
-local colors = setmetatable({},{__index = oUF.colors});
-do -- setup customized colors
-	colors.health = {0/255,255/255,50/255};
-	colors.reaction = {};
-	colors.reaction[1] = {0.8,0.3,0}; -- Hated
-	colors.reaction[2] = colors.reaction[1]; -- Hostile
-	colors.reaction[3] = colors.reaction[1]; -- Unfriendly
-	colors.reaction[4] = {1, 0.8, 0}; -- Neutral
-	colors.reaction[5] = {0,1, 0.2}; -- Friendly
-	colors.reaction[6] = colors.reaction[5]; -- Honored
-	colors.reaction[7] = colors.reaction[5]; -- Revered
-	colors.reaction[8] = colors.reaction[5]; -- Exalted
-end
+local colors = setmetatable({},{__index = oUF.colors}); colors.health = {0/255,255/255,50/255};
+local base_plate = [[Interface\AddOns\SpartanUI_PartyFrames\media\base_plate1]]
+local base_ring = [[Interface\AddOns\SpartanUI_PartyFrames\media\base_ring1]]
+
 local menu = function(self)
 	local unit = string.gsub(self.unit,"(.)",string.upper,1);
 	if (_G[unit..'FrameDropDown']) then
@@ -133,8 +121,6 @@ local PostUpdatePower = function(self, event, unit, bar, min, max)
 	end
 end
 local CreatePartyFrame = function(self,unit)
-	local base_plate = [[Interface\AddOns\SpartanUI_PartyFrames\media\base_plate1]]
-	local base_ring = [[Interface\AddOns\SpartanUI_PartyFrames\media\base_ring1]]
 	do -- setup base artwork
 		local artwork = CreateFrame("Frame",nil,self);
 		artwork:SetFrameStrata("BACKGROUND");
@@ -153,7 +139,6 @@ local CreatePartyFrame = function(self,unit)
 			local cast = CreateFrame("StatusBar",nil,self);
 			cast:SetFrameStrata("BACKGROUND"); cast:SetFrameLevel(2);
 			cast:SetWidth(119); cast:SetHeight(16);
-			cast:SetStatusBarTexture(bar_texture);
 			cast:SetPoint("TOPRIGHT",self,"TOPRIGHT",-55,-24);
 			
 			cast.Text = cast:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
@@ -174,7 +159,6 @@ local CreatePartyFrame = function(self,unit)
 			local health = CreateFrame("StatusBar",nil,self);
 			health:SetFrameStrata("BACKGROUND"); health:SetFrameLevel(2);
 			health:SetWidth(121); health:SetHeight(15);
-			health:SetStatusBarTexture(bar_texture);
 			health:SetPoint("TOPRIGHT",self.Castbar,"BOTTOMRIGHT",0,-2);
 			
 			health.value = health:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
@@ -197,7 +181,6 @@ local CreatePartyFrame = function(self,unit)
 			local power = CreateFrame("StatusBar",nil,self);
 			power:SetFrameStrata("BACKGROUND"); power:SetFrameLevel(2);
 			power:SetWidth(136); power:SetHeight(14);
-			power:SetStatusBarTexture(bar_texture);
 			power:SetPoint("TOPRIGHT",self.Health,"BOTTOMRIGHT",0,-2);
 			
 			power.value = power:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
@@ -236,9 +219,9 @@ local CreatePartyFrame = function(self,unit)
 		self.Level:SetPoint("CENTER",self.Portrait,"CENTER",-27,27);
 		self:Tag(self.Level, "[level]");
 		
-		self.ClassIcon = ring:CreateTexture(nil,"BORDER");
-		self.ClassIcon:SetWidth(20); self.ClassIcon:SetHeight(20);
-		self.ClassIcon:SetPoint("CENTER",self.Portrait,"CENTER",23,24);
+		self.SUI_ClassIcon = ring:CreateTexture(nil,"BORDER");
+		self.SUI_ClassIcon:SetWidth(20); self.SUI_ClassIcon:SetHeight(20);
+		self.SUI_ClassIcon:SetPoint("CENTER",self.Portrait,"CENTER",23,24);
 
 		self.Leader = ring:CreateTexture(nil,"BORDER");
 		self.Leader:SetWidth(20); self.Leader:SetHeight(20);
@@ -288,4 +271,5 @@ local CreateUnitFrame = function(self,unit) -- this is a throwback for when we s
 		self.colors = colors;
 		return CreatePartyFrame(self,unit);
 end
+
 oUF:RegisterStyle("Spartan_PartyFrames", CreateUnitFrame);

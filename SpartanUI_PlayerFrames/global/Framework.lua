@@ -1,7 +1,7 @@
 local spartan = LibStub("AceAddon-3.0"):GetAddon("SpartanUI");
 local addon = spartan:NewModule("PlayerFrames");
 ----------------------------------------------------------------------------------------------------
-if (not IsAddOnLoaded("oUF_ClassIcons")) then -- ClassIcon as an oUF module
+do -- ClassIcon as an oUF module
 	local ClassIconCoord = {
 		WARRIOR = {			0.00, 0.25, 0.00, 0.25 },
 		MAGE = {				0.25, 0.50, 0.00, 0.25 },
@@ -16,7 +16,7 @@ if (not IsAddOnLoaded("oUF_ClassIcons")) then -- ClassIcon as an oUF module
 		DEFAULT = {			0.75, 1.00, 0.75, 1.00 },
 	};
 	local Update = function(self,event,unit)
-		local icon = self.ClassIcon;
+		local icon = self.SUI_ClassIcon;
 		if (icon) then
 			local _,class = UnitClass(self.unit);
 			local coords = ClassIconCoord[class or "DEFAULT"];
@@ -25,26 +25,24 @@ if (not IsAddOnLoaded("oUF_ClassIcons")) then -- ClassIcon as an oUF module
 		end
 	end
 	local Enable = function(self)
-		local icon = self.ClassIcon;
+		local icon = self.SUI_ClassIcon;
 		if (icon) then
 			self:RegisterEvent("PARTY_MEMBERS_CHANGED", Update);
 			self:RegisterEvent("PLAYER_TARGET_CHANGED", Update);
-			self:RegisterEvent("UNIT_CLASSIFICATION_CHANGED", Update);
 			self:RegisterEvent("UNIT_PET", Update);
 			icon:SetTexture[[Interface\AddOns\SpartanUI_PlayerFrames\media\icon_class]]
 			return true;
 		end
 	end
 	local Disable = function(self)
-		local icon = self.ClassIcon;
+		local icon = self.SUI_ClassIcon;
 		if (icon) then
 			self:UnregisterEvent("PARTY_MEMBERS_CHANGED", Update);
 			self:UnregisterEvent("PLAYER_TARGET_CHANGED", Update);
-			self:UnregisterEvent("UNIT_CLASSIFICATION_CHANGED ", Update);
 			self:UnregisterEvent("UNIT_PET", Update);
 		end
 	end
-	oUF:AddElement('ClassIcon', Update,Enable,Disable);
+	oUF:AddElement('SUI_ClassIcon', Update,Enable,Disable);
 end
 do -- AFK / DND status text, as an oUF module
 	if not oUF.Tags["[afkdnd]"] then
@@ -98,27 +96,12 @@ do -- Rare / Elite dragon graphic as an oUF module
 	oUF:AddElement('RareElite', Update,Enable,Disable);
 end
 
-do -- addon colors
-	addon.colors = {};
-	addon.colors.health = {0/255,255/255,50/255};
-	addon.colors.reaction = {};
-	addon.colors.reaction[1] = {0.8,0.3,0}; -- Hated
-	addon.colors.reaction[2] = addon.colors.reaction[1]; -- Hostile
-	addon.colors.reaction[3] = addon.colors.reaction[1]; -- Unfriendly
-	addon.colors.reaction[4] = {1, 0.8, 0}; -- Neutral
-	addon.colors.reaction[5] = {0,1, 0.2}; -- Friendly
-	addon.colors.reaction[6] = addon.colors.reaction[5]; -- Honored
-	addon.colors.reaction[7] = addon.colors.reaction[5]; -- Revered
-	addon.colors.reaction[8] = addon.colors.reaction[5]; -- Exalted
-	if (oUF and oUF.colors) then
-		addon.colors = setmetatable(addon.colors,{__index = oUF.colors});
-	end
-end
-local bar_texture = [[Interface\TargetingFrame\UI-StatusBar]]
+local colors = setmetatable({},{__index = oUF.colors}); colors.health = {0/255,255/255,50/255};
 local base_plate1 = [[Interface\AddOns\SpartanUI_PlayerFrames\media\base_plate1]]
 local base_ring1 = [[Interface\AddOns\SpartanUI_PlayerFrames\media\base_ring1]]
 local base_plate3 = [[Interface\AddOns\SpartanUI_PlayerFrames\media\base_plate3]]
 local base_ring3 = [[Interface\AddOns\SpartanUI_PlayerFrames\media\base_ring3]]
+
 local menu = function(self)
 	local unit = string.gsub(self.unit,"(.)",string.upper,1);
 	if (_G[unit..'FrameDropDown']) then
@@ -181,7 +164,6 @@ local CreatePlayerFrame = function(self,unit)
 			local cast = CreateFrame("StatusBar",nil,self);
 			cast:SetFrameStrata("BACKGROUND"); cast:SetFrameLevel(2);
 			cast:SetWidth(153); cast:SetHeight(16);
-			cast:SetStatusBarTexture(bar_texture);
 			cast:SetPoint("TOPLEFT",self,"TOPLEFT",36,-23);
 			
 			cast.Text = cast:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
@@ -202,7 +184,6 @@ local CreatePlayerFrame = function(self,unit)
 			local health = CreateFrame("StatusBar",nil,self);
 			health:SetFrameStrata("BACKGROUND"); health:SetFrameLevel(2);
 			health:SetWidth(150); health:SetHeight(16);
-			health:SetStatusBarTexture(bar_texture);
 			health:SetPoint("TOPLEFT",self.Castbar,"BOTTOMLEFT",0,-2);
 			
 			health.value = health:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
@@ -225,7 +206,6 @@ local CreatePlayerFrame = function(self,unit)
 			local power = CreateFrame("StatusBar",nil,self);
 			power:SetFrameStrata("BACKGROUND"); power:SetFrameLevel(2);
 			power:SetWidth(155); power:SetHeight(14);
-			power:SetStatusBarTexture(bar_texture);
 			power:SetPoint("TOPLEFT",self.Health,"BOTTOMLEFT",0,-2);
 			
 			power.value = power:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
@@ -263,9 +243,9 @@ local CreatePlayerFrame = function(self,unit)
 		self.Level:SetPoint("CENTER",ring,"CENTER",51,12);
 		self:Tag(self.Level, "[level]");		
 		
-		self.ClassIcon = ring:CreateTexture(nil,"BORDER");
-		self.ClassIcon:SetWidth(22); self.ClassIcon:SetHeight(22);
-		self.ClassIcon:SetPoint("CENTER",ring,"CENTER",-29,21);
+		self.SUI_ClassIcon = ring:CreateTexture(nil,"BORDER");
+		self.SUI_ClassIcon:SetWidth(22); self.SUI_ClassIcon:SetHeight(22);
+		self.SUI_ClassIcon:SetPoint("CENTER",ring,"CENTER",-29,21);
 		
 		self.Leader = ring:CreateTexture(nil,"BORDER");
 		self.Leader:SetWidth(20); self.Leader:SetHeight(20);
@@ -281,7 +261,7 @@ local CreatePlayerFrame = function(self,unit)
 		
 		self.Resting = ring:CreateTexture(nil,"ARTWORK");
 		self.Resting:SetWidth(32); self.Resting:SetHeight(30);
-		self.Resting:SetPoint("CENTER",self.ClassIcon,"CENTER");
+		self.Resting:SetPoint("CENTER",self.SUI_ClassIcon,"CENTER");
 			
 		self.Combat = ring:CreateTexture(nil,"ARTWORK");
 		self.Combat:SetWidth(32); self.Combat:SetHeight(32);
@@ -336,7 +316,6 @@ local CreateTargetFrame = function(self,unit)
 			local cast = CreateFrame("StatusBar",nil,self);
 			cast:SetFrameStrata("BACKGROUND"); cast:SetFrameLevel(2);
 			cast:SetWidth(153); cast:SetHeight(16);
-			cast:SetStatusBarTexture(bar_texture);
 			cast:SetPoint("TOPRIGHT",self,"TOPRIGHT",-36,-23);
 			
 			cast.Text = cast:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
@@ -357,7 +336,6 @@ local CreateTargetFrame = function(self,unit)
 			local health = CreateFrame("StatusBar",nil,self);
 			health:SetFrameStrata("BACKGROUND"); health:SetFrameLevel(2);
 			health:SetWidth(150); health:SetHeight(16);
-			health:SetStatusBarTexture(bar_texture);	
 			health:SetPoint("TOPRIGHT",self.Castbar,"BOTTOMRIGHT",0,-2);
 			
 			health.value = health:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
@@ -375,7 +353,6 @@ local CreateTargetFrame = function(self,unit)
 			self.Health.frequentUpdates = true;
 			self.Health.colorTapping = true;
 			self.Health.colorDisconnected = true;
-			self.Health.colorReaction = true;
 			self.Health.colorHealth = true;		
 			self.PostUpdateHealth = PostUpdateHealth;
 		end
@@ -383,7 +360,6 @@ local CreateTargetFrame = function(self,unit)
 			local power = CreateFrame("StatusBar",nil,self);
 			power:SetFrameStrata("BACKGROUND"); power:SetFrameLevel(2);
 			power:SetWidth(155); power:SetHeight(14);
-			power:SetStatusBarTexture(bar_texture);
 			power:SetPoint("TOPRIGHT",self.Health,"BOTTOMRIGHT",0,-2);
 			
 			power.value = power:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
@@ -423,9 +399,9 @@ local CreateTargetFrame = function(self,unit)
 		self.Level:SetPoint("CENTER",ring,"CENTER",-50,12);
 		self:Tag(self.Level, "[difficulty][level]");
 		
-		self.ClassIcon = ring:CreateTexture(nil,"BORDER");
-		self.ClassIcon:SetWidth(22); self.ClassIcon:SetHeight(22);
-		self.ClassIcon:SetPoint("CENTER",ring,"CENTER",29,21);
+		self.SUI_ClassIcon = ring:CreateTexture(nil,"BORDER");
+		self.SUI_ClassIcon:SetWidth(22); self.SUI_ClassIcon:SetHeight(22);
+		self.SUI_ClassIcon:SetPoint("CENTER",ring,"CENTER",29,21);
 		
 		self.Leader = ring:CreateTexture(nil,"BORDER");
 		self.Leader:SetWidth(20); self.Leader:SetHeight(20);
@@ -514,7 +490,6 @@ local CreatePetFrame = function(self,unit)
 			local cast = CreateFrame("StatusBar",nil,self);
 			cast:SetFrameStrata("BACKGROUND"); cast:SetFrameLevel(2);
 			cast:SetWidth(120); cast:SetHeight(15);
-			cast:SetStatusBarTexture(bar_texture);
 			cast:SetPoint("TOPLEFT",self,"TOPLEFT",36,-23);
 			
 			cast.Text = cast:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
@@ -535,7 +510,6 @@ local CreatePetFrame = function(self,unit)
 			local health = CreateFrame("StatusBar",nil,self);
 			health:SetFrameStrata("BACKGROUND"); health:SetFrameLevel(2);
 			health:SetWidth(120); health:SetHeight(16);
-			health:SetStatusBarTexture(bar_texture);
 			health:SetPoint("TOPLEFT",self.Castbar,"BOTTOMLEFT",0,-2);
 			
 			health.value = health:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
@@ -556,7 +530,6 @@ local CreatePetFrame = function(self,unit)
 			local power = CreateFrame("StatusBar",nil,self);
 			power:SetFrameStrata("BACKGROUND"); power:SetFrameLevel(2);
 			power:SetWidth(135); power:SetHeight(14);
-			power:SetStatusBarTexture(bar_texture);
 			power:SetPoint("TOPLEFT",self.Health,"BOTTOMLEFT",0,-1);
 			
 			power.value = power:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
@@ -595,9 +568,9 @@ local CreatePetFrame = function(self,unit)
 		self.Level:SetPoint("CENTER",ring,"CENTER",24,25);
 		self:Tag(self.Level, "[level]");
 		
-		self.ClassIcon = ring:CreateTexture(nil,"BORDER");
-		self.ClassIcon:SetWidth(22); self.ClassIcon:SetHeight(22);
-		self.ClassIcon:SetPoint("CENTER",ring,"CENTER",-27,24);
+		self.SUI_ClassIcon = ring:CreateTexture(nil,"BORDER");
+		self.SUI_ClassIcon:SetWidth(22); self.SUI_ClassIcon:SetHeight(22);
+		self.SUI_ClassIcon:SetPoint("CENTER",ring,"CENTER",-27,24);
 		
 		self.Happiness = ring:CreateTexture(nil,"ARTWORK");
 		self.Happiness:SetWidth(22); self.Happiness:SetHeight(22);
@@ -655,7 +628,6 @@ local CreateToTFrame = function(self,unit)
 			local cast = CreateFrame("StatusBar",nil,self);
 			cast:SetFrameStrata("BACKGROUND"); cast:SetFrameLevel(2);
 			cast:SetWidth(120); cast:SetHeight(15);
-			cast:SetStatusBarTexture(bar_texture);
 			cast:SetPoint("TOPRIGHT",self,"TOPRIGHT",-36,-23);
 			
 			cast.Text = cast:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
@@ -676,7 +648,6 @@ local CreateToTFrame = function(self,unit)
 			local health = CreateFrame("StatusBar",nil,self);
 			health:SetFrameStrata("BACKGROUND"); health:SetFrameLevel(2);
 			health:SetWidth(120); health:SetHeight(16);
-			health:SetStatusBarTexture(bar_texture);
 			health:SetPoint("TOPRIGHT",self.Castbar,"BOTTOMRIGHT",0,-2);
 			
 			health.value = health:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
@@ -693,14 +664,12 @@ local CreateToTFrame = function(self,unit)
 			self.Health.colorTapping = true;
 			self.Health.colorDisconnected = true;
 			self.Health.colorHealth = true;
-			self.Health.colorReaction = true;
 			self.PostUpdateHealth = PostUpdateHealth;
 		end
 		do -- power bar
 			local power = CreateFrame("StatusBar",nil,self);
 			power:SetFrameStrata("BACKGROUND"); power:SetFrameLevel(2);
 			power:SetWidth(135); power:SetHeight(14);
-			power:SetStatusBarTexture(bar_texture);
 			power:SetPoint("TOPRIGHT",self.Health,"BOTTOMRIGHT",0,-1);
 			
 			power.value = power:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
@@ -738,9 +707,9 @@ local CreateToTFrame = function(self,unit)
 		self.Level:SetPoint("CENTER",ring,"CENTER",-27,25);
 		self:Tag(self.Level, "[level]");
 		
-		self.ClassIcon = ring:CreateTexture(nil,"BORDER");
-		self.ClassIcon:SetWidth(22); self.ClassIcon:SetHeight(22);
-		self.ClassIcon:SetPoint("CENTER",ring,"CENTER",23,24);
+		self.SUI_ClassIcon = ring:CreateTexture(nil,"BORDER");
+		self.SUI_ClassIcon:SetWidth(22); self.SUI_ClassIcon:SetHeight(22);
+		self.SUI_ClassIcon:SetPoint("CENTER",ring,"CENTER",23,24);
 		
 		self.PvP = ring:CreateTexture(nil,"BORDER");
 		self.PvP:SetWidth(48); self.PvP:SetHeight(48);
