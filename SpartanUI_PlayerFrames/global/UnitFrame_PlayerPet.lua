@@ -7,10 +7,12 @@ addon.pet = oUF:Spawn("pet","SUI_PetFrame");
 addon.pet:SetPoint("BOTTOMRIGHT",SpartanUI,"TOP",-370,12);
 
 do -- fix for switching pets when a pet already exists
-	local updateName = function(self,event)
+	local Update = function(self,event)
 		if self.Name then self.Name:UpdateTag(self.unit); end
+		if self.Level then self.Level:UpdateTag(self.unit); end
 	end
-	addon.pet:RegisterEvent("UNIT_PET",updateName);
+	addon.pet:RegisterEvent("UNIT_PET",Update);
+	--addon.pet:RegisterEvent("UNIT_CLASSIFICATION_CHANGED",Update);
 end
 	
 	
