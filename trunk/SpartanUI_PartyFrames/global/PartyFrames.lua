@@ -9,7 +9,7 @@ do -- party header configuration
 	party:SetClampedToScreen(true);
 	party:SetManyAttributes(
 		--"showSolo",						true,
-		--"showPlayer",					true,
+		--"showPlayer",						true,
 		"showParty",						true,
 		"yOffset",							-8,
 		"xOffset",							0,
