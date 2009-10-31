@@ -1,101 +1,6 @@
 local spartan = LibStub("AceAddon-3.0"):GetAddon("SpartanUI");
-local addon = spartan:NewModule("PlayerFrames");
+local addon = spartan:GetModule("PlayerFrames");
 ----------------------------------------------------------------------------------------------------
-do -- ClassIcon as an oUF module
-	local ClassIconCoord = {
-		WARRIOR = {			0.00, 0.25, 0.00, 0.25 },
-		MAGE = {				0.25, 0.50, 0.00, 0.25 },
-		ROGUE = {				0.50, 0.75, 0.00, 0.25 },
-		DRUID = {				0.75, 1.00, 0.00, 0.25 },
-		HUNTER = {			0.00, 0.25, 0.25, 0.50 },
-		SHAMAN = {			0.25, 0.50, 0.25, 0.50 },
-		PRIEST = {				0.50, 0.75, 0.25, 0.50 },
-		WARLOCK = {		0.75, 1.00, 0.25, 0.50 },
-		PALADIN = {			0.00, 0.25, 0.50, 0.75 },
-		DEATHKNIGHT = {	0.25, 0.50, 0.50, 0.75 },
-		DEFAULT = {			0.75, 1.00, 0.75, 1.00 },
-	};
-	local Update = function(self,event,unit)
-		local icon = self.SUI_ClassIcon;
-		if (icon) then
-			local _,class = UnitClass(self.unit);
-			local coords = ClassIconCoord[class or "DEFAULT"];
-			icon:SetTexCoord(coords[1], coords[2], coords[3], coords[4]);
-			icon:Show();
-		end
-	end
-	local Enable = function(self)
-		local icon = self.SUI_ClassIcon;
-		if (icon) then
-			self:RegisterEvent("PARTY_MEMBERS_CHANGED", Update);
-			self:RegisterEvent("PLAYER_TARGET_CHANGED", Update);
-			self:RegisterEvent("UNIT_PET", Update);
-			icon:SetTexture[[Interface\AddOns\SpartanUI_PlayerFrames\media\icon_class]]
-			return true;
-		end
-	end
-	local Disable = function(self)
-		local icon = self.SUI_ClassIcon;
-		if (icon) then
-			self:UnregisterEvent("PARTY_MEMBERS_CHANGED", Update);
-			self:UnregisterEvent("PLAYER_TARGET_CHANGED", Update);
-			self:UnregisterEvent("UNIT_PET", Update);
-		end
-	end
-	oUF:AddElement('SUI_ClassIcon', Update,Enable,Disable);
-end
-do -- AFK / DND status text, as an oUF module
-	if not oUF.Tags["[afkdnd]"] then
-		oUF.Tags["[afkdnd]"] = function(unit)
-			if unit then
-				return UnitIsAFK(unit) and "AFK" or UnitIsDND(unit) and "DND" or "";
-			end
-		end;
-		oUF.TagEvents["[afkdnd]"] = "PLAYER_FLAGS_CHANGED PLAYER_TARGET_CHANGED UNIT_TARGET";		
-	end
-end
-do -- Level Skull as an oUF module
-	local Update = function(self,event,unit)
-		if (self.unit ~= unit) then return; end
-		if (not self.LevelSkull) then return; end
-		local level = UnitLevel(unit);
-		self.LevelSkull:SetTexture[[Interface\TargetingFrame\UI-TargetingFrame-Skull]]
-		if level < 0 then
-			self.LevelSkull:SetTexCoord(0,1,0,1);
-			if self.Level then self.Level:SetText"" end
-		else
-			self.LevelSkull:SetTexCoord(0,0.01,0,0.01);
-		end
-	end
-	local Enable = function(self)
-		if (self.LevelSkull) then return true; end
-	end
-	local Disable = function(self) return; end
-	oUF:AddElement('LevelSkull', Update,Enable,Disable);
-end
-do -- Rare / Elite dragon graphic as an oUF module
-	local Update = function(self,event,unit)
-		if (self.unit ~= unit) then return; end
-		if (not self.RareElite) then return; end
-		local c = UnitClassification(unit);
-		self.RareElite:SetTexture[[Interface\AddOns\SpartanUI_PlayerFrames\media\elite_rare]];
-		if c == "worldboss" or c == "elite" or c == "rareelite" then
-			self.RareElite:SetTexCoord(0,1,0,1);
-			self.RareElite:SetVertexColor(1,0.9,0,1);
-		elseif c == "rare" then
-			self.RareElite:SetTexCoord(0,1,0,1);
-			self.RareElite:SetVertexColor(1,1,1,1);
-		else
-			self.RareElite:SetTexCoord(0,0.1,0,0.1);
-		end
-	end
-	local Enable = function(self)
-		if (self.RareElite) then return true; end
-	end
-	local Disable = function(self) return; end
-	oUF:AddElement('RareElite', Update,Enable,Disable);
-end
-
 local colors = setmetatable({},{__index = oUF.colors}); colors.health = {0/255,255/255,50/255};
 local base_plate1 = [[Interface\AddOns\SpartanUI_PlayerFrames\media\base_plate1]]
 local base_ring1 = [[Interface\AddOns\SpartanUI_PlayerFrames\media\base_ring1]]
@@ -106,6 +11,16 @@ local menu = function(self)
 	local unit = string.gsub(self.unit,"(.)",string.upper,1);
 	if (_G[unit..'FrameDropDown']) then
 		ToggleDropDownMenu(1, nil, _G[unit..'FrameDropDown'], 'cursor')
+	end
+end
+local threat = function(self, event,unit,status)
+	if (not self.Portrait) then return; end
+	if (not self.Portrait:IsObjectType("Texture")) then return; end
+	if (status and status > 0) then
+		local r,g,b = GetThreatStatusColor(status);
+		self.Portrait:SetVertexColor(r,g,b);
+	else
+		self.Portrait:SetVertexColor(1,1,1);
 	end
 end
 local PostUpdateHealth = function(self, event, unit, bar, min, max)
@@ -158,6 +73,9 @@ local CreatePlayerFrame = function(self,unit)
 		self.Portrait = self:CreateTexture(nil,"BORDER");
 		self.Portrait:SetWidth(64); self.Portrait:SetHeight(64);
 		self.Portrait:SetPoint("CENTER",self,"CENTER",80,3);
+		
+		self.Threat = CreateFrame("Frame",nil,self);
+		self.OverrideUpdateThreat = threat;
 	end
 	do -- setup status bars
 		do -- cast bar
@@ -265,7 +183,7 @@ local CreatePlayerFrame = function(self,unit)
 			
 		self.Combat = ring:CreateTexture(nil,"ARTWORK");
 		self.Combat:SetWidth(32); self.Combat:SetHeight(32);
-		self.Combat:SetPoint("CENTER",self.Level,"TOPLEFT");
+		self.Combat:SetPoint("CENTER",self.Level,"CENTER");
 		
 		self.RaidIcon = ring:CreateTexture(nil,"ARTWORK");
 		self.RaidIcon:SetWidth(24); self.RaidIcon:SetHeight(24);
@@ -310,6 +228,9 @@ local CreateTargetFrame = function(self,unit)
 		self.Portrait = self:CreateTexture(nil,"BORDER");
 		self.Portrait:SetWidth(64); self.Portrait:SetHeight(64);
 		self.Portrait:SetPoint("CENTER",self,"CENTER",-80,3);
+		
+		self.Threat = CreateFrame("Frame",nil,self);
+		self.OverrideUpdateThreat = threat;
 	end
 	do -- setup status bars
 		do -- cast bar
@@ -484,6 +405,9 @@ local CreatePetFrame = function(self,unit)
 		self.Portrait = self:CreateTexture(nil,"BACKGROUND");
 		self.Portrait:SetWidth(56); self.Portrait:SetHeight(50);
 		self.Portrait:SetPoint("CENTER",self,"CENTER",87,-8);
+		
+		self.Threat = CreateFrame("Frame",nil,self);
+		self.OverrideUpdateThreat = threat;
 	end
 	do -- setup status bars
 		do -- cast bar
@@ -622,6 +546,9 @@ local CreateToTFrame = function(self,unit)
 		self.Portrait = self:CreateTexture(nil,"BACKGROUND");
 		self.Portrait:SetWidth(56); self.Portrait:SetHeight(50);
 		self.Portrait:SetPoint("CENTER",self,"CENTER",-83,-8);
+		
+		self.Threat = CreateFrame("Frame",nil,self);
+		self.OverrideUpdateThreat = threat;
 	end
 	do -- setup status bars
 		do -- cast bar
