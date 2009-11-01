@@ -3,9 +3,9 @@ local addon = spartan:GetModule("PartyFrames");
 ----------------------------------------------------------------------------------------------------
 function addon:UpdateAuraVisibility()
 	for i = 1,4 do
-		-- local pet = _G["SUI_PartyFrameHeaderUnitButton"..i.."Pet"];
+		local pet = _G["SUI_PartyFrameHeaderUnitButton"..i.."Pet"];
 		local unit = _G["SUI_PartyFrameHeaderUnitButton"..i];
-		-- if pet and pet.Auras then pet:PostUpdateAura(); end
+		if pet and pet.Auras then pet:PostUpdateAura(); end
 		if unit and unit.Auras then unit:PostUpdateAura(); end
 	end
 end
