@@ -14,7 +14,8 @@ do -- party header configuration
 		"yOffset",							-16,
 		"xOffset",							0,
 		"columnAnchorPoint",	"TOPLEFT",
-		"initial-anchor",				"TOPLEFT");
+		"initial-anchor",				"TOPLEFT",
+		"template",						"SUI_PartyMemberTemplate");
 	PartyMemberBackground.Show = function() return; end
 	PartyMemberBackground:Hide();
 end
