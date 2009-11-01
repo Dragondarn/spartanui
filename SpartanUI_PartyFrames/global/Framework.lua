@@ -204,14 +204,14 @@ local CreatePartyFrame = function(self,unit)
 	end
 	do -- setup buffs and debuffs
 		self.Auras = CreateFrame("Frame",nil,self);
-		self.Auras:SetWidth(15*12); self.Auras:SetHeight(15*1);
+		self.Auras:SetWidth(17*11); self.Auras:SetHeight(17*1);
 		self.Auras:SetPoint("TOPRIGHT",self,"BOTTOMRIGHT",-6,2);
 		-- settings
-		self.Auras.size = 14;
+		self.Auras.size = 16;
 		self.Auras.spacing = 1;
 		self.Auras.initialAnchor = "TOPLEFT";
 		self.Auras.gap = false; -- adds an empty spacer between buffs and debuffs
-		self.Auras.numBuffs = 8;
+		self.Auras.numBuffs = 7;
 		self.Auras.numDebuffs = 4;
 		
 		self.PreUpdateAura = PreUpdateAura;
