@@ -14,4 +14,5 @@ global\UnitFrame_Player.lua
 global\UnitFrame_PlayerPet.lua
 global\UnitFrame_Target.lua
 global\UnitFrame_TargetTarget.lua
+global\UnitFrame_Focus.lua
 global\Commands.lua

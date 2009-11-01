@@ -632,7 +632,7 @@ local CreateToTFrame = function(self,unit)
 		self.Level:SetWidth(36); self.Level:SetHeight(11);
 		self.Level:SetJustifyH("CENTER"); self.Level:SetJustifyV("MIDDLE");
 		self.Level:SetPoint("CENTER",ring,"CENTER",-27,25);
-		self:Tag(self.Level, "[level]");
+		self:Tag(self.Level, "[difficulty][level]");
 		
 		self.SUI_ClassIcon = ring:CreateTexture(nil,"BORDER");
 		self.SUI_ClassIcon:SetWidth(22); self.SUI_ClassIcon:SetHeight(22);
@@ -645,6 +645,160 @@ local CreateToTFrame = function(self,unit)
 		self.RaidIcon = ring:CreateTexture(nil,"ARTWORK");
 		self.RaidIcon:SetWidth(20); self.RaidIcon:SetHeight(20);
 		self.RaidIcon:SetPoint("CENTER",ring,"RIGHT",1,-1);
+		
+		self.StatusText = ring:CreateFontString(nil, "OVERLAY", "SUI_FontOutline18");
+		self.StatusText:SetPoint("CENTER",ring,"CENTER");
+		self.StatusText:SetJustifyH("CENTER");
+		self:Tag(self.StatusText, "[afkdnd]");	
+
+	end
+	do -- setup buffs and debuffs
+		self.Auras = CreateFrame("Frame",nil,self);
+		self.Auras:SetWidth(17*11); self.Auras:SetHeight(16*1);
+		self.Auras:SetPoint("BOTTOMRIGHT",self,"TOPRIGHT",-10,0);
+		self.Auras:SetFrameStrata("BACKGROUND");
+		self.Auras:SetFrameLevel(4);
+		-- settings
+		self.Auras.size = 16;
+		self.Auras.spacing = 1;
+		self.Auras.initialAnchor = "BOTTOMRIGHT";
+		self.Auras["growth-x"] = "LEFT";
+		self.Auras["growth-y"] = "UP";
+		self.Auras.gap = false;
+		self.Auras.numBuffs = 8;
+		self.Auras.numDebuffs = 3;
+
+		self.PostUpdateAura = PostUpdateAura;
+	end
+	return self;
+end
+local CreateFocusFrame = function(self,unit)
+	self:SetWidth(210); self:SetHeight(60);
+	do --setup base artwork
+		local artwork = CreateFrame("Frame",nil,self);
+		artwork:SetFrameStrata("BACKGROUND");
+		artwork:SetFrameLevel(0); artwork:SetAllPoints(self);
+		
+		artwork.bg = artwork:CreateTexture(nil,"BACKGROUND");
+		artwork.bg:SetPoint("CENTER"); artwork.bg:SetTexture(base_plate3);
+		artwork.bg:SetWidth(256); artwork.bg:SetHeight(85);
+		artwork.bg:SetTexCoord(1,0,0,85/128);
+
+		self.Portrait = self:CreateTexture(nil,"BACKGROUND");
+		self.Portrait:SetWidth(56); self.Portrait:SetHeight(50);
+		self.Portrait:SetPoint("CENTER",self,"CENTER",-83,-8);
+		
+		self.Threat = CreateFrame("Frame",nil,self);
+		self.OverrideUpdateThreat = threat;
+	end
+	do -- setup status bars
+		do -- cast bar
+			local cast = CreateFrame("StatusBar",nil,self);
+			cast:SetFrameStrata("BACKGROUND"); cast:SetFrameLevel(2);
+			cast:SetWidth(120); cast:SetHeight(15);
+			cast:SetPoint("TOPRIGHT",self,"TOPRIGHT",-36,-23);
+			
+			cast.Text = cast:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
+			cast.Text:SetWidth(110); cast.Text:SetHeight(11);
+			cast.Text:SetJustifyH("LEFT"); cast.Text:SetJustifyV("MIDDLE");
+			cast.Text:SetPoint("RIGHT",cast,"RIGHT",-4,0);
+			
+			cast.Time = cast:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
+			cast.Time:SetWidth(40); cast.Time:SetHeight(11);
+			cast.Time:SetJustifyH("LEFT"); cast.Time:SetJustifyV("MIDDLE");
+			cast.Time:SetPoint("LEFT",cast,"RIGHT",4,0);
+			
+			self.Castbar = cast;
+			self.PostCastStart = PostCastStart;
+			self.PostChannelStart = PostChannelStart;
+		end
+		do -- health bar
+			local health = CreateFrame("StatusBar",nil,self);
+			health:SetFrameStrata("BACKGROUND"); health:SetFrameLevel(2);
+			health:SetWidth(120); health:SetHeight(16);
+			health:SetPoint("TOPRIGHT",self.Castbar,"BOTTOMRIGHT",0,-2);
+			
+			health.value = health:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
+			health.value:SetWidth(110); health.value:SetHeight(11);
+			health.value:SetJustifyH("LEFT"); health.value:SetJustifyV("MIDDLE");
+			health.value:SetPoint("RIGHT",health,"RIGHT",-4,0);
+			
+			health.ratio = health:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
+			health.ratio:SetWidth(40); health.ratio:SetHeight(11);
+			health.ratio:SetJustifyH("LEFT"); health.ratio:SetJustifyV("MIDDLE");
+			health.ratio:SetPoint("LEFT",health,"RIGHT",4,0);			
+						
+			self.Health = health;
+			self.Health.colorTapping = true;
+			self.Health.colorDisconnected = true;
+			self.Health.colorHealth = true;
+			self.PostUpdateHealth = PostUpdateHealth;
+		end
+		do -- power bar
+			local power = CreateFrame("StatusBar",nil,self);
+			power:SetFrameStrata("BACKGROUND"); power:SetFrameLevel(2);
+			power:SetWidth(135); power:SetHeight(14);
+			power:SetPoint("TOPRIGHT",self.Health,"BOTTOMRIGHT",0,-1);
+			
+			power.value = power:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
+			power.value:SetWidth(110); power.value:SetHeight(11);
+			power.value:SetJustifyH("LEFT"); power.value:SetJustifyV("MIDDLE");
+			power.value:SetPoint("RIGHT",power,"RIGHT",-4,0);
+			
+			power.ratio = power:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
+			power.ratio:SetWidth(40); power.ratio:SetHeight(11);
+			power.ratio:SetJustifyH("LEFT"); power.ratio:SetJustifyV("MIDDLE");
+			power.ratio:SetPoint("LEFT",power,"RIGHT",4,0);			
+			
+			self.Power = power;
+			self.Power.colorPower = true;
+			self.Power.frequentUpdates = true;
+			self.PostUpdatePower = PostUpdatePower;
+		end
+	end
+	do -- setup ring, icons, and text
+		local ring = CreateFrame("Frame",nil,self);
+		ring:SetFrameStrata("BACKGROUND");
+		ring:SetAllPoints(self.Portrait); ring:SetFrameLevel(3);
+		ring.bg = ring:CreateTexture(nil,"BACKGROUND");
+		ring.bg:SetPoint("CENTER",ring,"CENTER",-2,-3);
+		ring.bg:SetTexture(base_ring3);
+		
+		self.Name = ring:CreateFontString(nil, "BORDER","SUI_FontOutline12");
+		self.Name:SetHeight(12); self.Name:SetWidth(150); self.Name:SetJustifyH("LEFT");
+		self.Name:SetPoint("TOPRIGHT",self,"TOPRIGHT",-3,-5);
+		self:Tag(self.Name,"[name]");
+		
+		self.Level = ring:CreateFontString(nil,"BORDER","SUI_FontOutline10");			
+		self.Level:SetWidth(36); self.Level:SetHeight(11);
+		self.Level:SetJustifyH("CENTER"); self.Level:SetJustifyV("MIDDLE");
+		self.Level:SetPoint("CENTER",ring,"CENTER",-27,25);
+		self:Tag(self.Level, "[difficulty][level]");
+		
+		self.SUI_ClassIcon = ring:CreateTexture(nil,"BORDER");
+		self.SUI_ClassIcon:SetWidth(22); self.SUI_ClassIcon:SetHeight(22);
+		self.SUI_ClassIcon:SetPoint("CENTER",ring,"CENTER",23,24);
+		
+		self.PvP = ring:CreateTexture(nil,"BORDER");
+		self.PvP:SetWidth(48); self.PvP:SetHeight(48);
+		self.PvP:SetPoint("CENTER",ring,"CENTER",30,-36);
+		
+		self.LevelSkull = ring:CreateTexture(nil,"ARTWORK");
+		self.LevelSkull:SetWidth(16); self.LevelSkull:SetHeight(16);
+		self.LevelSkull:SetPoint("CENTER",self.Level,"CENTER");
+		
+		self.RareElite = ring:CreateTexture(nil,"ARTWORK");
+		self.RareElite:SetWidth(150); self.RareElite:SetHeight(150);
+		self.RareElite:SetPoint("CENTER",ring,"CENTER",-12,-4);
+		
+		self.RaidIcon = ring:CreateTexture(nil,"ARTWORK");
+		self.RaidIcon:SetWidth(20); self.RaidIcon:SetHeight(20);
+		self.RaidIcon:SetPoint("CENTER",ring,"RIGHT",1,-1);
+		
+		self.StatusText = ring:CreateFontString(nil, "OVERLAY", "SUI_FontOutline18");
+		self.StatusText:SetPoint("CENTER",ring,"CENTER");
+		self.StatusText:SetJustifyH("CENTER");
+		self:Tag(self.StatusText, "[afkdnd]");	
 	end
 	do -- setup buffs and debuffs
 		self.Auras = CreateFrame("Frame",nil,self);
@@ -675,7 +829,7 @@ local CreateUnitFrame = function(self,unit)
 	self:RegisterForClicks("anyup");
 	self:SetAttribute("*type2", "menu");
 	self.colors = addon.colors;
-	return (unit == "target" and CreateTargetFrame(self,unit)) or (unit == "targettarget" and CreateToTFrame(self,unit)) or (unit == "player" and CreatePlayerFrame(self,unit)) or CreatePetFrame(self,unit);
+	return (unit == "target" and CreateTargetFrame(self,unit)) or (unit == "targettarget" and CreateToTFrame(self,unit)) or (unit == "player" and CreatePlayerFrame(self,unit)) or (unit == "focus" and CreateFocusFrame(self,unit)) or CreatePetFrame(self,unit);
 end
 
 oUF:RegisterStyle("Spartan_PlayerFrames", CreateUnitFrame);

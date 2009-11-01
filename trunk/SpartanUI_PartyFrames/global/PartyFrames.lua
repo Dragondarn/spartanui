@@ -52,7 +52,6 @@ do -- scripts to make it movable
 	party.mover:RegisterEvent("VARIABLES_LOADED");
 	party.mover:RegisterEvent("PLAYER_REGEN_DISABLED");
 	
-	
 	function addon:UpdatePartyPosition()
 		if suiChar.PartyFrames.partyMoved then
 			party:SetMovable(true);
