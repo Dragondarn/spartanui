@@ -1,8 +1,8 @@
 local spartan = LibStub("AceAddon-3.0"):GetAddon("SpartanUI");
 local addon = spartan:GetModule("PlayerFrames");
 ----------------------------------------------------------------------------------------------------
-local default = {player = 0,target = 1,targettarget = 0,pet = 1,focus = 1};
 suiChar.PlayerFrames = suiChar.PlayerFrames or {};
+local default = {player = 0,target = 1,targettarget = 0,pet = 1,focus = 1};
 setmetatable(suiChar.PlayerFrames,{__index = default});
 
 function addon:OnInitialize()
