@@ -39,6 +39,10 @@ local threat = function(self, event,unit,status)
 		self.Portrait:SetVertexColor(1,1,1);
 	end
 end
+local petinfo = function(self,event)
+	if self.Name then self.Name:UpdateTag(self.unit); end
+	if self.Level then self.Level:UpdateTag(self.unit); end
+end
 local PostUpdateAura = function(self,event,unit)
 	if suiChar and suiChar.PartyFrames and suiChar.PartyFrames.showAuras == 0 then
 		self.Auras:Hide();		
@@ -347,6 +351,7 @@ local CreatePetFrame = function(self,unit)
 		self.PostUpdateAura = PostUpdateAura;
 	end
 	self:SetScale(0.8);
+	self:RegisterEvent("UNIT_PET",petinfo);	
 	return self;
 end
 local CreateUnitFrame = function(self,unit)
