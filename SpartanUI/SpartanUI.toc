@@ -1,5 +1,5 @@
 ## Interface: 30200
-## Title: SpartanUI (2.6.0 RC7)
+## Title: SpartanUI (2.6.0 RC8)
 ## Notes: User Interface combining elegant artwork with well designed features.
 ## Version: 2.6.0.30200
 ## Author: Atriace, Beladona

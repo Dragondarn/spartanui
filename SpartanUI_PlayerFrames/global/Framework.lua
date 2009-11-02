@@ -1,6 +1,8 @@
 local spartan = LibStub("AceAddon-3.0"):GetAddon("SpartanUI");
 local addon = spartan:GetModule("PlayerFrames");
 ----------------------------------------------------------------------------------------------------
+suiChar.PlayerFrames = suiChar.PlayerFrames or {};
+
 local colors = setmetatable({},{__index = oUF.colors}); colors.health = {0/255,255/255,50/255};
 local base_plate1 = [[Interface\AddOns\SpartanUI_PlayerFrames\media\base_plate1]]
 local base_ring1 = [[Interface\AddOns\SpartanUI_PlayerFrames\media\base_ring1]]
