@@ -380,16 +380,14 @@ local CreateTargetFrame = function(self,unit)
 		self:Tag(self.StatusText, "[afkdnd]");	
 
 		self.CPoints = ring:CreateFontString(nil, "BORDER","SUI_FontOutline13");
-		self.CPoints:SetPoint("TOP",ring,"BOTTOM");
+		self.CPoints:SetPoint("TOPLEFT",ring,"BOTTOMRIGHT",8,-4);
 		for i = 1, 5 do
 			self.CPoints[i] = ring:CreateTexture(nil,"OVERLAY");
 			self.CPoints[i]:SetTexture([[Interface\AddOns\SpartanUI_PlayerFrames\media\icon_combo]]);
+			if (i == 1) then self.CPoints[1]:SetPoint("LEFT",self.CPoints,"RIGHT",1,-1); else 
+				self.CPoints[i]:SetPoint("LEFT",self.CPoints[i-1],"RIGHT",-2,0);
+			end
 		end
-		self.CPoints[1]:SetPoint("CENTER",ring,"LEFT",-6,-6);
-		self.CPoints[2]:SetPoint("TOP",self.CPoints[1],"BOTTOM",3,6);
-		self.CPoints[3]:SetPoint("TOP",self.CPoints[2],"BOTTOM",6,8);
-		self.CPoints[4]:SetPoint("TOP",self.CPoints[3],"BOTTOM",7,9);
-		self.CPoints[5]:SetPoint("TOP",self.CPoints[4],"BOTTOM",9,11);		
 		ring:SetScript("OnUpdate",function()
 			if self.CPoints then
 				local cp = GetComboPoints("player","target");
