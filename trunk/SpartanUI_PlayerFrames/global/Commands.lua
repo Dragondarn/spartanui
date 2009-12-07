@@ -77,33 +77,6 @@ function addon:OnInitialize()
 			}
 		}
 	};
-	spartan.options.args["focus"] = {
-		type = "input",
-		name = "lock, unlock or reset focus frame positioning",
-		set = function(info,val)
-			if (InCombatLockdown()) then 
-				spartan:Print(ERR_NOT_IN_COMBAT);
-			else
-				if (val == "" and addon.locked == 1) or (val == "unlock") then
-					addon.locked = 0;
-					SUI_FocusFrame.mover:Show();
-					spartan:Print("Focus Position Unlocked");
-				elseif (val == "" and addon.locked == 0) or (val == "lock") then
-					addon.locked = 1;
-					SUI_FocusFrame.mover:Hide();
-					spartan:Print("Focus Position Locked");
-				elseif val == "reset" then
-					suiChar.PlayerFrames.focusMoved = nil;
-					addon.locked = 1; SUI_FocusFrame.mover:Hide();
-					addon:UpdateFocusPosition();
-					spartan:Print("Focus Position Reset");
-				end
-			end
-		end,
-		get = function(info) return suiChar and suiChar.PartyFrames and suiChar.PartyFrames.partyLock; end
-	
-	}
-	
 end
 function addon:OnEnable()
 	for k,v in pairs(default) do addon[k]:PostUpdateAura(nil,k); end

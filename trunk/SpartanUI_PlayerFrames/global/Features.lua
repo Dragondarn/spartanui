@@ -95,3 +95,11 @@ do -- Rare / Elite dragon graphic as an oUF module
 	local Disable = function(self) return; end
 	oUF:AddElement('RareElite', Update,Enable,Disable);
 end
+do -- fix SET_FOCUS errors
+	UnitPopupMenus["SELF"] = { "PVP_FLAG", "LOOT_METHOD", "LOOT_THRESHOLD", "OPT_OUT_LOOT_TITLE", "LOOT_PROMOTE", "DUNGEON_DIFFICULTY", "RAID_DIFFICULTY", "RESET_INSTANCES", "RAID_TARGET_ICON", "LEAVE", "CANCEL" };
+	UnitPopupMenus["PET"] = { "PET_PAPERDOLL", "PET_RENAME", "PET_ABANDON", "PET_DISMISS", "CANCEL" };
+	UnitPopupMenus["PLAYER"] = { "WHISPER", "INSPECT", "INVITE", "ACHIEVEMENTS", "TRADE", "FOLLOW", "DUEL", "RAID_TARGET_ICON", "RAF_SUMMON", "RAF_GRANT_LEVEL", "CANCEL" };
+	UnitPopupMenus["TARGET"] = { "RAID_TARGET_ICON", "CANCEL" };
+	UnitPopupMenus["ARENAENEMY"] = { "CANCEL" };
+	UnitPopupMenus["FOCUS"] = { "LOCK_FOCUS_FRAME", "UNLOCK_FOCUS_FRAME", "RAID_TARGET_ICON", "CANCEL" };
+end
