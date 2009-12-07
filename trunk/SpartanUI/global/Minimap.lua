@@ -6,7 +6,37 @@ local checkThirdParty = function()
 	local point, relativeTo, relativePoint, x, y = MinimapCluster:GetPoint();
 	if (relativeTo ~= UIParent) then return true; end -- a third party minimap manager is involved
 end
+local updateButtons = function()
+	if (not MouseIsOver(MinimapCluster)) and (suiChar.MapButtons) then
+		GameTimeFrame:Hide();
+		MiniMapTracking:Hide();
+		MinimapZoomIn:Hide();
+		MinimapZoomOut:Hide();
+		MiniMapWorldMapButton:Hide();
+	else
+		GameTimeFrame:Show();
+		MiniMapTracking:Show();
+		MinimapZoomIn:Show();
+		MinimapZoomOut:Show();
+		MiniMapWorldMapButton:Show();
+	end
+end
 
+function module:OnInitialize()
+	addon.options.args["minimap"] = {
+		name = "toggle Minimap Button Hiding", type="input",
+		get = function(info) return suiChar and suiChar.MapButtons; end,
+		set = function(info,val)
+			if (val == "" and suiChar.MapButtons == true) or (val == "off") then
+				suiChar.MapButtons = nil;
+				addon:Print("Minimap Button Hiding Disabled");
+			elseif (val == "" and not suiChar.MapButtons) or (val == "on") then
+				suiChar.MapButtons = true;
+				addon:Print("Minimap Button Hiding Enabled");
+			end
+		end
+	};
+end
 function module:OnEnable()
 	if (checkThirdParty()) then return; end
 	map = CreateFrame("Frame");
@@ -36,19 +66,7 @@ function module:OnEnable()
 		map.coords:SetWidth(128); map.coords:SetHeight(12);
 		map.coords:SetPoint("TOP","MinimapZoneTextButton","BOTTOM");
 		map:HookScript("OnUpdate", function()
-			if (MouseIsOver(MinimapCluster)) then
-				GameTimeFrame:Show();
-				MiniMapTracking:Show();
-				MinimapZoomIn:Show();
-				MinimapZoomOut:Show();
-				MiniMapWorldMapButton:Show();
-			else -- animation at rest
-				GameTimeFrame:Hide();
-				MiniMapTracking:Hide();
-				MinimapZoomIn:Hide();
-				MinimapZoomOut:Hide();
-				MiniMapWorldMapButton:Hide();
-			end
+			updateButtons();
 			do -- update minimap coordinates
 				local x,y = GetPlayerMapPosition("player");
 				if (not x) or (not y) then return; end
