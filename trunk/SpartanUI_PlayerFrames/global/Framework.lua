@@ -3,11 +3,23 @@ local addon = spartan:GetModule("PlayerFrames");
 ----------------------------------------------------------------------------------------------------
 suiChar.PlayerFrames = suiChar.PlayerFrames or {};
 
-local colors = setmetatable({},{__index = oUF.colors}); colors.health = {0/255,255/255,50/255};
 local base_plate1 = [[Interface\AddOns\SpartanUI_PlayerFrames\media\base_plate1]]
 local base_ring1 = [[Interface\AddOns\SpartanUI_PlayerFrames\media\base_ring1]]
 local base_plate3 = [[Interface\AddOns\SpartanUI_PlayerFrames\media\base_plate3]]
 local base_ring3 = [[Interface\AddOns\SpartanUI_PlayerFrames\media\base_ring3]]
+
+local colors = setmetatable({},{__index = oUF.colors});
+do -- setup custom colors that we want to use
+	colors.health = {0,1,50/255}; -- the color of health bars	
+	colors.reaction[1] = {1, 50/255, 0}; -- Hated
+	colors.reaction[2] = colors.reaction[1]; -- Hostile
+	colors.reaction[3] = {1, 150/255, 0};  -- Unfriendly
+	colors.reaction[4] = {1, 220/255, 0}; -- Neutral
+	colors.reaction[5] = colors.health;-- Friendly
+	colors.reaction[6] = colors.health; -- Honored
+	colors.reaction[7] = colors.health; -- Revered
+	colors.reaction[8] = colors.health; -- Exalted
+end
 
 local menu = function(self)
 	local unit = string.gsub(self.unit,"(.)",string.upper,1);
@@ -25,6 +37,15 @@ local threat = function(self, event,unit,status)
 		self.Portrait:SetVertexColor(1,1,1);
 	end
 end
+local name = function(self)
+	if (UnitIsEnemy(self.unit,"player")) then self.Name:SetTextColor(1, 50/255, 0); 
+	elseif (UnitIsUnit(self.unit,"player")) then self.Name:SetTextColor(1, 1, 1); 
+	else 
+		local r,g,b = unpack(colors.reaction[UnitReaction(self.unit,"player")] or {1,1,1});
+		self.Name:SetTextColor(r,g,b);
+	end
+end
+
 local PostUpdateHealth = function(self, event, unit, bar, min, max)
 	if(UnitIsDead(unit)) then
 		bar:SetValue(0);
@@ -37,10 +58,12 @@ local PostUpdateHealth = function(self, event, unit, bar, min, max)
 	else
 		bar.value:SetFormattedText("%s / %s", min,max)
 		bar.ratio:SetFormattedText("%d%%",(min/max)*100);
-	end
+	end	
+	if (self.unit == "target") or (self.unit == "targettarget") then name(self); end
 end
-local PostUpdatePower = function(self, event, unit, bar, min, max)
+local PostUpdatePower = function(self, event, unit, bar, min, max)	
 	if (UnitIsDead(unit) or UnitIsGhost(unit) or not UnitIsConnected(unit) or max == 0) then
+		bar:SetValue(0);
 		bar.value:SetText""
 		bar.ratio:SetText""
 	else
@@ -61,6 +84,7 @@ local PostUpdateAura = function(self,event,unit)
 		self.Auras:Show();
 	end	
 end
+
 local CreatePlayerFrame = function(self,unit)
 	self:SetWidth(280); self:SetHeight(80);
 	do -- setup base artwork
@@ -264,8 +288,7 @@ local CreateTargetFrame = function(self,unit)
 			health.value = health:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
 			health.value:SetWidth(135); health.value:SetHeight(11);
 			health.value:SetJustifyH("LEFT"); health.value:SetJustifyV("MIDDLE");
-			health.value:SetPoint("RIGHT",health,"RIGHT",-4,0);
-			
+			health.value:SetPoint("RIGHT",health,"RIGHT",-4,0);			
 			
 			health.ratio = health:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
 			health.ratio:SetWidth(90); health.ratio:SetHeight(11);
@@ -276,7 +299,8 @@ local CreateTargetFrame = function(self,unit)
 			self.Health.frequentUpdates = true;
 			self.Health.colorTapping = true;
 			self.Health.colorDisconnected = true;
-			self.Health.colorHealth = true;		
+			self.Health.colorHealth = true;
+			self.Health.colorReaction = true;			
 			self.PostUpdateHealth = PostUpdateHealth;
 		end
 		do -- power bar
@@ -593,6 +617,7 @@ local CreateToTFrame = function(self,unit)
 			self.Health.colorTapping = true;
 			self.Health.colorDisconnected = true;
 			self.Health.colorHealth = true;
+			self.Health.colorReaction = true;
 			self.PostUpdateHealth = PostUpdateHealth;
 		end
 		do -- power bar
