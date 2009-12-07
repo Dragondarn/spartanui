@@ -91,17 +91,8 @@ function module:OnEnable()
 			end
 		end);
 	end
-	do -- minimap buttons
-		GameTimeFrame:SetScale(0.6);
-		GameTimeFrame:ClearAllPoints();
-		GameTimeFrame:SetPoint("TOPRIGHT","Minimap","TOPRIGHT",5,-5);
-		MiniMapTracking:SetScale(0.8);
-		MiniMapTracking:ClearAllPoints();
-		MiniMapTracking:SetPoint("TOPLEFT",20,-36);
-	end	
 	do -- minimap modifications
 		MinimapBorderTop:Hide();
-		MinimapToggleButton:Hide();
 		MinimapBorder:SetAlpha(0); 
 		MinimapBackdrop:ClearAllPoints();
 		MinimapBackdrop:SetPoint("CENTER","MinimapCluster","CENTER",-10,-24);		
