@@ -42,7 +42,7 @@ local SetupBartender = function()
 			MicroMenu = {	enabled = true,	padding = -3,	position = {point = "TOPLEFT",		parent = "SUI_ActionBarPlate",	x=603,	y=0,	scale = 0.80,	growHorizontal="RIGHT"}},
 			PetBar = {			enabled = true, padding = 1, 		position = {point = "TOPLEFT",		parent = "SUI_ActionBarPlate",	x=5,		y=-6,	scale = 0.7,	growHorizontal="RIGHT"},	rows = 1, skin = {Zoom = true}},
 			StanceBar = {		enabled = true,	padding = 1, 	position = {point = "TOPRIGHT",		parent = "SUI_ActionBarPlate",	x=-605,	y=-2,	scale = 0.85,	growHorizontal="LEFT"},	rows = 1},
-			MultiCast = {		enabled = true,								position = {point = "TOPRIGHT",		parent = "SUI_ActionBarPlate",	x=-755,	y=-7,	scale = 0.75}},
+			MultiCast = {		enabled = true,								position = {point = "TOPRIGHT",		parent = "SUI_ActionBarPlate",	x=-777,	y=-4,	scale = 0.75}},
 			Vehicle = {			enabled = false},
 		};
 	
