@@ -56,11 +56,11 @@ local SetupBartender = function()
 		lib.windowData[frame].storage = storage
 		local parent = frame:GetParent();
 		if (storage.parent) then
-		frame:SetParent(storage.parent);
+			frame:SetParent(storage.parent);
 			if storage.parent == "SUI_ActionBarPlate" then
 				frame:SetFrameStrata("LOW");
 			end
-		elseif (not storage.parent) and (parent:GetName() == "SUI_ActionBarPlate") then
+		elseif (parent and parent:GetName() == "SUI_ActionBarPlate") then
 			frame:SetParent(UIParent);
 		end
 	end
