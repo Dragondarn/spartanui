@@ -93,6 +93,11 @@ function module:OnEnable()
 	end
 	do -- minimap modifications
 		MinimapBorderTop:Hide();
+		if (MinimapToggleButton) then -- this will occur on versions prior to 3.3.0
+			MinimapToggleButton:Hide();
+			GameTimeFrame:SetScale(0.6); GameTimeFrame:ClearAllPoints(); GameTimeFrame:SetPoint("TOPRIGHT",5,-5);
+			MiniMapTracking:SetScale(0.8); MiniMapTracking:ClearAllPoints(); MiniMapTracking:SetPoint("TOPLEFT",20,-36);		
+		end
 		MinimapBorder:SetAlpha(0); 
 		MinimapBackdrop:ClearAllPoints();
 		MinimapBackdrop:SetPoint("CENTER","MinimapCluster","CENTER",-10,-24);		
