@@ -1,6 +1,6 @@
 ## Interface: 30300
 ## Title: SpartanUI: Player Frames
-## Notes: Player and Target Frames designed to compliment SpartanUI
+## Notes: Player and Target Frames designed to complement SpartanUI
 ## Version: 2.6.0.30300
 ## Author: Atriace, Beladona
 ## X-Category: User Interfaces
