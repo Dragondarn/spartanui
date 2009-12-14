@@ -1,5 +1,5 @@
 ## Interface: 30300
-## Title: SpartanUI (2.6.2)
+## Title: SpartanUI (2.6.2) Development
 ## Notes: User Interface combining elegant artwork with well designed features.
 ## Version: 2.6.2.30300
 ## Author: Atriace, Beladona
