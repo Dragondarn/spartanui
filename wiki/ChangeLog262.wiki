@@ -1,5 +1,5 @@
 #summary One-sentence summary of this page.
-#labels Featured,Milestone-2.6.2,Changelog
+#labels Featured
 
 = Introduction =
 
