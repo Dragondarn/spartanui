@@ -3,17 +3,21 @@ local module = addon:NewModule("BottomBar");
 ----------------------------------------------------------------------------------------------------
 local anchor, frame = SUI_AnchorFrame, SpartanUI;
 local round = function(num) -- rounds a number to 2 decimal places
-	return math.floor( (num*10^2)+0.5) / (10^2);
+	return floor( (num*10^2)+0.5) / (10^2);
+end;
+local updateMinimumScale = function()
+	local minScale = floor(((UIParent:GetWidth()/2560)*10^2)+1) / (10^2);
+	if suiChar.scale < minScale then suiChar.scale = minScale; end
 end;
 local updateSpartanScale = function() -- scales SpartanUI based on setting or screen size
 	suiChar = suiChar or {};
 	if (not suiChar.scale) then -- make sure the variable exists, and auto-configured based on screen size
 		local width, height = string.match(GetCVar("gxResolution"),"(%d+).-(%d+)");
-		-- local width, height = string.match((({GetScreenResolutions()})[GetCurrentResolution()] or ""), "(%d+).-(%d+)");
 		if (tonumber(width) / tonumber(height) > 4/3) then suiChar.scale = 0.92;
 		else suiChar.scale = 0.78; end
 	end
-	if (suiChar.scale ~= round(SpartanUI:GetScale())) then
+	updateMinimumScale();
+	if (suiChar.scale ~= round(SpartanUI:GetScale())) then	
 		frame:SetScale(suiChar.scale);
 	end
 end;
@@ -117,8 +121,7 @@ function module:OnInitialize()
 		end);
 	end
 	addon.options.args["maxres"] = {
-		type = "execute",
-		name = "Toggle Default Scales",
+		type = "execute", name = "Toggle Default Scales",
 		desc = "toggles between widescreen and standard scales",
 		func = function()
 			if (InCombatLockdown()) then 
@@ -134,15 +137,14 @@ function module:OnInitialize()
 		end
 	};
 	addon.options.args["scale"] = {
-		type = "range",
-		name = "Configure Scale",
-		desc = "sets a specific scale for SpartanUI between 0.5 and 1",
-		min = 0.5, max = 1, step = 0.01, 
+		type = "range", name = "Configure Scale",
+		desc = "sets a specific scale for SpartanUI",
 		set = function(info,val)
 			if (InCombatLockdown()) then 
 				addon:Print(ERR_NOT_IN_COMBAT);
 			else
-				suiChar.scale = min(1,max(0.5,val));
+				suiChar.scale = min(1,round(val));
+				updateMinimumScale();
 				addon:Print("Relative Scale set to "..suiChar.scale);
 			end
 		end,
