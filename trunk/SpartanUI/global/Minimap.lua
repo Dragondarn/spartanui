@@ -135,7 +135,7 @@ function module:OnEnable()
 		hooksecurefunc(DurabilityFrame,"SetPoint",function(self,_,parent) -- durability frame
 			if (parent == "MinimapCluster") or (parent == _G["MinimapCluster"]) then
 				DurabilityFrame:ClearAllPoints();
-				DurabilityFrame:SetPoint("CENTER","UIParent","CENTER");
+				DurabilityFrame:SetPoint("TOP","UIErrorsFrame","BOTTOM",0,0);
 			end
 		end);
 		hooksecurefunc("AchievementAlertFrame_ShowAlert",function() -- achivement alerts
