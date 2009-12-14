@@ -118,37 +118,35 @@ function module:OnEnable()
 	do -- child frame modifications
 		VehicleSeatIndicator:ClearAllPoints();
 		VehicleSeatIndicator:SetPoint("RIGHT","UIParent","RIGHT",0,0);
-		TemporaryEnchantFrame:ClearAllPoints();
-		TemporaryEnchantFrame:SetPoint("TOPRIGHT",UIParent,"TOPRIGHT",-10,-10);
+		hooksecurefunc(VehicleSeatIndicator,"SetPoint",function(_,_,parent) -- vehicle seat indicator
+			if (parent == "MinimapCluster") or (parent == _G["MinimapCluster"]) then
+				VehicleSeatIndicator:ClearAllPoints();
+				VehicleSeatIndicator:SetPoint("BOTTOMRIGHT","SpartanUI","TOPRIGHT",-5,5);
+			end
+		end);
+		hooksecurefunc(WatchFrame,"SetPoint",function(_,_,parent) -- quest watch frame
+			if (parent == "MinimapCluster") or (parent == _G["MinimapCluster"]) then
+				-- this only happens if the user isn't using the advanced quest watcher
+				WatchFrame:ClearAllPoints();
+				WatchFrame:SetPoint("TOPRIGHT","UIParent","TOPRIGHT",-4,-130);
+				WatchFrame:SetPoint("BOTTOMRIGHT","UIParent","BOTTOMRIGHT",-4,160);
+			end
+		end);
+		hooksecurefunc(DurabilityFrame,"SetPoint",function(self,_,parent) -- durability frame
+			if (parent == "MinimapCluster") or (parent == _G["MinimapCluster"]) then
+				DurabilityFrame:ClearAllPoints();
+				DurabilityFrame:SetPoint("CENTER","UIParent","CENTER");
+			end
+		end);
+		hooksecurefunc("AchievementAlertFrame_ShowAlert",function() -- achivement alerts
+			if (AchievementAlertFrame1) then AchievementAlertFrame1:SetPoint("BOTTOM",UIParent,"CENTER"); end
+		end);
+		hooksecurefunc("UIParent_ManageFramePositions",function()
+			Update_BattlefieldMinimap();
+			Update_ArenaEnemyFrames();			
+		end);	
+		hooksecurefunc("ToggleBattlefieldMinimap",Update_BattlefieldMinimap);
 	end
-	hooksecurefunc(VehicleSeatIndicator,"SetPoint",function(_,_,parent) -- vehicle seat indicator
-		if (parent == "MinimapCluster") or (parent == _G["MinimapCluster"]) then
-			VehicleSeatIndicator:ClearAllPoints();
-			VehicleSeatIndicator:SetPoint("BOTTOMRIGHT","SpartanUI","TOPRIGHT",-5,5);
-		end
-	end);
-	hooksecurefunc(WatchFrame,"SetPoint",function(_,_,parent) -- quest watch frame
-		if (parent == "MinimapCluster") or (parent == _G["MinimapCluster"]) then
-			-- this only happens if the user isn't using the advanced quest watcher
-			WatchFrame:ClearAllPoints();
-			WatchFrame:SetPoint("TOPRIGHT","UIParent","TOPRIGHT",-4,-130);
-			WatchFrame:SetPoint("BOTTOMRIGHT","UIParent","BOTTOMRIGHT",-4,160);
-		end
-	end);
-	hooksecurefunc(DurabilityFrame,"SetPoint",function(self,_,parent) -- durability frame
-		if (parent == "MinimapCluster") or (parent == _G["MinimapCluster"]) then
-			DurabilityFrame:ClearAllPoints();
-			DurabilityFrame:SetPoint("BOTTOM","SpartanUI","TOP",0,70);
-		end
-	end);
-	hooksecurefunc("AchievementAlertFrame_ShowAlert",function() -- achivement alerts
-		if (AchievementAlertFrame1) then AchievementAlertFrame1:SetPoint("BOTTOM",UIParent,"CENTER"); end
-	end);
-	hooksecurefunc("UIParent_ManageFramePositions",function()
-		Update_BattlefieldMinimap();
-		Update_ArenaEnemyFrames();			
-	end);	
-	hooksecurefunc("ToggleBattlefieldMinimap",Update_BattlefieldMinimap);
 	map:RegisterEvent("ZONE_CHANGED");
 	map:RegisterEvent("ZONE_CHANGED_INDOORS");
 	map:RegisterEvent("ZONE_CHANGED_NEW_AREA");
