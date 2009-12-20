@@ -46,6 +46,13 @@ local name = function(self)
 	end
 end
 
+local PostUpdateAura = function(self,event,unit)
+	if suiChar and suiChar.PlayerFrames and suiChar.PlayerFrames[unit] == 0 then
+		self.Auras:Hide();		
+	else
+		self.Auras:Show();
+	end	
+end
 local PostUpdateHealth = function(self, event, unit, bar, min, max)
 	if(UnitIsDead(unit)) then
 		bar:SetValue(0);
@@ -71,18 +78,49 @@ local PostUpdatePower = function(self, event, unit, bar, min, max)
 		bar.ratio:SetFormattedText("%d%%",(min/max)*100);
 	end
 end
+
+local PostCastStop = function(self)
+	if self.Castbar.Time then self.Castbar.Time:SetTextColor(1,1,1); end
+end
 local PostCastStart = function(self,event,unit,name,rank,text,castid)
 	self.Castbar:SetStatusBarColor(1,0.7,0);
 end
 local PostChannelStart = function(self,event,unit,name,rank,text,castid)
-	self.Castbar:SetStatusBarColor(0,1,0);	
+	self.Castbar:SetStatusBarColor(0,0.7,1);	
 end
-local PostUpdateAura = function(self,event,unit)
-	if suiChar and suiChar.PlayerFrames and suiChar.PlayerFrames[unit] == 0 then
-		self.Auras:Hide();		
+local OnCastbarUpdate = function(self,elapsed)
+	if self.casting then
+		self.duration = self.duration + elapsed
+		if (self.duration >= self.max) then
+			self.casting = nil;
+			self:Hide();
+			if PostCastStop then PostCastStop(self:GetParent()); end
+			return;
+		end
+		if self.Time then
+			if self.delay ~= 0 then self.Time:SetTextColor(1,0,0); else self.Time:SetTextColor(1,1,1); end
+			self.Time:SetFormattedText("%.1f",self.max - self.duration);
+		end
+		self:SetValue(self.max-self.duration)
+	elseif self.channeling then
+		self.duration = self.duration - elapsed;
+		if (self.duration <= 0) then
+			self.channeling = nil;
+			self:Hide();
+			if PostChannelStop then PostChannelStop(self:GetParent()); end
+			return;
+		end
+		if self.Time then
+			if self.delay ~= 0 then self.Time:SetTextColor(1,0,0); else self.Time:SetTextColor(1,1,1); end
+			self.Time:SetFormattedText("%.1f",self.max-self.duration);
+		end
+		self:SetValue(self.duration)
 	else
-		self.Auras:Show();
-	end	
+		self.unitName = nil;
+		self.channeling = nil;
+		self:SetValue(1);
+		self:Hide();
+	end
 end
 
 local CreatePlayerFrame = function(self,unit)
@@ -118,11 +156,13 @@ local CreatePlayerFrame = function(self,unit)
 			cast.Time = cast:CreateFontString(nil, "OVERLAY", "SUI_FontOutline10");
 			cast.Time:SetWidth(90); cast.Time:SetHeight(11);			
 			cast.Time:SetJustifyH("RIGHT"); cast.Time:SetJustifyV("MIDDLE");
-			cast.Time:SetPoint("RIGHT",cast,"LEFT",-2,0);
+			cast.Time:SetPoint("RIGHT",cast,"LEFT",-2,0);	
 			
 			self.Castbar = cast;
+			self.OnCastbarUpdate = OnCastbarUpdate;
 			self.PostCastStart = PostCastStart;
 			self.PostChannelStart = PostChannelStart;
+			self.PostCastStop = PostCastStop;		
 		end
 		do -- health bar
 			local health = CreateFrame("StatusBar",nil,self);
@@ -276,6 +316,7 @@ local CreateTargetFrame = function(self,unit)
 			cast.Time:SetPoint("LEFT",cast,"RIGHT",2,0);
 			
 			self.Castbar = cast;
+			self.OnCastbarUpdate = OnCastbarUpdate;
 			self.PostCastStart = PostCastStart;
 			self.PostChannelStart = PostChannelStart;
 		end
@@ -451,6 +492,7 @@ local CreatePetFrame = function(self,unit)
 			cast.Time:SetPoint("RIGHT",cast,"LEFT",-2,0);
 			
 			self.Castbar = cast;
+			self.OnCastbarUpdate = OnCastbarUpdate;
 			self.PostCastStart = PostCastStart;
 			self.PostChannelStart = PostChannelStart;
 		end
@@ -592,6 +634,7 @@ local CreateToTFrame = function(self,unit)
 			cast.Time:SetPoint("LEFT",cast,"RIGHT",4,0);
 			
 			self.Castbar = cast;
+			self.OnCastbarUpdate = OnCastbarUpdate;
 			self.PostCastStart = PostCastStart;
 			self.PostChannelStart = PostChannelStart;
 		end
@@ -734,6 +777,7 @@ local CreateFocusFrame = function(self,unit)
 			cast.Time:SetPoint("LEFT",cast,"RIGHT",4,0);
 			
 			self.Castbar = cast;
+			self.OnCastbarUpdate = OnCastbarUpdate;
 			self.PostCastStart = PostCastStart;
 			self.PostChannelStart = PostChannelStart;
 		end
