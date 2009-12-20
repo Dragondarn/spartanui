@@ -21,6 +21,6 @@
 			</Button>
 		</Frames>
 	</Button>
-	<Script file="Global_Features.lua" />
-	<Script file="Global_Framework.lua" />
+	<Script file="Global-Features.lua" />
+	<Script file="Global-Framework.lua" />
 </Ui>

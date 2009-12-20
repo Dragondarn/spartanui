@@ -237,10 +237,15 @@ local CreatePartyFrame = function(self,unit)
 		self.PvP = ring:CreateTexture(nil,"BORDER");
 		self.PvP:SetWidth(50); self.PvP:SetHeight(50);
 		self.PvP:SetPoint("CENTER",self.Portrait,"BOTTOMLEFT",5,-10);
+		
+		self.LFDRole = ring:CreateTexture(nil,"BORDER");
+		self.LFDRole:SetWidth(28); self.LFDRole:SetHeight(28);
+		self.LFDRole:SetPoint("CENTER",ring,"BOTTOM",-3,-10);
+		self.LFDRole:SetTexture[[Interface\AddOns\SpartanUI_PlayerFrames\media\icon_role]];
 			
 		self.RaidIcon = ring:CreateTexture(nil,"ARTWORK");
 		self.RaidIcon:SetWidth(24); self.RaidIcon:SetHeight(24);
-		self.RaidIcon:SetPoint("CENTER",self.Portrait,"BOTTOM",-2,-10);
+		self.RaidIcon:SetPoint("CENTER",self.Portrait,"CENTER");
 
 		self.StatusText = ring:CreateFontString(nil, "OVERLAY", "SUI_FontOutline18");
 		self.StatusText:SetPoint("CENTER",self.Portrait,"CENTER");
