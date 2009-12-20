@@ -146,6 +146,8 @@ function module:OnEnable()
 			Update_ArenaEnemyFrames();			
 		end);	
 		hooksecurefunc("ToggleBattlefieldMinimap",Update_BattlefieldMinimap);
+		LFDSearchStatus:ClearAllPoints();
+		LFDSearchStatus:SetPoint("BOTTOM",SpartanUI,"TOP",0,100);
 	end
 	map:RegisterEvent("ZONE_CHANGED");
 	map:RegisterEvent("ZONE_CHANGED_INDOORS");
