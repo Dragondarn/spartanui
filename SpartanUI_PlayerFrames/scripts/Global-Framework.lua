@@ -161,7 +161,7 @@ local CreatePlayerFrame = function(self,unit)
 			self.OnCastbarUpdate = OnCastbarUpdate;
 			self.PostCastStart = PostCastStart;
 			self.PostChannelStart = PostChannelStart;
-			self.PostCastStop = PostCastStop;		
+			self.PostCastStop = PostCastStop;
 		end
 		do -- health bar
 			local health = CreateFrame("StatusBar",nil,self);
@@ -318,6 +318,7 @@ local CreateTargetFrame = function(self,unit)
 			self.OnCastbarUpdate = OnCastbarUpdate;
 			self.PostCastStart = PostCastStart;
 			self.PostChannelStart = PostChannelStart;
+			self.PostCastStop = PostCastStop;
 		end
 		do -- health bar
 			local health = CreateFrame("StatusBar",nil,self);
@@ -494,6 +495,7 @@ local CreatePetFrame = function(self,unit)
 			self.OnCastbarUpdate = OnCastbarUpdate;
 			self.PostCastStart = PostCastStart;
 			self.PostChannelStart = PostChannelStart;
+			self.PostCastStop = PostCastStop;
 		end
 		do -- health bar
 			local health = CreateFrame("StatusBar",nil,self);
@@ -636,6 +638,7 @@ local CreateToTFrame = function(self,unit)
 			self.OnCastbarUpdate = OnCastbarUpdate;
 			self.PostCastStart = PostCastStart;
 			self.PostChannelStart = PostChannelStart;
+			self.PostCastStop = PostCastStop;
 		end
 		do -- health bar
 			local health = CreateFrame("StatusBar",nil,self);
@@ -779,6 +782,7 @@ local CreateFocusFrame = function(self,unit)
 			self.OnCastbarUpdate = OnCastbarUpdate;
 			self.PostCastStart = PostCastStart;
 			self.PostChannelStart = PostChannelStart;
+			self.PostCastStop = PostCastStop;
 		end
 		do -- health bar
 			local health = CreateFrame("StatusBar",nil,self);
