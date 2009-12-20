@@ -43,18 +43,13 @@ local petinfo = function(self,event)
 	if self.Name then self.Name:UpdateTag(self.unit); end
 	if self.Level then self.Level:UpdateTag(self.unit); end
 end
+
 local PostUpdateAura = function(self,event,unit)
 	if suiChar and suiChar.PartyFrames and suiChar.PartyFrames.showAuras == 0 then
 		self.Auras:Hide();		
 	else
 		self.Auras:Show();
 	end	
-end
-local PostCastStart = function(self,event,unit,name,rank,text,castid)
-	self.Castbar:SetStatusBarColor(1,0.7,0);
-end
-local PostChannelStart = function(self,event,unit,name,rank,text,castid)
-	self.Castbar:SetStatusBarColor(0,1,0);	
 end
 local PostUpdateHealth = function(self, event, unit, bar, min, max)
 	if(UnitIsDead(unit)) then
@@ -79,6 +74,50 @@ local PostUpdatePower = function(self, event, unit, bar, min, max)
 		bar.ratio:SetFormattedText("%d%%",(min/max)*100);
 	end
 end
+local PostCastStop = function(self)
+	if self.Castbar.Time then self.Castbar.Time:SetTextColor(1,1,1); end
+end
+local PostCastStart = function(self,event,unit,name,rank,text,castid)
+	self.Castbar:SetStatusBarColor(1,0.7,0);
+end
+local PostChannelStart = function(self,event,unit,name,rank,text,castid)
+	self.Castbar:SetStatusBarColor(1,0.2,0.7);
+end
+local OnCastbarUpdate = function(self,elapsed)
+	if self.casting then
+		self.duration = self.duration + elapsed
+		if (self.duration >= self.max) then
+			self.casting = nil;
+			self:Hide();
+			if PostCastStop then PostCastStop(self:GetParent()); end
+			return;
+		end
+		if self.Time then
+			if self.delay ~= 0 then self.Time:SetTextColor(1,0,0); else self.Time:SetTextColor(1,1,1); end
+			self.Time:SetFormattedText("%.1f",self.max - self.duration);
+		end
+		self:SetValue(self.max-self.duration)
+	elseif self.channeling then
+		self.duration = self.duration - elapsed;
+		if (self.duration <= 0) then
+			self.channeling = nil;
+			self:Hide();
+			if PostChannelStop then PostChannelStop(self:GetParent()); end
+			return;
+		end
+		if self.Time then
+			if self.delay ~= 0 then self.Time:SetTextColor(1,0,0); else self.Time:SetTextColor(1,1,1); end
+			self.Time:SetFormattedText("%.1f",self.max-self.duration);
+		end
+		self:SetValue(self.duration)
+	else
+		self.unitName = nil;
+		self.channeling = nil;
+		self:SetValue(1);
+		self:Hide();
+	end
+end
+
 local CreatePartyFrame = function(self,unit)
 	do -- setup base artwork
 		local artwork = CreateFrame("Frame",nil,self);
@@ -114,8 +153,10 @@ local CreatePartyFrame = function(self,unit)
 			cast.Time:SetPoint("LEFT",cast,"RIGHT",2,0);
 			
 			self.Castbar = cast;
+			self.OnCastbarUpdate = OnCastbarUpdate;
 			self.PostCastStart = PostCastStart;
 			self.PostChannelStart = PostChannelStart;
+			self.PostCastStop = PostCastStop;
 		end
 		do -- health bar
 			local health = CreateFrame("StatusBar",nil,self);
@@ -256,8 +297,10 @@ local CreatePetFrame = function(self,unit)
 			cast.Time:SetPoint("LEFT",cast,"RIGHT",2,0);
 			
 			self.Castbar = cast;
+			self.OnCastbarUpdate = OnCastbarUpdate;
 			self.PostCastStart = PostCastStart;
 			self.PostChannelStart = PostChannelStart;
+			self.PostCastStop = PostCastStop;
 		end
 		do -- health bar
 			local health = CreateFrame("StatusBar",nil,self);
