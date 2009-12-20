@@ -78,7 +78,6 @@ local PostUpdatePower = function(self, event, unit, bar, min, max)
 		bar.ratio:SetFormattedText("%d%%",(min/max)*100);
 	end
 end
-
 local PostCastStop = function(self)
 	if self.Castbar.Time then self.Castbar.Time:SetTextColor(1,1,1); end
 end
@@ -86,7 +85,7 @@ local PostCastStart = function(self,event,unit,name,rank,text,castid)
 	self.Castbar:SetStatusBarColor(1,0.7,0);
 end
 local PostChannelStart = function(self,event,unit,name,rank,text,castid)
-	self.Castbar:SetStatusBarColor(0,0.7,1);	
+	self.Castbar:SetStatusBarColor(1,0.2,0.7);
 end
 local OnCastbarUpdate = function(self,elapsed)
 	if self.casting then
