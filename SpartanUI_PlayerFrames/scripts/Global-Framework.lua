@@ -240,7 +240,12 @@ local CreatePlayerFrame = function(self,unit)
 		
 		self.PvP = ring:CreateTexture(nil,"BORDER");
 		self.PvP:SetWidth(48); self.PvP:SetHeight(48);
-		self.PvP:SetPoint("CENTER",ring,"CENTER",-20,-40);
+		self.PvP:SetPoint("CENTER",ring,"CENTER",32,-40);
+		
+		self.LFDRole = ring:CreateTexture(nil,"BORDER");
+		self.LFDRole:SetWidth(28); self.LFDRole:SetHeight(28);
+		self.LFDRole:SetPoint("CENTER",ring,"CENTER",-20,-35);
+		self.LFDRole:SetTexture[[Interface\AddOns\SpartanUI_PlayerFrames\media\icon_role]];
 		
 		self.Resting = ring:CreateTexture(nil,"ARTWORK");
 		self.Resting:SetWidth(32); self.Resting:SetHeight(30);
@@ -401,7 +406,7 @@ local CreateTargetFrame = function(self,unit)
 		
 		self.PvP = ring:CreateTexture(nil,"BORDER");
 		self.PvP:SetWidth(48); self.PvP:SetHeight(48);
-		self.PvP:SetPoint("CENTER",ring,"CENTER",35,-40);
+		self.PvP:SetPoint("CENTER",ring,"CENTER",-16,-40);
 		
 		self.LevelSkull = ring:CreateTexture(nil,"ARTWORK");
 		self.LevelSkull:SetWidth(16); self.LevelSkull:SetHeight(16);
@@ -563,13 +568,13 @@ local CreatePetFrame = function(self,unit)
 		self.SUI_ClassIcon:SetWidth(22); self.SUI_ClassIcon:SetHeight(22);
 		self.SUI_ClassIcon:SetPoint("CENTER",ring,"CENTER",-27,24);
 		
+		self.PvP = ring:CreateTexture(nil,"BORDER");
+		self.PvP:SetWidth(48); self.PvP:SetHeight(48);
+		self.PvP:SetPoint("CENTER",ring,"CENTER",30,-36);
+		
 		self.Happiness = ring:CreateTexture(nil,"ARTWORK");
 		self.Happiness:SetWidth(22); self.Happiness:SetHeight(22);
 		self.Happiness:SetPoint("CENTER",ring,"CENTER",-27,24);
-		
-		self.PvP = ring:CreateTexture(nil,"BORDER");
-		self.PvP:SetWidth(48); self.PvP:SetHeight(48);
-		self.PvP:SetPoint("CENTER",ring,"CENTER",-20,-36);
 		
 		self.RaidIcon = ring:CreateTexture(nil,"ARTWORK");
 		self.RaidIcon:SetAllPoints(self.Portrait);
@@ -710,7 +715,7 @@ local CreateToTFrame = function(self,unit)
 		
 		self.PvP = ring:CreateTexture(nil,"BORDER");
 		self.PvP:SetWidth(48); self.PvP:SetHeight(48);
-		self.PvP:SetPoint("CENTER",ring,"CENTER",30,-36);
+		self.PvP:SetPoint("CENTER",ring,"CENTER",-14,-36);
 		
 		self.RaidIcon = ring:CreateTexture(nil,"ARTWORK");
 		self.RaidIcon:SetWidth(20); self.RaidIcon:SetHeight(20);
