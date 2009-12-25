@@ -9,5 +9,6 @@
 ## OptionalDeps: LibStub, Ace3, Bartender4, FuBar, Titan
 ## SavedVariablesPerCharacter: suiChar
 
-embed\LibraryList.xml
-SpartanUI.xml
+scripts\Embed-Libraries.xml
+scripts\Global-Framework.xml
+
