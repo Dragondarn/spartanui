@@ -3,7 +3,8 @@
 	<!-- frameStrata Parameters:  BACKGROUND, LOW, MEDIUM, HIGH, DIALOG, FULLSCREEN, FULLSCREEN_DIALOG, TOOLTIP  -->
 	<!-- Layer level Parameters:  BACKGROUND, BORDER, ARTWORK, OVERLAY, HIGHLIGHT -->
 	
-	<Script file="SpartanUI.lua" />
+	<Script file="Global-Features.lua" />
+	
 	<Font name="SUI_FontOutline22"  font="Interface\AddOns\SpartanUI\media\Cognosis.ttf" outline="NORMAL" virtual="true">
 		<FontHeight><AbsValue val="22"/></FontHeight>
 	</Font>
@@ -28,7 +29,6 @@
 	<Font name="SUI_FontOutline8"  font="Interface\AddOns\SpartanUI\media\Cognosis.ttf" outline="NORMAL" virtual="true">
 		<FontHeight><AbsValue val="8"/></FontHeight>
 	</Font>
-	
 	<Frame name="SUI_AnchorFrame" frameStrata="BACKGROUND" parent="UIParent">
 		<Anchors>
 			<Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT"><Offset><AbsDimension x="0" y="-1"/></Offset></Anchor>
@@ -62,7 +62,6 @@
 			</Layer>
 		</Layers>
 	</Frame>
-	
 	<Frame name="SUI_StatusBars_TooltipTemplate" frameStrata="TOOLTIP" virtual="true">
 		<Size><AbsDimension x="374" y="70"/></Size>
 		<Layers>
@@ -167,7 +166,6 @@
 			</Layer>
 		</Layers>
 	</Frame>
-	
 	<Frame name="SUI_PopTemplate" frameStrata="BACKGROUND" virtual="true">
 		<Size><AbsDimension x="400" y="32" /></Size>
 		<Layers>
@@ -237,9 +235,9 @@
 		</Layers>
 	</Frame>
 	
-	<Script file="global\BottomBar.lua" />
-	<Script file="global\ChatFrame.lua" />
-	<Script file="global\StatusBars.lua" />
-	<Script file="global\Minimap.lua" />
-	<Script file="global\ActionBars.lua" />
+	<Script file="Global-Framework.lua" />
+	<Script file="Module-ChatFrame.lua" />
+	<Script file="Module-StatusBars.lua" />
+	<Script file="Module-Minimap.lua" />
+	<Script file="Module-ActionBars.lua" />
 </Ui>
