@@ -149,6 +149,10 @@ function module:OnEnable()
 		LFDSearchStatus:ClearAllPoints();
 		LFDSearchStatus:SetPoint("BOTTOM",SpartanUI,"TOP",0,100);
 	end
+	do -- move the buffs
+		ConsolidatedBuffs:ClearAllPoints();
+		ConsolidatedBuffs:SetPoint("TOPRIGHT",-13,-13);		
+	end
 	map:RegisterEvent("ZONE_CHANGED");
 	map:RegisterEvent("ZONE_CHANGED_INDOORS");
 	map:RegisterEvent("ZONE_CHANGED_NEW_AREA");
