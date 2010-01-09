@@ -46,12 +46,6 @@ function module:OnEnable()
 			BattlefieldMinimapTab:SetPoint("RIGHT", "UIParent", "RIGHT",-144,150);
 		end
 	end
-	Update_ArenaEnemyFrames = function()
-		if ( ArenaEnemyFrames ) then
-			ArenaEnemyFrames:ClearAllPoints();
-			ArenaEnemyFrames:SetPoint("RIGHT", UIParent, "RIGHT",0,40);
-		end
-	end
 	do -- minimap overlay		
 		local overlay = Minimap:CreateTexture(nil,"OVERLAY");
 		overlay:SetWidth(228); overlay:SetHeight(228); 
@@ -118,8 +112,6 @@ function module:OnEnable()
 		end);
 	end
 	do -- child frame modifications
-		VehicleSeatIndicator:ClearAllPoints();
-		VehicleSeatIndicator:SetPoint("RIGHT","UIParent","RIGHT",0,0);
 		hooksecurefunc(VehicleSeatIndicator,"SetPoint",function(_,_,parent) -- vehicle seat indicator
 			if (parent == "MinimapCluster") or (parent == _G["MinimapCluster"]) then
 				VehicleSeatIndicator:ClearAllPoints();
@@ -145,13 +137,17 @@ function module:OnEnable()
 		end);
 		hooksecurefunc("UIParent_ManageFramePositions",function()
 			Update_BattlefieldMinimap();
-			Update_ArenaEnemyFrames();			
+			if ( ArenaEnemyFrames ) then
+				ArenaEnemyFrames:ClearAllPoints();
+				ArenaEnemyFrames:SetPoint("RIGHT", UIParent, "RIGHT",0,40);
+			end
+			TutorialFrameAlertButton:SetParent(MinimapCluster);
+			TutorialFrameAlertButton:ClearAllPoints();
+			TutorialFrameAlertButton:SetPoint("CENTER",MinimapCluster,"TOP",-2,10);
 		end);	
 		hooksecurefunc("ToggleBattlefieldMinimap",Update_BattlefieldMinimap);
 		LFDSearchStatus:ClearAllPoints();
 		LFDSearchStatus:SetPoint("BOTTOM",SpartanUI,"TOP",0,100);
-	end
-	do -- move the buffs
 		ConsolidatedBuffs:ClearAllPoints();
 		ConsolidatedBuffs:SetPoint("TOPRIGHT",-13,-13);		
 	end
