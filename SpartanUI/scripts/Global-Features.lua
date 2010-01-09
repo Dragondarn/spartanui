@@ -4,6 +4,18 @@ suiChar = suiChar or {};
 addon.options = {name = "SpartanUI", type = "group", args = {}};
 
 function addon:OnInitialize()
+	local lang = GetLocale();
+	if (lang == "ruRU" or lang == "zhCN" or lang == "zhTW") then
+		local font = [[Interface\AddOns\SpartanUI\media\font-myriad.ttf]];
+		SUI_FontOutline22:SetFont(font,22,"OUTLINE");
+		SUI_FontOutline18:SetFont(font,18,"OUTLINE");
+		SUI_FontOutline13:SetFont(font,13,"OUTLINE");
+		SUI_FontOutline12:SetFont(font,12,"OUTLINE");
+		SUI_FontOutline11:SetFont(font,11,"OUTLINE");
+		SUI_FontOutline10:SetFont(font,10,"OUTLINE");
+		SUI_FontOutline9:SetFont(font,9,"OUTLINE");
+		SUI_FontOutline8:SetFont(font,8,"OUTLINE");
+	end
 	addon.options.args["reset"] = {
 		type = "execute",
 		name = "Reset Options",
