@@ -44,19 +44,19 @@
 		</Anchors>
 		<Layers>
 			<Layer level="BACKGROUND">
-				<Texture name="$parent_Base1" file="Interface\AddOns\SpartanUI\media\_base1">					
+				<Texture name="$parent_Base1" file="Interface\AddOns\SpartanUI\media\base-center">					
 					<Anchors><Anchor point="BOTTOM" relativePoint="BOTTOM"/></Anchors>
 				</Texture>
-				<Texture name="$parent_Base2" file="Interface\AddOns\SpartanUI\media\_base2">
+				<Texture name="$parent_Base2" file="Interface\AddOns\SpartanUI\media\base-left1">
 					<Anchors><Anchor point="RIGHT" relativeTo="$parent_Base1" relativePoint="LEFT"/></Anchors>
 				</Texture>
-				<Texture name="$parent_Base3" file="Interface\AddOns\SpartanUI\media\_base3">
+				<Texture name="$parent_Base3" file="Interface\AddOns\SpartanUI\media\base-left2">
 					<Anchors><Anchor point="RIGHT" relativeTo="$parent_Base2" relativePoint="LEFT"/></Anchors>
 				</Texture>
-				<Texture name="$parent_Base4" file="Interface\AddOns\SpartanUI\media\_base4">
+				<Texture name="$parent_Base4" file="Interface\AddOns\SpartanUI\media\base-right1">
 					<Anchors><Anchor point="LEFT" relativeTo="$parent_Base1" relativePoint="RIGHT"/></Anchors>
 				</Texture>
-				<Texture name="$parent_Base5" file="Interface\AddOns\SpartanUI\media\_base5">
+				<Texture name="$parent_Base5" file="Interface\AddOns\SpartanUI\media\base-right2">
 					<Anchors><Anchor point="LEFT" relativeTo="$parent_Base4" relativePoint="RIGHT"/></Anchors>
 				</Texture>
 			</Layer>
@@ -66,7 +66,7 @@
 		<Size><AbsDimension x="374" y="70"/></Size>
 		<Layers>
 			<Layer level="BACKGROUND">
-				<Texture file="Interface\AddOns\SpartanUI\media\status_tooltip">
+				<Texture file="Interface\AddOns\SpartanUI\media\status-tooltip">
 					<Anchors><Anchor point="CENTER"/></Anchors>
 				</Texture>
 			</Layer>
@@ -88,30 +88,30 @@
 		<Size><AbsDimension x="450" y="32" /></Size>
 		<Layers>
 			<Layer level="OVERLAY">
-				<Texture name="$parentPlate" file="Interface\AddOns\SpartanUI\media\status_platexp">
+				<Texture name="$parentPlate" file="Interface\AddOns\SpartanUI\media\status-plate-exp">
 					<Size><AbsDimension x="512" y="32" /></Size>
 					<Anchors><Anchor point="RIGHT"/></Anchors>
 				</Texture>
 			</Layer>
 			<Layer level="BORDER">
-				<Texture name="$parentFill" file="Interface\AddOns\SpartanUI\media\status_glow">
+				<Texture name="$parentFill" file="Interface\AddOns\SpartanUI\media\status-glow">
 					<Size><AbsDimension x="400" y="32" /></Size>
 					<Anchors><Anchor point="RIGHT"/></Anchors>
 				</Texture>
-				<Texture name="$parentLead" file="Interface\AddOns\SpartanUI\media\status_lead">
+				<Texture name="$parentLead" file="Interface\AddOns\SpartanUI\media\status-lead">
 					<Size><AbsDimension x="20" y="32" /></Size>
 					<Anchors><Anchor point="RIGHT" relativeTo="$parentFill" relativePoint="LEFT"/></Anchors>
 					<TexCoords left="1" right="0" top="0" bottom="1" />
 				</Texture>
 			</Layer>
 			<Layer level="ARTWORK">
-				<Texture name="$parentFillGlow" file="Interface\AddOns\SpartanUI\media\status_glow" alphaMode="ADD">
+				<Texture name="$parentFillGlow" file="Interface\AddOns\SpartanUI\media\status-glow" alphaMode="ADD">
 					<Anchors>
 						<Anchor point="TOPLEFT" relativeTo="$parentFill" relativePoint="TOPLEFT"/>
 						<Anchor point="BOTTOMRIGHT" relativeTo="$parentFill" relativePoint="BOTTOMRIGHT"/>
 					</Anchors>
 				</Texture>
-				<Texture name="$parentLeadGlow" file="Interface\AddOns\SpartanUI\media\status_lead" alphaMode="ADD">
+				<Texture name="$parentLeadGlow" file="Interface\AddOns\SpartanUI\media\status-lead" alphaMode="ADD">
 					<Anchors>
 						<Anchor point="TOPLEFT" relativeTo="$parentLead" relativePoint="TOPLEFT"/>
 						<Anchor point="BOTTOMRIGHT" relativeTo="$parentLead" relativePoint="BOTTOMRIGHT"/>
@@ -130,29 +130,29 @@
 		<Size><AbsDimension x="450" y="32" /></Size>
 		<Layers>
 			<Layer level="OVERLAY">
-				<Texture name="$parentPlate" file="Interface\AddOns\SpartanUI\media\status_platerep">
+				<Texture name="$parentPlate" file="Interface\AddOns\SpartanUI\media\status-plate-rep">
 					<Size><AbsDimension x="512" y="32" /></Size>
 					<Anchors><Anchor point="LEFT"/></Anchors>
 				</Texture>
 			</Layer>
 			<Layer level="BORDER">
-				<Texture name="$parentFill" file="Interface\AddOns\SpartanUI\media\status_glow">
+				<Texture name="$parentFill" file="Interface\AddOns\SpartanUI\media\status-glow">
 					<Size><AbsDimension x="400" y="32" /></Size>
 					<Anchors><Anchor point="LEFT"/></Anchors>
 				</Texture>
-				<Texture name="$parentLead" file="Interface\AddOns\SpartanUI\media\status_lead">
+				<Texture name="$parentLead" file="Interface\AddOns\SpartanUI\media\status-lead">
 					<Size><AbsDimension x="25" y="32" /></Size>
 					<Anchors><Anchor point="LEFT" relativeTo="$parentFill" relativePoint="RIGHT"/></Anchors>
 				</Texture>
 			</Layer>
 			<Layer level="ARTWORK">
-				<Texture name="$parentFillGlow" file="Interface\AddOns\SpartanUI\media\status_glow" alphaMode="ADD">
+				<Texture name="$parentFillGlow" file="Interface\AddOns\SpartanUI\media\status-glow" alphaMode="ADD">
 					<Anchors>
 						<Anchor point="TOPLEFT" relativeTo="$parentFill" relativePoint="TOPLEFT"/>
 						<Anchor point="BOTTOMRIGHT" relativeTo="$parentFill" relativePoint="BOTTOMRIGHT"/>
 					</Anchors>
 				</Texture>
-				<Texture name="$parentLeadGlow" file="Interface\AddOns\SpartanUI\media\status_lead" alphaMode="ADD">
+				<Texture name="$parentLeadGlow" file="Interface\AddOns\SpartanUI\media\status-lead" alphaMode="ADD">
 					<Anchors>
 						<Anchor point="TOPLEFT" relativeTo="$parentLead" relativePoint="TOPLEFT"/>
 						<Anchor point="BOTTOMRIGHT" relativeTo="$parentLead" relativePoint="BOTTOMRIGHT"/>
@@ -170,7 +170,7 @@
 		<Size><AbsDimension x="400" y="32" /></Size>
 		<Layers>
 			<Layer level="BACKGROUND">
-				<Texture name="$parentBG" file="Interface\AddOns\SpartanUI\media\bar_backdrop0">
+				<Texture name="$parentBG" file="Interface\AddOns\SpartanUI\media\bar-backdrop0">
 					<Size><AbsDimension x="512" y="64" /></Size>
 					<Anchors><Anchor point="BOTTOM" relativePoint="BOTTOM"/></Anchors>
 				</Texture>
@@ -181,7 +181,7 @@
 		<Size><AbsDimension x="400" y="32" /></Size>
 		<Layers>
 			<Layer level="BACKGROUND">
-				<Texture name="$parentBG" file="Interface\AddOns\SpartanUI\media\bar_backdrop1">
+				<Texture name="$parentBG" file="Interface\AddOns\SpartanUI\media\bar-backdrop1">
 					<Size><AbsDimension x="512" y="64" /></Size>
 					<Anchors><Anchor point="CENTER" relativePoint="CENTER"/></Anchors>
 				</Texture>
@@ -192,7 +192,7 @@
 		<Size><AbsDimension x="135" y="100" /></Size>
 		<Layers>
 			<Layer level="BACKGROUND">
-				<Texture name="$parentBG" file="Interface\AddOns\SpartanUI\media\bar_backdrop3">
+				<Texture name="$parentBG" file="Interface\AddOns\SpartanUI\media\bar-backdrop3">
 					<Size><AbsDimension x="256" y="128" /></Size>
 					<Anchors><Anchor point="CENTER" relativePoint="CENTER"/></Anchors>
 				</Texture>
@@ -216,7 +216,7 @@
 		<Size><AbsDimension x="400" y="34"/></Size>
 		<Layers>
 			<Layer level="BACKGROUND">
-				<Texture name="$parentBG" file="Interface\AddOns\SpartanUI\media\bar_popup1">
+				<Texture name="$parentBG" file="Interface\AddOns\SpartanUI\media\bar-popup1">
 					<Size><AbsDimension x="512" y="64" /></Size>
 					<Anchors><Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT"/></Anchors>
 				</Texture>
@@ -227,7 +227,7 @@
 		<Size><AbsDimension x="400" y="34"/></Size>
 		<Layers>
 			<Layer level="BACKGROUND">
-				<Texture name="$parentBG" file="Interface\AddOns\SpartanUI\media\bar_popup2">
+				<Texture name="$parentBG" file="Interface\AddOns\SpartanUI\media\bar-popup2">
 					<Size><AbsDimension x="512" y="64" /></Size>
 					<Anchors><Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT"/></Anchors>
 				</Texture>
