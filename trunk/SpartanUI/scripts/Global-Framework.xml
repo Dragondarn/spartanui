@@ -5,30 +5,31 @@
 	
 	<Script file="Global-Features.lua" />
 	
-	<Font name="SUI_FontOutline22"  font="Interface\AddOns\SpartanUI\media\Cognosis.ttf" outline="NORMAL" virtual="true">
+	<Font name="SUI_FontOutline22"  font="Interface\AddOns\SpartanUI\media\font-cognosis.ttf" outline="NORMAL" virtual="true">
 		<FontHeight><AbsValue val="22"/></FontHeight>
 	</Font>
-	<Font name="SUI_FontOutline18"  font="Interface\AddOns\SpartanUI\media\Cognosis.ttf" outline="NORMAL" virtual="true">
+	<Font name="SUI_FontOutline18"  font="Interface\AddOns\SpartanUI\media\font-cognosis.ttf" outline="NORMAL" virtual="true">
 		<FontHeight><AbsValue val="18"/></FontHeight>
 	</Font>
-	<Font name="SUI_FontOutline13" font="Interface\AddOns\SpartanUI\media\Cognosis.ttf" outline="NORMAL" virtual="true">
+	<Font name="SUI_FontOutline13" font="Interface\AddOns\SpartanUI\media\font-cognosis.ttf" outline="NORMAL" virtual="true">
 		<FontHeight><AbsValue val="13"/></FontHeight>
 	</Font>
-	<Font name="SUI_FontOutline12" font="Interface\AddOns\SpartanUI\media\Cognosis.ttf" outline="NORMAL" virtual="true">
+	<Font name="SUI_FontOutline12" font="Interface\AddOns\SpartanUI\media\font-cognosis.ttf" outline="NORMAL" virtual="true">
 		<FontHeight><AbsValue val="12"/></FontHeight>
 	</Font>
-	<Font name="SUI_FontOutline11"  font="Interface\AddOns\SpartanUI\media\Cognosis.ttf" outline="NORMAL" virtual="true">
+	<Font name="SUI_FontOutline11"  font="Interface\AddOns\SpartanUI\media\font-cognosis.ttf" outline="NORMAL" virtual="true">
 		<FontHeight><AbsValue val="11"/></FontHeight>
 	</Font>
-	<Font name="SUI_FontOutline10"  font="Interface\AddOns\SpartanUI\media\Cognosis.ttf" outline="NORMAL" virtual="true">
+	<Font name="SUI_FontOutline10"  font="Interface\AddOns\SpartanUI\media\font-cognosis.ttf" outline="NORMAL" virtual="true">
 		<FontHeight><AbsValue val="10"/></FontHeight>
 	</Font>
-	<Font name="SUI_FontOutline9"  font="Interface\AddOns\SpartanUI\media\Cognosis.ttf" outline="NORMAL" virtual="true">
+	<Font name="SUI_FontOutline9"  font="Interface\AddOns\SpartanUI\media\font-cognosis.ttf" outline="NORMAL" virtual="true">
 		<FontHeight><AbsValue val="9"/></FontHeight>
 	</Font>
-	<Font name="SUI_FontOutline8"  font="Interface\AddOns\SpartanUI\media\Cognosis.ttf" outline="NORMAL" virtual="true">
+	<Font name="SUI_FontOutline8"  font="Interface\AddOns\SpartanUI\media\font-cognosis.ttf" outline="NORMAL" virtual="true">
 		<FontHeight><AbsValue val="8"/></FontHeight>
 	</Font>
+	
 	<Frame name="SUI_AnchorFrame" frameStrata="BACKGROUND" parent="UIParent">
 		<Anchors>
 			<Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT"><Offset><AbsDimension x="0" y="-1"/></Offset></Anchor>
