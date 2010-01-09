@@ -16,8 +16,8 @@ local updateButtons = function()
 	else
 		GameTimeFrame:Show();
 		MiniMapTracking:Show();
-		MinimapZoomIn:Show();
-		MinimapZoomOut:Show();
+		--MinimapZoomIn:Show();
+		--MinimapZoomOut:Show();
 		MiniMapWorldMapButton:Show();
 	end
 end
@@ -101,6 +101,8 @@ function module:OnEnable()
 		MinimapBorder:SetAlpha(0); 
 		MinimapBackdrop:ClearAllPoints();
 		MinimapBackdrop:SetPoint("CENTER","MinimapCluster","CENTER",-10,-24);		
+		MinimapZoomIn:Hide();
+		MinimapZoomOut:Hide();
 		Minimap:ClearAllPoints();
 		Minimap:SetPoint("CENTER","MinimapCluster","CENTER",0,2);
 		MinimapCluster:ClearAllPoints();
