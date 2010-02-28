@@ -6,7 +6,7 @@ local checkThirdParty, frame = function()
 	if (relativeTo ~= UIParent) then return true; end -- a third party minimap manager is involved
 end;
 local updateButtons = function()
-	if (not MouseIsOver(MinimapCluster)) and (suiChar.MapButtons) then
+	if (not MouseIsOver(Minimap)) and (suiChar.MapButtons) then
 		GameTimeFrame:Hide();
 		MiniMapTracking:Hide();
 		MinimapZoomIn:Hide();
@@ -16,12 +16,6 @@ local updateButtons = function()
 		GameTimeFrame:Show();
 		MiniMapTracking:Show();
 		MiniMapWorldMapButton:Show();
-	end
-end
-local updateBattlefieldMinimap = function()
-	if ( BattlefieldMinimapTab and not BattlefieldMinimapTab:IsUserPlaced() ) then
-		BattlefieldMinimapTab:ClearAllPoints()
-		BattlefieldMinimapTab:SetPoint("RIGHT", "UIParent", "RIGHT",-144,150);
 	end
 end
 local modifyMinimapLayout = function()
@@ -48,26 +42,6 @@ local modifyMinimapLayout = function()
 		else Minimap_ZoomOut() end
 	end);
 end;
-local modifyMinimapChildren = function()
-	hooksecurefunc("AchievementAlertFrame_ShowAlert",function() -- achivement alerts
-		if (AchievementAlertFrame1) then AchievementAlertFrame1:SetPoint("BOTTOM",UIParent,"CENTER"); end
-	end);
-	hooksecurefunc("UIParent_ManageFramePositions",function()
-		updateBattlefieldMinimap();
-		if ( ArenaEnemyFrames ) then
-			ArenaEnemyFrames:ClearAllPoints();
-			ArenaEnemyFrames:SetPoint("RIGHT", UIParent, "RIGHT",0,40);
-		end
-		TutorialFrameAlertButton:SetParent(Minimap);
-		TutorialFrameAlertButton:ClearAllPoints();
-		TutorialFrameAlertButton:SetPoint("CENTER",Minimap,"TOP",-2,10);
-	end);	
-	hooksecurefunc("ToggleBattlefieldMinimap",updateBattlefieldMinimap);
-	LFDSearchStatus:ClearAllPoints();
-	LFDSearchStatus:SetPoint("BOTTOM",SpartanUI,"TOP",0,100);
-	ConsolidatedBuffs:ClearAllPoints();
-	ConsolidatedBuffs:SetPoint("TOPRIGHT",-13,-13);		
-end
 local createMinimapCoords = function()
 	local map = CreateFrame("Frame",nil,SpartanUI);
 	map.coords = map:CreateFontString(nil,"BACKGROUND","GameFontNormalSmall");
@@ -126,6 +100,9 @@ end
 function module:OnEnable()
 	if (checkThirdParty()) then return; end
 	modifyMinimapLayout();
-	modifyMinimapChildren();
-	createMinimapCoords();	
+	createMinimapCoords();
+	LFDSearchStatus:ClearAllPoints();
+	LFDSearchStatus:SetPoint("BOTTOM",SpartanUI,"TOP",0,100);
+	ConsolidatedBuffs:ClearAllPoints();
+	ConsolidatedBuffs:SetPoint("TOPRIGHT",-13,-13);	
 end

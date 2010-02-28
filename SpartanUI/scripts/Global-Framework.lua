@@ -40,7 +40,13 @@ end;
 local updateSpartanViewport = function() -- handles viewport offset based on settings
 	WorldFrame:SetPoint("BOTTOMRIGHT",frame,"TOPRIGHT",0,-5);
 end;
-
+local updateBattlefieldMinimap = function()
+	if ( BattlefieldMinimapTab and not BattlefieldMinimapTab:IsUserPlaced() ) then
+		BattlefieldMinimapTab:ClearAllPoints()
+		BattlefieldMinimapTab:SetPoint("RIGHT", "UIParent", "RIGHT",-144,150);
+	end
+end
+----------------------------------------------------------------------------------------------------
 function module:OnInitialize()
 	do -- default interface modifications
 		FramerateLabel:ClearAllPoints(); FramerateLabel:SetPoint("TOP", "WorldFrame", "TOP", -15, -50);
@@ -173,6 +179,23 @@ end
 function module:OnEnable()
 	anchor:SetFrameStrata("BACKGROUND"); anchor:SetFrameLevel(1);
 	frame:SetFrameStrata("BACKGROUND"); frame:SetFrameLevel(1);
+	
+	hooksecurefunc("AchievementAlertFrame_ShowAlert",function() -- achivement alerts
+		if (AchievementAlertFrame1) then AchievementAlertFrame1:SetPoint("BOTTOM",UIParent,"CENTER"); end
+	end);
+	hooksecurefunc("UIParent_ManageFramePositions",function()
+		updateBattlefieldMinimap();
+		if ( ArenaEnemyFrames ) then
+			ArenaEnemyFrames:ClearAllPoints();
+			ArenaEnemyFrames:SetPoint("RIGHT", UIParent, "RIGHT",0,40);
+		end
+		TutorialFrameAlertButton:SetParent(Minimap);
+		TutorialFrameAlertButton:ClearAllPoints();
+		TutorialFrameAlertButton:SetPoint("CENTER",Minimap,"TOP",-2,10);
+		CastingBarFrame:ClearAllPoints();
+		CastingBarFrame:SetPoint("BOTTOM",frame,"TOP",0,90);
+	end);
+	hooksecurefunc("ToggleBattlefieldMinimap",updateBattlefieldMinimap);
 	
 	updateSpartanScale();
 	updateSpartanOffset();
