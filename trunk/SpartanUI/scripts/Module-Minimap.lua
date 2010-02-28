@@ -1,10 +1,10 @@
 local addon = LibStub("AceAddon-3.0"):GetAddon("SpartanUI");
 local module = addon:NewModule("Minimap");
 ---------------------------------------------------------------------------
-local checkThirdParty = function()
+local checkThirdParty, frame = function()
 	local point, relativeTo, relativePoint, x, y = MinimapCluster:GetPoint();
 	if (relativeTo ~= UIParent) then return true; end -- a third party minimap manager is involved
-end
+end;
 local updateButtons = function()
 	if (not MouseIsOver(MinimapCluster)) and (suiChar.MapButtons) then
 		GameTimeFrame:Hide();
@@ -25,60 +25,30 @@ local updateBattlefieldMinimap = function()
 	end
 end
 local modifyMinimapLayout = function()
-	local overlay = Minimap:CreateTexture(nil,"OVERLAY");
-	overlay:SetWidth(228); overlay:SetHeight(228); 
-	overlay:SetPoint("CENTER");
-	overlay:SetTexture("Interface\\AddOns\\SpartanUI\\media\\map_overlay");
-	overlay:SetBlendMode("ADD");	
-	MinimapZoneTextButton:ClearAllPoints();
-	MinimapZoneTextButton:SetPoint("BOTTOM","SpartanUI","BOTTOM",0,24);
-	MinimapBorderTop:Hide();
-	MinimapBorder:SetAlpha(0); 
-	MinimapBackdrop:ClearAllPoints();
-	MinimapBackdrop:SetPoint("CENTER","MinimapCluster","CENTER",-10,-24);		
-	MinimapZoomIn:Hide();
-	MinimapZoomOut:Hide();
-	Minimap:ClearAllPoints();
-	Minimap:SetPoint("CENTER","MinimapCluster","CENTER",0,2);
-	MinimapCluster:ClearAllPoints();
-	MinimapCluster:SetParent("SpartanUI");
-	MinimapCluster:SetPoint("BOTTOM","SpartanUI","BOTTOM",0,20)
-	MinimapCluster:SetScale(1.1);
-	MinimapCluster:SetMovable(true);
-	MinimapCluster:SetUserPlaced(true);
-	MinimapCluster:EnableMouseWheel(true);
-	MinimapCluster:SetScript("OnMouseWheel",function()
+	frame = CreateFrame("Frame",nil,SpartanUI);
+	frame:SetWidth(158); frame:SetHeight(158);
+	frame:SetPoint("CENTER",0,54);
+	
+	Minimap:SetParent(frame); Minimap:SetWidth(158); Minimap:SetHeight(158);
+	Minimap:ClearAllPoints(); Minimap:SetPoint("CENTER");
+	
+	MinimapBackdrop:ClearAllPoints(); MinimapBackdrop:SetPoint("CENTER",frame,"CENTER",-10,-24);
+	MinimapZoneTextButton:SetParent(frame); MinimapZoneTextButton:ClearAllPoints(); MinimapZoneTextButton:SetPoint("TOP",frame,"BOTTOM",0,-6);
+	MinimapBorderTop:Hide(); MinimapBorder:SetAlpha(0);		
+	MinimapZoomIn:Hide(); MinimapZoomOut:Hide();	
+	Minimap.overlay = Minimap:CreateTexture(nil,"OVERLAY");
+	Minimap.overlay:SetWidth(250); Minimap.overlay:SetHeight(250); 
+	Minimap.overlay:SetTexture("Interface\\AddOns\\SpartanUI\\media\\map-overlay");
+	Minimap.overlay:SetPoint("CENTER"); Minimap.overlay:SetBlendMode("ADD");	
+	
+	frame:EnableMouse(true);
+	frame:EnableMouseWheel(true);	
+	frame:SetScript("OnMouseWheel",function()
 		if (arg1 > 0) then Minimap_ZoomIn()
 		else Minimap_ZoomOut() end
-	end);	
-end
+	end);
+end;
 local modifyMinimapChildren = function()
-	hooksecurefunc(VehicleSeatIndicator,"SetPoint",function(_,_,parent) -- vehicle seat indicator
-		if (parent == "MinimapCluster") or (parent == _G["MinimapCluster"]) then
-			VehicleSeatIndicator:ClearAllPoints();
-			VehicleSeatIndicator:SetPoint("BOTTOMRIGHT","SpartanUI","TOPRIGHT",-5,5);
-		end
-	end);
-	hooksecurefunc(WatchFrame,"SetPoint",function(_,_,parent) -- quest watch frame
-		if (parent == "MinimapCluster") or (parent == _G["MinimapCluster"]) then
-			-- this only happens if the user isn't using the advanced quest watcher
-			WatchFrame:ClearAllPoints();
-			WatchFrame:SetPoint("TOPRIGHT","UIParent","TOPRIGHT",-4,-130);
-			WatchFrame:SetPoint("BOTTOMRIGHT","UIParent","BOTTOMRIGHT",-4,160);
-		end
-	end);
-	hooksecurefunc(DurabilityFrame,"SetPoint",function(self,_,parent) -- durability frame
-		if (parent == "MinimapCluster") or (parent == _G["MinimapCluster"]) then
-			DurabilityFrame:ClearAllPoints();
-			DurabilityFrame:SetPoint("TOP","UIErrorsFrame","BOTTOM",0,0);
-		end
-	end);
-	hooksecurefunc(Boss1TargetFrame,"SetPoint",function(self,_,parent) -- temporary code, see if I can create a custom frame?
-		if (parent == "MinimapCluster") or (parent == _G["MinimapCluster"]) then
-			Boss1TargetFrame:ClearAllPoints();
-			Boss1TargetFrame:SetPoint("RIGHT",DurabilityFrame,"LEFT",0,-20);
-		end		
-	end);	
 	hooksecurefunc("AchievementAlertFrame_ShowAlert",function() -- achivement alerts
 		if (AchievementAlertFrame1) then AchievementAlertFrame1:SetPoint("BOTTOM",UIParent,"CENTER"); end
 	end);
@@ -88,9 +58,9 @@ local modifyMinimapChildren = function()
 			ArenaEnemyFrames:ClearAllPoints();
 			ArenaEnemyFrames:SetPoint("RIGHT", UIParent, "RIGHT",0,40);
 		end
-		TutorialFrameAlertButton:SetParent(MinimapCluster);
+		TutorialFrameAlertButton:SetParent(Minimap);
 		TutorialFrameAlertButton:ClearAllPoints();
-		TutorialFrameAlertButton:SetPoint("CENTER",MinimapCluster,"TOP",-2,10);
+		TutorialFrameAlertButton:SetPoint("CENTER",Minimap,"TOP",-2,10);
 	end);	
 	hooksecurefunc("ToggleBattlefieldMinimap",updateBattlefieldMinimap);
 	LFDSearchStatus:ClearAllPoints();
@@ -99,10 +69,10 @@ local modifyMinimapChildren = function()
 	ConsolidatedBuffs:SetPoint("TOPRIGHT",-13,-13);		
 end
 local createMinimapCoords = function()
-	local map = CreateFrame("Frame");
-	map.coords = MinimapZoneTextButton:CreateFontString(nil,"BACKGROUND","GameFontNormalSmall");
+	local map = CreateFrame("Frame",nil,SpartanUI);
+	map.coords = map:CreateFontString(nil,"BACKGROUND","GameFontNormalSmall");
 	map.coords:SetWidth(128); map.coords:SetHeight(12);
-	map.coords:SetPoint("TOP","MinimapZoneTextButton","BOTTOM");
+	map.coords:SetPoint("TOP","MinimapZoneTextButton","BOTTOM",0,-6);
 	map:HookScript("OnUpdate", function()
 		updateButtons();
 		do -- update minimap coordinates
