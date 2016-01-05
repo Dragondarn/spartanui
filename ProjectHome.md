@@ -1,0 +1,1 @@
+This is the development site for SpartanUI. The primary purpose of this site is to provide an additional download vector, as well as to utilize advanced issue tracking and bug reports.
